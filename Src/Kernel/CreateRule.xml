@@ -1,0 +1,420 @@
+<!DOCTYPE CreateRule>
+<CreateRule>
+  <ClassRule>
+    <Edge>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </Edge>
+    <InputPort>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </InputPort>
+    <OutputPort>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </OutputPort>
+    <Node>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </Node>
+    <StorageMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </StorageMono>
+    <StorageMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </StorageMulti>
+    <TransmitterMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </TransmitterMono>
+    <TransmitterMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </TransmitterMulti>
+    <VisualizationMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </VisualizationMono>
+    <VisualizationMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </VisualizationMulti>
+    <SensorTimer>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </SensorTimer>
+    <SensorExternalEvent>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </SensorExternalEvent>
+    <SensorInternalEvent>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </SensorInternalEvent>
+    <Simulator>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </Simulator>
+    <Drain>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </Drain>
+    <DrainMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </DrainMono>
+    <DrainMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </DrainMulti>
+    <Processor>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </Processor>
+    <ProcessorMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </ProcessorMono>
+    <ProcessorMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </ProcessorMulti>
+    <Source>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </Source>
+    <SourceDrain>
+      <Available>0</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </SourceDrain>
+    <SourceDrainMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </SourceDrainMono>
+    <SourceDrainMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </SourceDrainMulti>
+    <TriggerLog>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </TriggerLog>
+    <TriggerView>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>0</NeedOutputPorts>
+    </TriggerView>
+    <UserInput>
+      <Available>1</Available>
+      <NeedInputPorts>0</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </UserInput>
+  </ClassRule>
+  <FuncRule>
+    <getPortsSize Return="void">
+      <FuncType>1</FuncType>
+      <Parameters>
+        <inputPortsSize Type="QList&lt;int> &amp;">inputPortsSize=$(InputPortsSize);</inputPortsSize>
+        <outputPortsNumber Type="int &amp;">outputPortsNumber=$(OutputPortsNumber);</outputPortsNumber>
+      </Parameters>
+      <FuncPreset>/*======No Need to Program======*/</FuncPreset>
+    </getPortsSize>
+    <initializeParams Return="void">
+      <FuncType>1</FuncType>
+      <Parameters>
+        <paramsPtr Type="boost::shared_ptr&lt;void> &amp;">paramsPtr=boost::shared_ptr&lt;void>(new $(ParamsType)());</paramsPtr>
+      </Parameters>
+      <FuncPreset>/*======No Need to Program======*/</FuncPreset>
+    </initializeParams>
+    <initializeVars Return="void">
+      <FuncType>1</FuncType>
+      <Parameters>
+        <varsPtr Type="boost::shared_ptr&lt;void> &amp;">varsPtr=boost::shared_ptr&lt;void>(new $(VarsType)());</varsPtr>
+      </Parameters>
+      <FuncPreset>/*======No Need to Program======*/</FuncPreset>
+    </initializeVars>
+    <setParamsVarsOpenNode Return="bool">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <qstrConfigName Type="QString">XMLDomInterface xmlloader(qstrConfigName,qstrNodeType,qstrNodeClass,qstrNodeName);</qstrConfigName>
+        <qstrNodeType Type="QString"></qstrNodeType>
+        <qstrNodeClass Type="QString"></qstrNodeClass>
+        <qstrNodeName Type="QString"></qstrNodeName>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+      </Parameters>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: open node.</FuncPreset>
+      <FuncPreset>Procedure:</FuncPreset>
+      <FuncPreset>1: load parameters (params). [GetParamValue(xmlloader,params,tag); GetEnumParamValue(xmlloader,params,tag); GetUEnumParamValue(xmlloader,params,tag)]</FuncPreset>
+      <FuncPreset>2: initialize variables (vars).</FuncPreset>
+      <FuncPreset>3: If everything is OK, return 1 for successful opening and vice versa.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </setParamsVarsOpenNode>
+    <handleVarsCloseNode Return="bool">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+      </Parameters>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: close node.</FuncPreset>
+      <FuncPreset>Procedure:</FuncPreset>
+      <FuncPreset>1: handle/close variables (vars).</FuncPreset>
+      <FuncPreset>2: If everything is OK, return 1 for successful closing and vice versa.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </handleVarsCloseNode>
+    <getInternalTrigger Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <internalTrigger Type="QObject * &amp;">internalTrigger=NULL;</internalTrigger>
+        <internalTriggerSignal Type="QString &amp;">internalTriggerSignal=QString();</internalTriggerSignal>
+      </Parameters>
+      <FuncPreset>/*======Occasionally Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get internal trigger [defined in vars] for node.</FuncPreset>
+      <FuncPreset>You need to program here when you need internal trigger (internalTrigger + internalTriggerSignal) for node.</FuncPreset>
+      <FuncPreset>E.g.</FuncPreset>
+      <FuncPreset>internalTrigger=&amp;(vars->trigger);</FuncPreset>
+      <FuncPreset>internalTriggerSignal=QString(SIGNAL(triggerSignal()));</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </getInternalTrigger>
+    <visualizationWidgets Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <widgets Type="QList&lt;QWidget *> &amp;">widgets=QList&lt;QWidget *>();</widgets>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get visualization widgets [defined in vars].</FuncPreset>
+      <FuncPreset>You need to program here when you need visualization widgets.</FuncPreset>
+      <FuncPreset>E.g.</FuncPreset>
+      <FuncPreset>widgets=QList&lt;QWidget *>()&lt;&lt;(vars->visualization_1)&lt;&lt;(vars->visualization_2)...;</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </visualizationWidgets>
+    <getMonoDrainDataSize Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <drainDataSize Type="int &amp;">drainDataSize=0;</drainDataSize>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get drain data size to be grabbed from buffer.</FuncPreset>
+      <FuncPreset>Rules:</FuncPreset>
+      <FuncPreset>drainDataSize=0: grab and remove all data from buffer.</FuncPreset>
+      <FuncPreset>drainDataSize>0: grab drainDataSize latest data from buffer.</FuncPreset>
+      <FuncPreset>drainDataSize&lt;0: grab and remove drainDataSize ancient data from buffer.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </getMonoDrainDataSize>
+    <processMonoDrainData Return="bool">
+      <FuncType>3</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <drainParams Type="QVector&lt;void *>">QVector&lt;$(InputParamsType) *> drainparams; copyQVector(drainparams,drainParams);</drainParams>
+        <drainData Type="QVector&lt;void *>">QVector&lt;$(InputDataType) *> draindata; copyQVector(draindata,drainData);</drainData>
+      </Parameters>
+      <FuncPreset>if(draindata.size()==0){return 0;}</FuncPreset>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: process draindata.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </processMonoDrainData>
+    <getMultiDrainDataSize Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <drainDataSize Type="QList&lt;int> &amp;">drainDataSize=QList&lt;int>();</drainDataSize>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get drain data size to be grabbed from buffer.</FuncPreset>
+      <FuncPreset>Rules:</FuncPreset>
+      <FuncPreset>drainDataSize=0: grab and remove all data from buffer.</FuncPreset>
+      <FuncPreset>drainDataSize>0: grab drainDataSize latest data from buffer.</FuncPreset>
+      <FuncPreset>drainDataSize&lt;0: grab and remove drainDataSize ancient data from buffer.</FuncPreset>
+      <FuncPreset>E.g.</FuncPreset>
+      <FuncPreset>drainDataSize=QList&lt;int>()&lt;&lt;0&lt;&lt;1&lt;&lt;-1...;</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </getMultiDrainDataSize>
+    <processMultiDrainData Return="bool">
+      <FuncType>3</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <drainParams Type="QVector&lt;QVector&lt;void *>>">QVector&lt;$(InputParamsType) *> drainparams_$(Index); copyQVector(drainparams_$(Index),drainParams[$(Index)]);</drainParams>
+        <drainData Type="QVector&lt;QVector&lt;void *> >">QVector&lt;$(InputDataType) *> draindata_$(Index); copyQVector(draindata_$(Index),drainData[$(Index)]);</drainData>
+      </Parameters>
+      <FuncPreset>if(draindata_$(Index).size()==0){return 0;}</FuncPreset>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: process draindata_index.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </processMultiDrainData>
+    <initializeOutputData Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <outputDataPtr Type="boost::shared_ptr&lt;void> &amp;">outputDataPtr=boost::shared_ptr&lt;void>(new $(OutputDataType)());</outputDataPtr>
+      </Parameters>
+      <FuncPreset>/*======Occasionally Program below/above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: initial output data.</FuncPreset>
+      <FuncPreset>You need to program here when you need to manually initialize output data.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+    </initializeOutputData>
+    <getMonoInputDataSize Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <inputDataSize Type="int &amp;">inputDataSize=0;</inputDataSize>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get input data size to be grabbed from buffer.</FuncPreset>
+      <FuncPreset>Rules:</FuncPreset>
+      <FuncPreset>inputDataSize=0: grab and remove all data from buffer.</FuncPreset>
+      <FuncPreset>inputDataSize>0: grab inputDataSize latest data from buffer.</FuncPreset>
+      <FuncPreset>inputDataSize&lt;0: grab and remove inputDataSize ancient data from buffer.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </getMonoInputDataSize>
+    <processMonoInputData Return="bool">
+      <FuncType>3</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <inputParams Type="QVector&lt;void *>">QVector&lt;$(InputParamsType) *> inputparams; copyQVector(inputparams,inputParams);</inputParams>
+        <inputData Type="QVector&lt;void *>">QVector&lt;$(InputDataType) *> inputdata; copyQVector(inputdata,inputData);</inputData>
+        <outputData Type="void *">$(OutputDataType) * outputdata=($(OutputDataType) *)outputData;</outputData>
+        <outputPortIndex Type="QList&lt;int> &amp;">outputPortIndex=QList&lt;int>();</outputPortIndex>
+      </Parameters>
+      <FuncPreset>if(inputdata.size()==0){return 0;}</FuncPreset>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Step 1: process inputdata, then store it into outputdata.</FuncPreset>
+      <FuncPreset>Step 2 [optional]: determine the outputPortIndex. (if not, outputdata will be sent by all ports)</FuncPreset>
+      <FuncPreset>E.g. outputPortIndex=QList&lt;int>()&lt;&lt;(outportindex1)&lt;&lt;(outportindex2)...</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </processMonoInputData>
+    <getMultiInputDataSize Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <inputDataSize Type="QList&lt;int> &amp;">inputDataSize=QList&lt;int>();</inputDataSize>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get input data size to be grabbed from buffer.</FuncPreset>
+      <FuncPreset>Rules:</FuncPreset>
+      <FuncPreset>inputDataSize=0: grab and remove all data from buffer.</FuncPreset>
+      <FuncPreset>inputDataSize>0: grab inputDataSize latest data from buffer.</FuncPreset>
+      <FuncPreset>inputDataSize&lt;0: grab and remove inputDataSize ancient data from buffer.</FuncPreset>
+      <FuncPreset>E.g.</FuncPreset>
+      <FuncPreset>inputDataSize=QList&lt;int>()&lt;&lt;0&lt;&lt;1&lt;&lt;-1...;</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </getMultiInputDataSize>
+    <processMultiInputData Return="bool">
+      <FuncType>3</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <inputParams Type="QVector&lt;QVector&lt;void *>>">QVector&lt;$(InputParamsType) *> inputparams_$(Index); copyQVector(inputparams_$(Index),inputParams[$(Index)]);</inputParams>
+        <inputData Type="QVector&lt;QVector&lt;void *>>">QVector&lt;$(InputDataType) *> inputdata_$(Index); copyQVector(inputdata_$(Index),inputData[$(Index)]);</inputData>
+        <outputData Type="void *">$(OutputDataType) * outputdata=($(OutputDataType) *)outputData;</outputData>
+        <outputPortIndex Type="QList&lt;int> &amp;">outputPortIndex=QList&lt;int>();</outputPortIndex>
+      </Parameters>
+      <FuncPreset>if(inputdata_$(Index).size()==0){return 0;}</FuncPreset>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Step 1: process inputdata_index, then store it into outputdata.</FuncPreset>
+      <FuncPreset>Step 2 [optional]: determine the outputPortIndex. (if not, outputdata will be sent by all ports)</FuncPreset>
+      <FuncPreset>E.g. outputPortIndex=QList&lt;int>()&lt;&lt;(outportindex1)&lt;&lt;(outportindex2)...</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </processMultiInputData>
+    <generateSourceData Return="bool">
+      <FuncType>3</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <outputData Type="void *">$(OutputDataType) * outputdata=($(OutputDataType) *)outputData;</outputData>
+        <outputPortIndex Type="QList&lt;int> &amp;">outputPortIndex=QList&lt;int>();</outputPortIndex>
+        <timeStamp Type="QTime &amp;">timeStamp=QTime();</timeStamp>
+      </Parameters>
+      <FuncPreset>/*======Please Program below======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Step 1: fill outputdata.</FuncPreset>
+      <FuncPreset>Step 2 [optional]: determine the outputPortIndex. (if not, outputdata will be sent by all ports)</FuncPreset>
+      <FuncPreset>E.g. outputPortIndex=QList&lt;int>()&lt;&lt;(outportindex1)&lt;&lt;(outportindex2)...</FuncPreset>
+      <FuncPreset>Step 3: set the timeStamp for Simulator.</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+      <FuncPreset/>
+      <FuncPreset>return 1;</FuncPreset>
+    </generateSourceData>
+    <UIWidgets Return="void">
+      <FuncType>2</FuncType>
+      <Parameters>
+        <paramsPtr Type="void *">$(ParamsType) * params=($(ParamsType) *)paramsPtr;</paramsPtr>
+        <varsPtr Type="void *">$(VarsType) * vars=($(VarsType) *)varsPtr;</varsPtr>
+        <widgets Type="QList&lt;QWidget *> &amp;">widgets=QList&lt;QWidget *>();</widgets>
+      </Parameters>
+      <FuncPreset>/*======Please Program above======*/</FuncPreset>
+      <FuncPreset>/*</FuncPreset>
+      <FuncPreset>Function: get UI widgets [defined in vars].</FuncPreset>
+      <FuncPreset>You need to program here when you need UI widgets.</FuncPreset>
+      <FuncPreset>E.g. widgets=QList&lt;QWidget *>()&lt;&lt;(vars->UI_1)&lt;&lt;(vars->UI_2)...;</FuncPreset>
+      <FuncPreset>*/</FuncPreset>
+    </UIWidgets>
+  </FuncRule>
+</CreateRule>

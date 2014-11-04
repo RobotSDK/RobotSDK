@@ -1,0 +1,559 @@
+<!DOCTYPE Interface_Functions>
+<Interface_Functions>
+  <Edge>
+    <File>Core/Edge/edge.h</File>
+    <Parent>QWidget</Parent>
+    <Interface/>
+  </Edge>
+  <TriggerLog>
+    <File>Core/Edge/triggerlog.h</File>
+    <Parent>QWidget</Parent>
+    <Interface/>
+  </TriggerLog>
+  <TriggerView>
+    <File>Core/Edge/triggerview.h</File>
+    <Parent>QWidget</Parent>
+    <Interface/>
+  </TriggerView>
+  <InputPort>
+    <File>Core/Node/node.h</File>
+    <Parent>QObject</Parent>
+    <Interface/>
+  </InputPort>
+  <OutputPort>
+    <File>Core/Node/node.h</File>
+    <Parent>QObject</Parent>
+    <Interface/>
+  </OutputPort>
+  <Node>
+    <File>Core/Node/node.h</File>
+    <Parent>QObject</Parent>
+    <Interface>
+      <getPortsSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting node's port(s)' size.</Text>
+          <Text>\param [out] inputPortsSize The size of each input port's data buffer.</Text>
+          <Text>\param [out] outputPortsNumber The number of output ports.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <inputPortsSize>QList&lt;int> &amp;</inputPortsSize>
+          <outputPortsNumber>int &amp;</outputPortsNumber>
+        </Parameters>
+      </getPortsSize>
+      <initializeParams>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of initializing node's parameters.</Text>
+          <Text>\param [out] paramsPtr The parameters embelished by boost::shared_pointer&lt;void>.</Text>
+          <Text>\details To initialize parameters:</Text>
+          <Text>- paramsPtr=boost::shared_ptr&lt;void> (new ParametersType);</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>boost::shared_ptr&lt;void> &amp;</paramsPtr>
+        </Parameters>
+      </initializeParams>
+      <initializeVars>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of initializing node's variables.</Text>
+          <Text>\param [out] varsPtr The variables embelished by boost::shared_pointer&lt;void>.</Text>
+          <Text>\details To initialize variables:</Text>
+          <Text>- varsPtr=boost::shared_ptr&lt;void> (new VariablesType);</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <varsPtr>boost::shared_ptr&lt;void> &amp;</varsPtr>
+        </Parameters>
+      </initializeVars>
+      <setParamsVarsOpenNode>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of setting node's parameters and variables while openning node.</Text>
+          <Text>\param [in] qstrConfigName The config-name of the node.</Text>
+          <Text>\param [in] qstrNodeType The type-name of the node.</Text>
+          <Text>\param [in] qstrNodeClass The class-name of the node.</Text>
+          <Text>\param [in] qstrNodeName The node-name of the node.</Text>
+          <Text>\param [in,out] paramsPtr The parameters(\ref Node::paramsptr) to be loaded.</Text>
+          <Text>\param [in,out] varsPtr The variables(\ref Node::varsptr) to be set</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <qstrConfigName>QString</qstrConfigName>
+          <qstrNodeType>QString</qstrNodeType>
+          <qstrNodeClass>QString</qstrNodeClass>
+          <qstrNodeName>QString</qstrNodeName>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+        </Parameters>
+      </setParamsVarsOpenNode>
+      <handleVarsCloseNode>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of handling node's variables while closing node.</Text>
+          <Text>\param [in] paramsPtr The parameters(\ref Node::paramsptr) for setting variables.</Text>
+          <Text>\param [in,out] varsPtr The variables(\ref Node::varsptr) to be handled</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+        </Parameters>
+      </handleVarsCloseNode>
+      <getInternalTrigger>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's internal trigger.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains internal trigger.</Text>
+          <Text>\param [out] internalTrigger The internal trigger.</Text>
+          <Text>\param [out] internalTriggerSignal The internal trigger signal embelished by QString.</Text>
+          <Text>\details To embelish internal trigger signal:</Text>
+          <Text>- QString(SIGNAL(&lt;internal trigger signal>));</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <internalTrigger>QObject * &amp;</internalTrigger>
+          <internalTriggerSignal>QString &amp;</internalTriggerSignal>
+        </Parameters>
+      </getInternalTrigger>
+    </Interface>
+  </Node>
+  <StorageMono>
+    <File>ExModules/Drain/Storage/storage.h</File>
+    <Parent>DrainMono</Parent>
+    <Interface/>
+  </StorageMono>
+  <StorageMulti>
+    <File>ExModules/Drain/Storage/storage.h</File>
+    <Parent>DrainMulti</Parent>
+    <Interface/>
+  </StorageMulti>
+  <TransmitterMono>
+    <File>ExModules/Drain/Transmitter/transmitter.h</File>
+    <Parent>DrainMono</Parent>
+    <Interface/>
+  </TransmitterMono>
+  <TransmitterMulti>
+    <File>ExModules/Drain/Transmitter/transmitter.h</File>
+    <Parent>DrainMulti</Parent>
+    <Interface/>
+  </TransmitterMulti>
+  <VisualizationMono>
+    <File>ExModules/Drain/Visualization/visualization.h</File>
+    <Parent>DrainMono</Parent>
+    <Interface>
+      <visualizationWidgets>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's visualization widgets.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains visualization widget.</Text>
+          <Text>\param [out] widgets The visualization widgets.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <widgets>QList&lt;QWidget *> &amp;</widgets>
+        </Parameters>
+      </visualizationWidgets>
+    </Interface>
+  </VisualizationMono>
+  <VisualizationMulti>
+    <File>ExModules/Drain/Visualization/visualization.h</File>
+    <Parent>DrainMulti</Parent>
+    <Interface>
+      <visualizationWidgets>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's visualization widgets.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains visualization widget.</Text>
+          <Text>\param [out] widgets The visualization widgets.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <widgets>QList&lt;QWidget *> &amp;</widgets>
+        </Parameters>
+      </visualizationWidgets>
+    </Interface>
+  </VisualizationMulti>
+  <SensorTimer>
+    <File>ExModules/Source/Sensor/sensor.h</File>
+    <Parent>Source</Parent>
+    <Interface/>
+  </SensorTimer>
+  <SensorExternalEvent>
+    <File>ExModules/Source/Sensor/sensor.h</File>
+    <Parent>Source</Parent>
+    <Interface/>
+  </SensorExternalEvent>
+  <SensorInternalEvent>
+    <File>ExModules/Source/Sensor/sensor.h</File>
+    <Parent>Source</Parent>
+    <Interface/>
+  </SensorInternalEvent>
+  <Simulator>
+    <File>ExModules/Source/Simulator/simulator.h</File>
+    <Parent>Source</Parent>
+    <Interface/>
+  </Simulator>
+  <UserInput>
+    <File>ExModules/Source/UserInput/userinput.h</File>
+    <Parent>Source</Parent>
+    <Interface>
+      <UIWidgets>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's UI widgets.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains UI widget.</Text>
+          <Text>\param [out] widgets The UI widgets.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <widgets>QList&lt;QWidget *> &amp;</widgets>
+        </Parameters>
+      </UIWidgets>
+    </Interface>
+  </UserInput>
+  <Drain>
+    <File>Modules/Drain/drain.h</File>
+    <Parent>Node</Parent>
+    <Interface/>
+  </Drain>
+  <DrainMono>
+    <File>Modules/Drain/drain.h</File>
+    <Parent>Drain</Parent>
+    <Interface>
+      <getMonoDrainDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting mono drain data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] drainDataSize The required mono drain data size. (see InputNode::grabDrainData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainDataSize>int &amp;</drainDataSize>
+        </Parameters>
+      </getMonoDrainDataSize>
+      <processMonoDrainData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing mono drain data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] drainParams The mono drain parameters of input node.</Text>
+          <Text>\param [in] drainData The mono drain data of input node.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainParams>QVector&lt;void *></drainParams>
+          <drainData>QVector&lt;void *></drainData>
+        </Parameters>
+      </processMonoDrainData>
+    </Interface>
+  </DrainMono>
+  <DrainMulti>
+    <File>Modules/Drain/drain.h</File>
+    <Parent>Drain</Parent>
+    <Interface>
+      <getMultiDrainDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting multi drain data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] drainDataSize The required multi drain data size. (see InputNode::grabDrainData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainDataSize>QList&lt;int> &amp;</drainDataSize>
+        </Parameters>
+      </getMultiDrainDataSize>
+      <processMultiDrainData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing multi drain data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] drainParams The multi drain parameters of input node.</Text>
+          <Text>\param [in] drainData The multi drain data of input node.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainParams>QVector&lt;QVector&lt;void *> ></drainParams>
+          <drainData>QVector&lt;QVector&lt;void *> ></drainData>
+        </Parameters>
+      </processMultiDrainData>
+    </Interface>
+  </DrainMulti>
+  <Processor>
+    <File>Modules/Processor/processor.h</File>
+    <Parent>Node</Parent>
+    <Interface>
+      <initializeOutputData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of initializing node's output data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] outputDataPtr The output data embelished by boost::shared_pointer&lt;void>.</Text>
+          <Text>\details To initialize output data:</Text>
+          <Text>- outputDataPtr=boost::shared_ptr&lt;void> (new OutputDataType);</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <outputDataPtr>boost::shared_ptr&lt;void> &amp;</outputDataPtr>
+        </Parameters>
+      </initializeOutputData>
+    </Interface>
+  </Processor>
+  <ProcessorMono>
+    <File>Modules/Processor/processor.h</File>
+    <Parent>Processor</Parent>
+    <Interface>
+      <getMonoInputDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting mono input data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] inputDataSize The required mono input data size. (see InputNode::grabInputData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <inputDataSize>int &amp;</inputDataSize>
+        </Parameters>
+      </getMonoInputDataSize>
+      <processMonoInputData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing mono input data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] inputParams The mono input parameters of input node.</Text>
+          <Text>\param [in] inputData The mono input data of input node.</Text>
+          <Text>\param [out] outputData The output data.</Text>
+          <Text>\param [out] outputPortIndex The index of output port to send output data.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <inputParams>QVector&lt;void *></inputParams>
+          <inputData>QVector&lt;void *></inputData>
+          <outputData>void *</outputData>
+          <outputPortIndex>QList&lt;int> &amp;</outputPortIndex>
+        </Parameters>
+      </processMonoInputData>
+    </Interface>
+  </ProcessorMono>
+  <ProcessorMulti>
+    <File>Modules/Processor/processor.h</File>
+    <Parent>Processor</Parent>
+    <Interface>
+      <getMultiInputDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting multi input data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] inputDataSize The required multi input data size. (see InputNode::grabInputData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <inputDataSize>QList&lt;int> &amp;</inputDataSize>
+        </Parameters>
+      </getMultiInputDataSize>
+      <processMultiInputData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing multi input data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] inputParams The multi input parameters of input node.</Text>
+          <Text>\param [in] inputData The multi input data of input node.</Text>
+          <Text>\param [out] outputData The output data.</Text>
+          <Text>\param [out] outputPortIndex The index of output port to send output data.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <inputParams>QVector&lt;QVector&lt;void *> ></inputParams>
+          <inputData>QVector&lt;QVector&lt;void *> ></inputData>
+          <outputData>void *</outputData>
+          <outputPortIndex>QList&lt;int> &amp;</outputPortIndex>
+        </Parameters>
+      </processMultiInputData>
+    </Interface>
+  </ProcessorMulti>
+  <Source>
+    <File>Modules/Source/source.h</File>
+    <Parent>Node</Parent>
+    <Interface>
+      <initializeOutputData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of initializing node's output data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] outputDataPtr The output data embelished by boost::shared_pointer&lt;void>.</Text>
+          <Text>\details To initialize output data:</Text>
+          <Text>- outputDataPtr=boost::shared_ptr&lt;void> (new OutputDataType);</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <outputDataPtr>boost::shared_ptr&lt;void> &amp;</outputDataPtr>
+        </Parameters>
+      </initializeOutputData>
+      <generateSourceData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of generating source data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] outputData The output data.</Text>
+          <Text>\param [out] outputPortIndex The index of output port to send output data.</Text>
+          <Text>\param [out] timeStamp The timestamp. Mainly used in simulator to get the timestamp of one data frame.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <outputData>void *</outputData>
+          <outputPortIndex>QList&lt;int> &amp;</outputPortIndex>
+          <timeStamp>QTime &amp;</timeStamp>
+        </Parameters>
+      </generateSourceData>
+    </Interface>
+  </Source>
+  <SourceDrain>
+    <File>Modules/SourceDrain/sourcedrain.h</File>
+    <Parent>Node</Parent>
+    <Interface>
+      <initializeOutputData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of initializing node's output data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] outputDataPtr The output data embelished by boost::shared_pointer&lt;void>.</Text>
+          <Text>\details To initialize output data:</Text>
+          <Text>- outputDataPtr=boost::shared_ptr&lt;void> (new OutputDataType);</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <outputDataPtr>boost::shared_ptr&lt;void> &amp;</outputDataPtr>
+        </Parameters>
+      </initializeOutputData>
+      <generateSourceData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of generating source data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] outputData The output data.</Text>
+          <Text>\param [out] outputPortIndex The index of output port to send output data.</Text>
+          <Text>\param [out] timeStamp The timestamp. Mainly used in simulator to get the timestamp of one data frame.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <outputData>void *</outputData>
+          <outputPortIndex>QList&lt;int> &amp;</outputPortIndex>
+          <timeStamp>QTime &amp;</timeStamp>
+        </Parameters>
+      </generateSourceData>
+    </Interface>
+  </SourceDrain>
+  <SourceDrainMono>
+    <File>Modules/SourceDrain/sourcedrain.h</File>
+    <Parent>SourceDrain</Parent>
+    <Interface>
+      <getMonoDrainDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting mono drain data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] drainDataSize The required mono drain data size. (see InputNode::grabDrainData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainDataSize>int &amp;</drainDataSize>
+        </Parameters>
+      </getMonoDrainDataSize>
+      <processMonoDrainData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing mono drain data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] drainParams The mono drain parameters of input node.</Text>
+          <Text>\param [in] drainData The mono drain data of input node.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainParams>QVector&lt;void *></drainParams>
+          <drainData>QVector&lt;void *></drainData>
+        </Parameters>
+      </processMonoDrainData>
+    </Interface>
+  </SourceDrainMono>
+  <SourceDrainMulti>
+    <File>Modules/SourceDrain/sourcedrain.h</File>
+    <Parent>SourceDrain</Parent>
+    <Interface>
+      <getMultiDrainDataSize>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of getting multi drain data size.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [out] drainDataSize The required multi drain data size. (see InputNode::grabDrainData(int grabSize))</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainDataSize>QList&lt;int> &amp;</drainDataSize>
+        </Parameters>
+      </getMultiDrainDataSize>
+      <processMultiDrainData>
+        <Comment>
+          <Text>\brief [required] Function pointer type for interface function of processing multi drain data.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr).</Text>
+          <Text>\param [in] drainParams The multi drain parameters of input node.</Text>
+          <Text>\param [in] drainData The multi drain data of input node.</Text>
+          <Text>\return 1 for success and 0 for failure.</Text>
+        </Comment>
+        <Return>bool</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <drainParams>QVector&lt;QVector&lt;void *> ></drainParams>
+          <drainData>QVector&lt;QVector&lt;void *> ></drainData>
+        </Parameters>
+      </processMultiDrainData>
+    </Interface>
+  </SourceDrainMulti>
+</Interface_Functions>
