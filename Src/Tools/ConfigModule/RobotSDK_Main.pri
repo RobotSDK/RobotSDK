@@ -21,6 +21,9 @@ equals(INSTTYPE, "MOD") {
 
 unix{
     DESTDIR = $$(HOME)/Build/$$INSTTYPE/$$PROJNAME
+    MOC_DIR = $$(HOME)/Build/$$INSTTYPE/$$PROJNAME/MOC
+    OBJECTS_DIR = $$(HOME)/Build/$$INSTTYPE/$$PROJNAME/OBJ
+    UI_DIR = $$(HOME)/Build/$$INSTTYPE/$$PROJNAME/UI    
 
     equals(INSTTYPE, "SDK") {
         target.path = $$(HOME)/$$INSTTYPE/$$PROJNAME/lib
@@ -76,6 +79,9 @@ win32{
         error($$TMPPATH is not Specified.)
     }
     DESTDIR = $$(RobotSDK_Kernel)/../../../Build/$$INSTTYPE/$$PROJNAME
+    MOC_DIR = $$(RobotSDK_Kernel)/../../../Build/$$INSTTYPE/$$PROJNAME/MOC
+    OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/$$INSTTYPE/$$PROJNAME/OBJ
+    UI_DIR = $$(RobotSDK_Kernel)/../../../Build/$$INSTTYPE/$$PROJNAME/UI  
 
     equals(INSTTYPE, "SDK") {
         TMPPATH=$$(RobotDep_Include)
