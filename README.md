@@ -10,4 +10,6 @@ How to install RobotSDK
 
   cd RobotSDK
 
-  sh Install.sh
+  sh Install.sh (for Linux)
+  
+  Install.bat (for windows, use Visual Studio Command Prompt)
