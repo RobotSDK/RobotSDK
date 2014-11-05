@@ -25,7 +25,8 @@ SOURCES += \
     ExModules/Source/Sensor/sensor.cpp \
     ExModules/Source/Simulator/simulator.cpp \
     ExModules/Source/UserInput/userinput.cpp \
-    Accessories/XMLDomInterface/xmldominterface.cpp
+    Accessories/XMLDomInterface/xmldominterface.cpp \
+    ExModules/SourceDrain/userinteract.cpp
 
 HEADERS += \
     Core/Node/node.h \
@@ -43,7 +44,8 @@ HEADERS += \
     ExModules/Source/Simulator/simulator.h \
     ExModules/Source/UserInput/userinput.h \
     Accessories/XMLDomInterface/xmldominterface.h \
-    RobotSDK_Global.h
+    RobotSDK_Global.h \
+    ExModules/SourceDrain/userinteract.h
 
 OTHER_FILES += \
     CreateRule.xml \
