@@ -29,15 +29,23 @@ FORMS    += mainwindow.ui \
     registerdirwidgetitem.ui
 
 unix{
-    DESTDIR = $$(HOME)/Build/RobotSDK/Tools
+    DESTDIR = $$(HOME)/Build/RobotSDK/Tools/ConfigSystem
 
+	MOC_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigSystem/MOC
+    OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigSystem/OBJ
+    UI_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigSystem/UI
+	
     target.path = $$(HOME)/SDK/RobotSDK/Tools
     INSTALLS += target
 }
 
 win32{
-    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools
+    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools/ConfigSystem
 
+	MOC_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigSystem/MOC
+    OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigSystem/OBJ
+    UI_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigSystem/UI
+	
     target.path = $$(RobotSDK_Tools)
     INSTALLS += target
 

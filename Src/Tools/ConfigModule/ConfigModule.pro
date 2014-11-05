@@ -26,8 +26,12 @@ OTHER_FILES += \
     RobotSDK_Install.pri
 
 unix{
-    DESTDIR = $$(HOME)/Build/RobotSDK/Tools
+    DESTDIR = $$(HOME)/Build/RobotSDK/Tools/ConfigModule
 
+	MOC_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigModule/MOC
+    OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigModule/OBJ
+    UI_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigModule/UI
+	
     target.path = $$(HOME)/SDK/RobotSDK/Tools
     INSTALLS += target
 
@@ -37,8 +41,12 @@ unix{
 }
 
 win32{
-    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools
+    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools/ConfigModule
 
+	MOC_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigModule/MOC
+    OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigModule/OBJ
+    UI_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigModule/UI
+	
     target.path = $$(RobotSDK_Tools)
     INSTALLS += target
 

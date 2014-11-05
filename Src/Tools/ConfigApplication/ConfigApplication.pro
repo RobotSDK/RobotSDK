@@ -20,15 +20,23 @@ HEADERS  += mainwindow.h
 FORMS    += mainwindow.ui
 
 unix{
-    DESTDIR = $$(HOME)/Build/RobotSDK/Tools
+    DESTDIR = $$(HOME)/Build/RobotSDK/Tools/ConfigApplication
+	
+	MOC_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigApplication/MOC
+    OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigApplication/OBJ
+    UI_DIR = $$(HOME)/Build/RobotSDK/Tools/ConfigApplication/UI
 
     target.path = $$(HOME)/SDK/RobotSDK/Tools
     INSTALLS += target
 }
 
 win32{
-    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools
+    DESTDIR = $$(RobotSDK_Tools)/../../../Build/RobotSDK/Tools/ConfigApplication
 
+	MOC_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigApplication/MOC
+    OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigApplication/OBJ
+    UI_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Tools/ConfigApplication/UI
+	
     target.path = $$(RobotSDK_Tools)
     INSTALLS += target
 }
