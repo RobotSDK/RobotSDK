@@ -6,7 +6,7 @@
     \brief The Library of UserInteractMono.
 */
 
-/*! \addtogroup ExSource
+/*! \addtogroup ExSourceDrain
     @{
 */
 
