@@ -219,6 +219,46 @@
       </UIWidgets>
     </Interface>
   </UserInput>
+  <UserInteractMono>
+    <File>ExModules/SourceDrain/userinteract.h</File>
+    <Parent>SourceDrainMono</Parent>
+    <Interface>
+      <UIWidgets>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's UI widgets.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains UI widget.</Text>
+          <Text>\param [out] widgets The UI widgets.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <widgets>QList&lt;QWidget *> &amp;</widgets>
+        </Parameters>
+      </UIWidgets>
+    </Interface>
+  </UserInteractMono>
+  <UserInteractMulti>
+    <File>ExModules/SourceDrain/userinteract.h</File>
+    <Parent>SourceDrainMulti</Parent>
+    <Interface>
+      <UIWidgets>
+        <Comment>
+          <Text>\brief [optional] Function pointer type for interface function of getting node's UI widgets.</Text>
+          <Text>\param [in] paramsPtr The node's parameters(\ref Node::paramsptr).</Text>
+          <Text>\param [in] varsPtr The node's variables(\ref Node::varsptr) that contains UI widget.</Text>
+          <Text>\param [out] widgets The UI widgets.</Text>
+        </Comment>
+        <Return>void</Return>
+        <Parameters>
+          <paramsPtr>void *</paramsPtr>
+          <varsPtr>void *</varsPtr>
+          <widgets>QList&lt;QWidget *> &amp;</widgets>
+        </Parameters>
+      </UIWidgets>
+    </Interface>
+  </UserInteractMulti>
   <Drain>
     <File>Modules/Drain/drain.h</File>
     <Parent>Node</Parent>

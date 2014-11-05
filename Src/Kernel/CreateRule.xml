@@ -136,6 +136,16 @@
       <NeedInputPorts>0</NeedInputPorts>
       <NeedOutputPorts>1</NeedOutputPorts>
     </UserInput>
+    <UserInteractMono>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </UserInteractMono>
+    <UserInteractMulti>
+      <Available>1</Available>
+      <NeedInputPorts>1</NeedInputPorts>
+      <NeedOutputPorts>1</NeedOutputPorts>
+    </UserInteractMulti>
   </ClassRule>
   <FuncRule>
     <getPortsSize Return="void">
