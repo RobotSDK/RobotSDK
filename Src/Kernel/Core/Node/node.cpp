@@ -98,14 +98,14 @@ QVector<boost::shared_ptr<void> > InputPort::grabInputData(int grabSize)
         {
             inputdatabuffer.clear();
         }
-		else if(checkstop)
+	else if(checkstop)
+	{
+		datagrubcount++;
+		if(datagrubcount>CHECKSTOP*inputbuffersize)
 		{
-			datagrubcount++;
-			if(datagrubcount>CHECKSTOP*inputbuffersize)
-			{
-				inputdatabuffer.clear();
-			}
+			inputdatabuffer.clear();
 		}
+	}
     }
     else if(grabSize>0)
     {
@@ -117,14 +117,14 @@ QVector<boost::shared_ptr<void> > InputPort::grabInputData(int grabSize)
         {
             result=QVector<boost::shared_ptr<void> >::fromList(inputdatabuffer.mid(0,grabSize));
         }
-		if(inputbuffersize>0&&checkstop)
+	if(inputbuffersize>0&&checkstop)
+	{
+		datagrubcount++;
+		if(datagrubcount>CHECKSTOP*inputbuffersize)
 		{
-			datagrubcount++;
-			if(datagrubcount>CHECKSTOP*inputbuffersize)
-			{
-				inputdatabuffer.clear();
-			}
+			inputdatabuffer.clear();
 		}
+	}
     }
     else
     {

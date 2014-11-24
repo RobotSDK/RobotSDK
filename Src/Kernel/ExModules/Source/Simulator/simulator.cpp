@@ -10,8 +10,8 @@ Simulator::Simulator(QString qstrSharedLibrary, QString qstrNodeClass, QString q
 	nexttime=QTime();
 	simulaterate=simulateRate;
 	simflag=0;
-    curoutputdata=boost::shared_ptr<void>();
-    nextoutputdata=boost::shared_ptr<void>();
+	curoutputdata=boost::shared_ptr<void>();
+	nextoutputdata=boost::shared_ptr<void>();
 }
 
 void Simulator::setStartTimeSlot(QTime startTime)
@@ -21,7 +21,7 @@ void Simulator::setStartTimeSlot(QTime startTime)
 
 void Simulator::setSimulateRateSlot(double simulateRate)
 {
-	resetTimeTrackSlot();
+	//resetTimeTrackSlot();
 	simulaterate=simulateRate;
 }
 
@@ -33,8 +33,8 @@ void Simulator::syncTimeTrackSlot()
 	}
 	curtime=QTime();
 	nexttime=QTime();
-    curoutputdata=boost::shared_ptr<void>();
-    nextoutputdata=boost::shared_ptr<void>();
+	curoutputdata=boost::shared_ptr<void>();
+	nextoutputdata=boost::shared_ptr<void>();
 	startcurtime=QTime();
 	initialcurtime=QTime();
 	stopSimulatorSlot();
@@ -79,8 +79,8 @@ void Simulator::resetTimeTrackSlot()
 	{
 		curtime=QTime();
 		nexttime=QTime();
-        curoutputdata=boost::shared_ptr<void>();
-        nextoutputdata=boost::shared_ptr<void>();
+		curoutputdata=boost::shared_ptr<void>();
+		nextoutputdata=boost::shared_ptr<void>();
 		startcurtime=QTime();
 		initialcurtime=QTime();
 		stopSimulatorSlot();

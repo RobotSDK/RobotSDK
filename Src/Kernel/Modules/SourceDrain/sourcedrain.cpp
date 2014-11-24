@@ -145,14 +145,14 @@ void SourceDrainMulti::processDrainDataSlot()
 	{
 		nodeTriggerTime(NodeTriggerStart);
 		int i,n=inputports.size();
-        QVector<QVector<boost::shared_ptr<void> > > boostparams(n);
-        QVector<QVector<boost::shared_ptr<void> > > boostdata(n);
-        QVector<QVector<void *> > drainparams(n);
-        QVector<QVector<void *> > draindata(n);
+		QVector<QVector<boost::shared_ptr<void> > > boostparams(n);
+		QVector<QVector<boost::shared_ptr<void> > > boostdata(n);
+		QVector<QVector<void *> > drainparams(n);
+		QVector<QVector<void *> > draindata(n);
 		QList<int> multidatasize;
 		getMultiDrainDataSize(paramsptr.get(),varsptr.get(),multidatasize);
 		int m=multidatasize.size();
-				QVector<int> checkports;
+		QVector<int> checkports;
 		for(i=0;i<n;i++)
 		{
 			inputports[i]->lock();

@@ -125,10 +125,10 @@ void ProcessorMulti::processInputDataSlot()
 	{
 		nodeTriggerTime(NodeTriggerStart);
 		int i,n=inputports.size();
-        QVector<QVector<boost::shared_ptr<void> > > boostparams(n);
-        QVector<QVector<boost::shared_ptr<void> > > boostdata(n);
-        QVector<QVector<void *> > inputparams(n);
-        QVector<QVector<void *> > inputdata(n);
+		QVector<QVector<boost::shared_ptr<void> > > boostparams(n);
+		QVector<QVector<boost::shared_ptr<void> > > boostdata(n);
+		QVector<QVector<void *> > inputparams(n);
+		QVector<QVector<void *> > inputdata(n);
 		QList<int> multidatasize;
 		getMultiInputDataSize(paramsptr.get(),varsptr.get(),multidatasize);
 		int m=multidatasize.size();
