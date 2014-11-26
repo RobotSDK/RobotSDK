@@ -38,6 +38,7 @@ Edge::Edge()
 
 	panel.addWidget(new QLabel("Trigger Log"),0,0);
 	panel.addWidget(new QLabel("Trigger View"),0,1);
+    rowcount=1;
 
     bool flag=1;
     flag&=bool(connect(set,SIGNAL(clicked()),this,SLOT(setTimeLineSlot())));
@@ -159,12 +160,12 @@ void Edge::addNode(Node * node, bool gotoThread, bool needMonitor)
         {
             TriggerLog * triggerlog=new TriggerLog(this,node,gotoThread);
             TriggerView * triggerview=new TriggerView(this,node,timerange,timeinterval,zoomratio,gotoThread);
-            int row=panel.rowCount();
             //panel.setVerticalHeaderItem(row,new QTableWidgetItem(QString("%1_%2_%3").arg(node->getNodeType()).arg(node->getNodeClass()).arg(node->getNodeName())));
-            panel.addWidget(triggerlog,row,0);
-            panel.addWidget(triggerview,row,1);
+            panel.addWidget(triggerlog,rowcount,0);
+            panel.addWidget(triggerview,rowcount,1);
+            rowcount++;
 			QWidget * parent=(QWidget *)panel.parent();
-			parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*panel.rowCount());
+            parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*rowcount);
         }
     }
 }
@@ -175,8 +176,8 @@ void Edge::clear()
     int i,n;
 
     flag&=disconnectAll();
-    n=panel.rowCount();
-    for(i=n-1;i>=0;i--)
+    n=rowcount;
+    for(i=n-1;i>0;i--)
     {
 		TriggerLog * triggerlog=(TriggerLog *)(panel.itemAtPosition(i,0)->widget());
         TriggerView * triggerview=(TriggerView *)(panel.itemAtPosition(i,1)->widget());
@@ -185,6 +186,7 @@ void Edge::clear()
         delete triggerlog;
         delete triggerview;
     }
+    rowcount=1;
 
     emit closeAllNodesSignal();
 
@@ -208,7 +210,7 @@ void Edge::clear()
         nodes[i]->deleteLater();
     }
 	QWidget * parent=(QWidget *)panel.parent();
-	parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*panel.rowCount());
+    parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*rowcount);
 }
 
 bool Edge::connectAll()
@@ -276,7 +278,7 @@ void Edge::playPauseTimerSlot()
 
 void Edge::setTimeLineSlot()
 {
-    int i,n=panel.rowCount();
+    int i,n=rowcount;
     timerange=timerangeinput.text().toInt();
     timeinterval=timeintervalinput.text().toInt();
 	zoomratio=zoomratioinput.text().toDouble();
@@ -286,7 +288,7 @@ void Edge::setTimeLineSlot()
         triggerview->setTimeLine(timerange,timeinterval,zoomratio);		
     }
 	QWidget * parent=(QWidget *)panel.parent();
-	parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*panel.rowCount());
+    parent->resize(400+int(timerange*zoomratio+0.5),MONITORSIZE*rowcount);
 }
 
 void Edge::drawSlot()

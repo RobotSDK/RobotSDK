@@ -127,6 +127,10 @@ protected:
         \brief panel to contain \ref TriggerLog and \ref TriggerView.
     */
 	QGridLayout panel;
+    /*! \var rowcount
+        \breif rowcount to count the number of \ref TriggerLog and \ref TriggerView.
+    */
+    int rowcount;
 protected:
     /*! \fn bool connectNodes(Node * inputNode, Node * outputNode)
         \brief Connect two nodes.
