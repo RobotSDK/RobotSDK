@@ -203,7 +203,7 @@ Node::Node(QString qstrSharedLibrary, QString qstrNodeType, QString qstrNodeClas
 { 
     QString sharedlibraryname=qstrSharedLibrary;
 
-#ifdef _DEBUG
+#ifdef QT_DEBUG
     sharedlibraryname=sharedlibraryname+QString("_Debug");
 #else
     sharedlibraryname=sharedlibraryname+QString("_Release");
