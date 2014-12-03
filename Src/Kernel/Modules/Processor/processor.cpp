@@ -133,7 +133,7 @@ void ProcessorMulti::processInputDataSlot()
 		getMultiInputDataSize(paramsptr.get(),varsptr.get(),multidatasize);
 		int m=multidatasize.size();
 		QVector<int> checkports;
-		for(i=0;i<n;i++)
+        for(i=0;i<n;i++)
 		{
 			inputports[i]->lock();
 			if(i<m)
