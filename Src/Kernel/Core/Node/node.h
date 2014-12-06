@@ -196,7 +196,7 @@ public:
 		\brief Set \ref checkstop
 		\param [in] flag The value of \ref checkstop.  
     */
-	void setCheckStop(bool flag);
+    void setCheckStop(bool flag);
 public slots:
     /*! \fn void inputDataSlot(boost::shared_ptr<void> inputParamsPtr,  boost::shared_ptr<void> inputDataPtr)
         \brief The slot to receive input data signal OutputPort::outputDataSignal(boost::shared_ptr<void> outputParamsPtr, boost::shared_ptr<void> outputDataPtr) from OutputPort, which contains the data and parameters.

@@ -5,7 +5,7 @@ InputPort::InputPort(int inputBufferSize)
     inputbuffersize=inputBufferSize;
 	paramsgrubcount=0;
 	datagrubcount=0;
-	checkstop=1;
+    checkstop=0;
 }
 
 InputPort::~InputPort()
