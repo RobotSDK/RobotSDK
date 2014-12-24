@@ -57,14 +57,15 @@ unix{
     INCLUDEPATH += /usr/include
 
     MOC_DIR = $$(HOME)/Build/RobotSDK/Kernel/MOC
-    OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Kernel/OBJ
     UI_DIR = $$(HOME)/Build/RobotSDK/Kernel/UI
 	
     CONFIG(debug, debug|release){
+        OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Kernel/OBJ/Debug
         DESTDIR = $$(HOME)/Build/RobotSDK/Kernel/lib/Debug
         target.path = $$(HOME)/SDK/RobotSDK/Kernel/lib/Debug
     }
     else {
+        OBJECTS_DIR = $$(HOME)/Build/RobotSDK/Kernel/OBJ/Release
         DESTDIR = $$(HOME)/Build/RobotSDK/Kernel/lib/Release
         target.path = $$(HOME)/SDK/RobotSDK/Kernel/lib/Release
     }
@@ -92,14 +93,16 @@ win32{
     }
 
     MOC_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/MOC
-    OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/OBJ
+
     UI_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/UI
 	
     CONFIG(debug, debug|release){
+        OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/OBJ/Debug
         DESTDIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/lib/Debug
         target.path = $$(RobotSDK_Kernel)/lib/Debug
     }
     else {
+        OBJECTS_DIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/OBJ/Release
         DESTDIR = $$(RobotSDK_Kernel)/../../../Build/RobotSDK/Kernel/lib/Release
         target.path = $$(RobotSDK_Kernel)/lib/Release
     }
