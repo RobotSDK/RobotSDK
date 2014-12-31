@@ -94,7 +94,7 @@ bool Edge::connectNodes(Node * outputNode, Node * inputNode)
         return 1;
     }
     return bool(connect(outputNode->getOutputPort(outputportindex),SIGNAL(outputDataSignal(boost::shared_ptr<void>, boost::shared_ptr<void>))
-        ,inputNode->getInputPort(inputportindex),SLOT(inputDataSlot(boost::shared_ptr<void>,  boost::shared_ptr<void>)),Qt::BlockingQueuedConnection));
+        ,inputNode->getInputPort(inputportindex),SLOT(inputDataSlot(boost::shared_ptr<void>,  boost::shared_ptr<void>))));//,Qt::BlockingQueuedConnection));
 }
 
 bool Edge::disconnectNodes(Node * inputNode, Node * outputNode)
