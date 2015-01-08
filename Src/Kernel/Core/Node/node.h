@@ -63,6 +63,7 @@
 #include<qthread.h>
 #include<qreadwritelock.h>
 #include<boost/shared_ptr.hpp>
+#include<qmetatype.h>
 
 /*! \def LoadCheckFptr(sharedLibrary, funcPtrType, funcPtr, nodeType, nodeClass)
     \brief Load and check private interface functions \a funcPtrType \a nodeType_nodeClass_funcPtr from QLibrary \a sharedLibrary.
@@ -83,6 +84,8 @@
     \brief The stop ratio of grubcount to buffersize
 */
 #define CHECKSTOP 2
+
+Q_DECLARE_METATYPE(boost::shared_ptr<void>)
 
 /*! \class InputPort
     \brief Class InputPort is the input port for node class to receive input data.

@@ -201,8 +201,8 @@ void OutputPort::outputData(boost::shared_ptr<void> outputParamsPtr, boost::shar
 
 Node::Node(QString qstrSharedLibrary, QString qstrNodeType, QString qstrNodeClass, QString qstrNodeName, QString qstrConfigName)
 { 
+    qRegisterMetaType<boost::shared_ptr<void> >("boost::shared_ptr<void>const&");
     QString sharedlibraryname=qstrSharedLibrary;
-
 #ifdef QT_DEBUG
     sharedlibraryname=sharedlibraryname+QString("_Debug");
 #else

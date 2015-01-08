@@ -94,7 +94,7 @@ bool Edge::connectNodes(Node * outputNode, Node * inputNode)
         return 1;
     }
     return bool(connect(outputNode->getOutputPort(outputportindex),SIGNAL(outputDataSignal(boost::shared_ptr<void>, boost::shared_ptr<void>))
-        ,inputNode->getInputPort(inputportindex),SLOT(inputDataSlot(boost::shared_ptr<void>,  boost::shared_ptr<void>))));//,Qt::BlockingQueuedConnection));
+        ,inputNode->getInputPort(inputportindex),SLOT(inputDataSlot(boost::shared_ptr<void>,  boost::shared_ptr<void>))));
 }
 
 bool Edge::disconnectNodes(Node * inputNode, Node * outputNode)
@@ -147,8 +147,6 @@ void Edge::addNode(Node * node, bool gotoThread, bool needMonitor)
             thread->start();
             threads.push_back(thread);
             flag&=bool(connect(this,SIGNAL(openAllNodesSignal()),node,SLOT(openNodeSlot()),Qt::BlockingQueuedConnection));
-            //flag&=bool(connect(this,SIGNAL(closeAllNodesSignal()),node,SLOT(closeNodeSlot()),Qt::BlockingQueuedConnection));
-            //flag&=bool(connect(this,SIGNAL(openAllNodesSignal()),node,SLOT(openNodeSlot())));
             flag&=bool(connect(this,SIGNAL(closeAllNodesSignal()),node,SLOT(closeNodeSlot())));
         }
         else
