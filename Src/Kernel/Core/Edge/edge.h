@@ -128,7 +128,7 @@ protected:
     */
 	QGridLayout panel;
     /*! \var rowcount
-        \breif rowcount to count the number of \ref TriggerLog and \ref TriggerView.
+        \brief rowcount to count the number of \ref TriggerLog and \ref TriggerView.
     */
     int rowcount;
 protected:
