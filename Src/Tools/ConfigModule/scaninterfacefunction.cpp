@@ -883,7 +883,7 @@ void ScanInterfaceFunction::deleteInputDataParamsHeadersSlot()
 
 void ScanInterfaceFunction::clearInputDataParamsHeadersSlot()
 {
-    ui.InputDataheadersList->clear();
+    ui.InputDataheadersList->clearContents();
     ui.InputDataheadersList->setRowCount(0);
 }
 
@@ -912,7 +912,7 @@ void ScanInterfaceFunction::deleteInputPortsSizeSlot()
 
 void ScanInterfaceFunction::clearInputPortsSizeSlot()
 {
-    ui.InputPortsSize->clear();
+    ui.InputPortsSize->clearContents();
     ui.InputDataheadersList->setRowCount(0);
 }
 
@@ -1151,7 +1151,7 @@ void ScanInterfaceFunction::deleteExFuncSlot()
 
 void ScanInterfaceFunction::clearExFuncsSlot()
 {
-	ui.ExFuncs->clear();
+        ui.ExFuncs->clear();
 }
 
 void ScanInterfaceFunction::browseOutputDirSlot()
