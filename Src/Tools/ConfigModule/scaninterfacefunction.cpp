@@ -913,7 +913,7 @@ void ScanInterfaceFunction::deleteInputPortsSizeSlot()
 void ScanInterfaceFunction::clearInputPortsSizeSlot()
 {
     ui.InputPortsSize->clearContents();
-    ui.InputDataheadersList->setRowCount(0);
+    ui.InputPortsSize->setRowCount(0);
 }
 
 void ScanInterfaceFunction::processDoubleClickInputParamsDataSlot(int row, int column)
