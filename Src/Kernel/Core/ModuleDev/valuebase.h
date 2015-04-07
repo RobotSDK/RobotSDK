@@ -1,22 +1,7 @@
 #ifndef VALUEBASE
 #define VALUEBASE
 
-#include<QList>
-#include<QVector>
-#include<QString>
-#include<QReadWriteLock>
-#include<QTime>
-#include<QMap>
-#include<QObject>
-#include<QWidget>
-#include<QLayout>
-#include<QMultiMap>
-#include<QCoreApplication>
-#include<memory>
-#include<functional>
-#include<Accessories/XMLDomInterface/xmldominterface.h>
 #include<Core/ModuleDev/defines.h>
-#include<Core/Port/port.h>
 
 namespace RobotSDK
 {
@@ -24,6 +9,9 @@ namespace RobotSDK
 class XMLValueBase
 {
     friend class InputPorts;
+    friend class QObjectPool;
+    friend class OutputPorts;
+    friend class Node;
 public:
     XMLValueBase();
     virtual ~XMLValueBase();
@@ -76,11 +64,13 @@ public:
     void setOutputPortFilterFlag(unsigned int portID, bool filterFlag);
     void setOutputPortFilterFlag(QList< bool > filterFlag);
 protected:
-    QMap< QString, QObject * > _objecttriggermap;
-    QMap< QString, QObject * > _widgettriggermap;
-    QMultiMap< QObject *, QString > _connectionmap;
-    QMap< QString, QWidget * > _widgetmap;
-    QMap< QString, QLayout * > _layoutmap;
+    QMap< QString, QObject * > _qobjecttriggermap;
+    QMap< QString, QObject * > _qwidgettriggermap;
+    QMultiMap< QObject *, QString > _defaultconnectionmap;
+    QMultiMap< QObject *, QPair< QString, QString > > _userconnectionmap;
+    QMultiMap< QPair< QObject *, QObject * > , QPair< QString, QString > > _connectionmap;
+    QMap< QString, QWidget * > _qwidgetmap;
+    QMap< QString, QLayout * > _qlayoutmap;
 public:
     QWidget * mainWidget;
 public:
