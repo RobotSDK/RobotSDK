@@ -1,10 +1,6 @@
 #ifndef VALUEBASE
 #define VALUEBASE
 
-#include<QMutex>
-#include<QMutexLocker>
-#include<QCoreApplication>
-
 #include<Core/ModuleDev/defines.h>
 
 namespace RobotSDK
@@ -16,6 +12,7 @@ public:
     XMLValueBase();
     virtual ~XMLValueBase();
 protected:
+    QString _configfilename;
     QList< std::function< void(XMLDomInterface &, XMLValueBase *) > > _xmlloadfunclist;
 public:
     void loadXMLValues(QString configName, QString nodeClass, QString nodeName);
@@ -23,6 +20,7 @@ public:
 
 class XMLParamsBase : public XMLValueBase
 {
+    friend class Node;
 public:
     XMLParamsBase();
     ~XMLParamsBase();

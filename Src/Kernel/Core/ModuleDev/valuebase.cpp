@@ -48,7 +48,7 @@ QString XMLParamsBase::getNodeName()
 XMLVarsBase::XMLVarsBase()
 {
     mainWidget=new QWidget;
-    mainWidget->moveToThread(QCoreApplication::instance()->thread());
+    mainWidget->moveToThread(QApplication::instance()->thread());
 }
 
 XMLVarsBase::~XMLVarsBase()
@@ -113,7 +113,7 @@ void XMLVarsBase::setInputPortBufferSize(uint portID, uint bufferSize)
 void XMLVarsBase::setInputPortBufferSize(QList<uint> bufferSize)
 {
     QMutexLocker locker(&_inputportlock);
-    int i,n=bufferSize.size();
+    uint i,n=bufferSize.size();
     for(i=0;i<_inputportnum&&i<n;i++)
     {
         _buffersize[i]=bufferSize.at(i);
@@ -132,7 +132,7 @@ void XMLVarsBase::setInputPortObtainDataBehavior(uint portID, ObtainBehavior obt
 void XMLVarsBase::setInputPortObtainDataBehavior(QList<ObtainBehavior> obtainDataBehavior)
 {
     QMutexLocker locker(&_inputportlock);
-    int i,n=obtainDataBehavior.size();
+    uint i,n=obtainDataBehavior.size();
     for(i=0;i<_inputportnum&&i<n;i++)
     {
         _obtaindatabehavior[i]=obtainDataBehavior.at(i);
@@ -151,7 +151,7 @@ void XMLVarsBase::setInputPortObtainDataSize(uint portID, uint obtainDataSize)
 void XMLVarsBase::setInputPortObtainDataSize(QList<uint> obtainDataSize)
 {
     QMutexLocker locker(&_inputportlock);
-    int i,n=obtainDataSize.size();
+    uint i,n=obtainDataSize.size();
     for(i=0;i<_inputportnum&&i<n;i++)
     {
         _obtaindatasize[i]=obtainDataSize.at(i);
@@ -170,7 +170,7 @@ void XMLVarsBase::setInputPortTriggerFlag(uint portID, bool triggerFlag)
 void XMLVarsBase::setInputPortTriggerFlag(QList<bool> triggerFlag)
 {
     QMutexLocker locker(&_inputportlock);
-    int i,n=triggerFlag.size();
+    uint i,n=triggerFlag.size();
     for(i=0;i<_inputportnum&&i<n;i++)
     {
         _triggerflag[i]=triggerFlag.at(i);

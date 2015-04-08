@@ -76,10 +76,10 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
     }
     if(sendFlag)
     {
-        PORT_PARAMS_CAPSULE INPUT_PARAMS_ARG;
-        INPUT_PARAMS_ARG.resize(portnum);
-        PORT_DATA_CAPSULE INPUT_DATA_ARG;
-        _inputData.resize(portnum);
+        PORT_PARAMS_CAPSULE inputparams;
+        inputparams.resize(portnum);
+        PORT_DATA_CAPSULE inputdata;
+        inputdata.resize(portnum);
         for(i=0;i<portnum;i++)
         {
             ObtainBehavior obtaindatabehavior=_obtaindatabehavior.at(i);
@@ -88,13 +88,13 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
             {
                 if(obtaindatasize>0)
                 {
-                    std::copy(portparamsbuffer[i].begin(), portparamsbuffer[i].begin()+obtaindatasize, INPUT_PARAMS_ARG[i].begin());
-                    std::copy(portdatabuffer[i].begin(), portdatabuffer[i].begin()+obtaindatasize, INPUT_DATA_ARG[i].begin());
+                    std::copy(portparamsbuffer[i].begin(), portparamsbuffer[i].begin()+obtaindatasize, inputparams[i].begin());
+                    std::copy(portdatabuffer[i].begin(), portdatabuffer[i].begin()+obtaindatasize, inputdata[i].begin());
                 }
                 else
                 {
-                    INPUT_PARAMS_ARG[i]=portparamsbuffer[i];
-                    INPUT_DATA_ARG[i]=portdatabuffer[i];
+                    inputparams[i]=portparamsbuffer[i];
+                    inputdata[i]=portdatabuffer[i];
                 }
                 if((0b001)&(_obtaindatabehavior.at(i)))
                 {
@@ -107,13 +107,13 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
             {
                 if(obtaindatasize>0)
                 {
-                    std::copy(portparamsbuffer[i].end()-obtaindatasize, portparamsbuffer[i].end(), INPUT_PARAMS_ARG[i].begin());
-                    std::copy(portdatabuffer[i].end()-obtaindatasize, portdatabuffer[i].end(), INPUT_DATA_ARG[i].begin());
+                    std::copy(portparamsbuffer[i].end()-obtaindatasize, portparamsbuffer[i].end(), inputparams[i].begin());
+                    std::copy(portdatabuffer[i].end()-obtaindatasize, portdatabuffer[i].end(), inputdata[i].begin());
                 }
                 else
                 {
-                    INPUT_PARAMS_ARG[i]=portparamsbuffer[i];
-                    INPUT_DATA_ARG[i]=portdatabuffer[i];
+                    inputparams[i]=portparamsbuffer[i];
+                    inputdata[i]=portdatabuffer[i];
                 }
                 if((0b001)&(_obtaindatabehavior.at(i)))
                 {
@@ -135,7 +135,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
                 }
             }
         }
-        emit signalObtainParamsData(INPUT_PARAMS_ARG,INPUT_DATA_ARG);
+        emit signalObtainParamsData(inputparams,inputdata);
     }
 }
 

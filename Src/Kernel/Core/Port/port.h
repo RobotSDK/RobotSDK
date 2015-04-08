@@ -1,8 +1,8 @@
 #ifndef PORT_H
 #define PORT_H
 
-#include<Core/ModuleDev/valuebase.h>
 #include<Core/ModuleDev/defines.h>
+#include<Core/ModuleDev/valuebase.h>
 
 namespace RobotSDK
 {
@@ -50,7 +50,7 @@ public slots:
     void slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TRANSFER_PORT_DATA_TYPE inputData, uint inputPortID);
     void slotClearBuffer();
 signals:
-    void signalObtainParamsData(PORT_PARAMS_CAPSULE INPUT_PARAMS_ARG, PORT_DATA_CAPSULE INPUT_DATA_ARG);
+    void signalObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
 };
 
 class OutputPorts : QObject

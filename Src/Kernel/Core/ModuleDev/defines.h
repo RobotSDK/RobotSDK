@@ -12,11 +12,17 @@
 #include<QPair>
 #include<QLibrary>
 #include<QtGlobal>
+#include<QApplication>
+#include<QMutex>
+#include<QMutexLocker>
+#include<QThread>
+
 #include<deque>
 #include<vector>
 #include<algorithm>
 #include<memory>
 #include<functional>
+
 #include<Accessories/XMLDomInterface/xmldominterface.h>
 
 #define RobotSDK_Module
@@ -44,16 +50,26 @@ enum ObtainBehavior
 
 //=================================================================================
 
+#define XML_VALUE_BASE_TYPE std::shared_ptr< XMLValueBase >
+#define XML_VALUE_BASE_CONST_TYPE std::shared_ptr< const XMLValueBase >
 
-#define TRANSFER_TYPE std::shared_ptr< XMLValueBase >
-#define TRANSFER_CONST_TYPE std::shared_ptr< const XMLValueBase >
+#define XML_PARAMS_BASE_TYPE std::shared_ptr< XMLParamsBase >
+#define XML_PARAMS_BASE_CONST_TYPE std::shared_ptr< const XMLParamsBase >
 
-#define TRANSFER_NODE_PARAMS_TYPE std::shared_ptr< const XMLParamsBase >
-#define TRANSFER_NODE_VARS_TYPE std::shared_ptr< XMLVarsBase >
-#define TRANSFER_NODE_DATA_TYPE std::shared_ptr< XMLDataBase >
+#define XML_VARS_BASE_TYPE std::shared_ptr< XMLVarsBase >
+#define XML_VARS_BASE_CONST_TYPE std::shared_ptr< const XMLVarsBase >
 
-#define TRANSFER_PORT_PARAMS_TYPE std::shared_ptr< const XMLParamsBase >
-#define TRANSFER_PORT_DATA_TYPE std::shared_ptr< const XMLDataBase >
+#define XML_DATA_BASE_TYPE std::shared_ptr< XMLDataBase >
+#define XML_DATA_BASE_CONST_TYPE std::shared_ptr< const XMLDataBase >
+
+//=================================================================================
+
+#define TRANSFER_NODE_PARAMS_TYPE XML_PARAMS_BASE_CONST_TYPE
+#define TRANSFER_NODE_VARS_TYPE XML_VARS_BASE_TYPE
+#define TRANSFER_NODE_DATA_TYPE XML_DATA_BASE_TYPE
+
+#define TRANSFER_PORT_PARAMS_TYPE XML_PARAMS_BASE_CONST_TYPE
+#define TRANSFER_PORT_DATA_TYPE XML_DATA_BASE_CONST_TYPE
 
 #define PORT_PARAMS_BUFFER QList< TRANSFER_PORT_PARAMS_TYPE >
 #define PORT_DATA_BUFFER QList< TRANSFER_PORT_DATA_TYPE >
@@ -90,18 +106,20 @@ using namespace RobotSDK;
     NODE_VARS_ARG, \
     NODE_DATA_ARG
 
-#define NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName) funcName=(funcName##Fptr)(qLibrary.resolve(QString("%1_%2").arg(nodeClass).arg(#funcName).toUtf8().constData()));
-#define NODE_EXFUNC_PTR_LOAD(qLibrary, nodeClass, funcName, exName) funcName=(funcName##Fptr)(qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())); \
-    if(funcName==NULL){NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName)}
+#define LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName) qLibrary.resolve(QString("%1_%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
+#define LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName) qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
+      qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
+    : LOAD_NODE_FUNC_PTR(qLibrary,nodeClass,funcName)
 
-#define NODE_FUNC_PTR_ADD(returnType, funcName, ...) \
+#define ADD_NODE_FUNC_PTR(returnType, funcName, ...) \
     protected: typedef returnType (*funcName##Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
-    private: funcName##Fptr _funcptr_##funcName##_Func() \
-    {_funcptrlist.push_back([](QLibrary & qLibrary, QString nodeClass, QString exName) \
-    {if(exName.size()==0){NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName)}else{NODE_EXFUNC_PTR_LOAD(qLibrary, nodeClass, funcName, exName)}}); return NULL;}; \
-    protected: funcName##Fptr funcName=_funcptr_##funcName##_Func();
+    private: QString _funcptr_##funcName##_Func() \
+    {_funcloadmap.insert(QString(#funcName),[](QLibrary & qLibrary, QString nodeClass, QString exName)->QFunctionPointer \
+    {if(exName.size()==0){return LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName);} \
+    else{return LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName);}}); return QString(#funcName);}; \
+    protected: QString funcName=_funcptr_##funcName##_Func();
 
-#define NODE_FUNC_PTR_CALL(funcName, ...) funcName(ROBOTSDK_ARGS, ##__VA_ARGS__)
+#define NODE_FUNC_PTR(funcName, ...) (funcName##Fptr(_funcmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
 
@@ -217,7 +235,7 @@ using namespace RobotSDK;
 
 #define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
     private: triggerType * _qwidget_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
+    {triggerType * trigger=new triggerType; trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
     public: triggerType * triggerName=_qwidget_##triggerType##_##triggerName##_Func();
 
 #define ADD_INTERNAL_DEFAULT_CONNECTION(triggeName,signalName) \
@@ -233,12 +251,12 @@ using namespace RobotSDK;
 
 #define ADD_QWIDGET(widgetType, widgetName) \
     private: widgetType * _qwidget_##widgetType##_##widgetName##_Func() \
-    {widgetType * widget=new widgetType; _qwidgetmap.insert(#widgetName, widget); return widget;}; \
+    {widgetType * widget=new widgetType; widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
     public: widgetType * widgetName=_qwidget_##widgetType##_##widgetName##_Func();
 
 #define ADD_QLAYOUT(layoutType, layoutName) \
     private: layoutType * _qlayout_##layoutType##_##layoutName##_Func() \
-    {layoutType * layout=new layoutType; _qlayoutmap.insert(#layoutName, layout); return layout;}; \
+    {layoutType * layout=new layoutType; layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
     public: layoutType * layoutName=_qlayout_##layoutType##_##layoutName##_Func()
 
 #define ADD_CONNECTION(emitterName,signalName,receiverName,slotName,...) \
@@ -269,12 +287,12 @@ using namespace RobotSDK;
     return INPUT_PORT_NUM;} \
     NODE_FUNC_DECL_CPP(uint, getOutputPortNum){ \
     return OUTPUT_POPT_NUM;} \
-    NODE_FUNC_DECL_CPP(TRANSFER_NODE_PARAMS_TYPE, generateParams){ \
-    return TRANSFER_NODE_PARAMS_TYPE(new NODE_PARAMS_TYPE);} \
-    NODE_FUNC_DECL_CPP(TRANSFER_NODE_VARS_TYPE, generateVars){ \
-    return TRANSFER_NODE_VARS_TYPE(new NODE_VARS_TYPE);} \
-    NODE_FUNC_DECL_CPP(TRANSFER_TYPE, generateData){ \
-    return TRANSFER_TYPE(new NODE_DATA_TYPE);}
+    NODE_FUNC_DECL_CPP(XML_PARAMS_BASE_TYPE, generateNodeParams){ \
+    return XML_PARAMS_BASE_TYPE(new NODE_PARAMS_TYPE);} \
+    NODE_FUNC_DECL_CPP(XML_VARS_BASE_TYPE, generateNodeVars){ \
+    return XML_VARS_BASE_TYPE(new NODE_VARS_TYPE);} \
+    NODE_FUNC_DECL_CPP(XML_DATA_BASE_TYPE, generateNodeData){ \
+    return XML_DATA_BASE_TYPE(new NODE_DATA_TYPE);}
 
 //=================================================================================
 
