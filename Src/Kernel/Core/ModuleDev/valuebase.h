@@ -12,10 +12,9 @@ public:
     XMLValueBase();
     virtual ~XMLValueBase();
 protected:
-    QString _configfilename;
     QList< std::function< void(XMLDomInterface &, XMLValueBase *) > > _xmlloadfunclist;
 public:
-    void loadXMLValues(QString configName, QString nodeClass, QString nodeName);
+    void loadXMLValues(QString configFileName, QString nodeClass, QString nodeName);
 };
 
 class XMLParamsBase : public XMLValueBase
@@ -27,24 +26,56 @@ public:
 protected:
     QString _nodeclass;
     QString _nodename;
+    QString _exname;
 public:
     QString getNodeClass();
     QString getNodeName();
+    QString getExName();
+};
+
+class NodeSwitcher : public QPushButton
+{
+    Q_OBJECT
+    friend class Node;
+public:
+    static const int SwitchEventType;
+    static const int OpenNodeEventType;
+    static const int CloseNodeEventType;
+protected:
+    QObject * _node;
+public:
+    NodeSwitcher(QWidget * parent=0);
+public slots:
+    void slotSwitchNode();
+};
+
+class WidgetSwitcher : public QPushButton
+{
+    Q_OBJECT
+public:
+    WidgetSwitcher(QWidget * parent=0);
+protected:
+    bool visibleflag;
+public slots:
+    void slotSwitchWidget();
+signals:
+    void signalSwitchWidget(bool visiable);
 };
 
 class XMLVarsBase : public XMLValueBase
 {
     friend class InputPorts;
+    friend class Node;
 public:
     XMLVarsBase();
     ~XMLVarsBase();
 protected:
     QMutex _inputportlock;
     uint _inputportnum;
-    QList< uint > _buffersize;
-    QList< ObtainBehavior > _obtaindatabehavior;
-    QList< uint > _obtaindatasize;
-    QList< bool > _triggerflag;
+    QVector< uint > _buffersize;
+    QVector< ObtainBehavior > _obtaindatabehavior;
+    QVector< uint > _obtaindatasize;
+    QVector< bool > _triggerflag;
 public:
     void setInputPortBufferSize(uint portID, uint bufferSize);
     void setInputPortBufferSize(QList< uint > bufferSize);
@@ -63,11 +94,18 @@ protected:
     QMap< QString, QWidget * > _qwidgetmap;
     QMap< QString, QLayout * > _qlayoutmap;
 public:
-    QWidget * mainWidget;
+    ADD_QWIDGET(QWidget, widget)
+    ADD_QWIDGET(NodeSwitcher, nodeSwitcher)
+    ADD_QWIDGET(WidgetSwitcher, widgetSwitcher)
+    ADD_CONNECTION(widgetSwitcher, signalSwitchWidget, widget, setVisible, bool)
+private:
+    void moveTriggerToPoolThread(QObject * node, QThread *poolThread);
 public:
-    QObject * getTrigger(QString triggerName);
-    QWidget * getWidget(QString widgetName);
-    QLayout * getLayout(QString layoutName);
+    QWidget * getWidget() const;
+protected:
+    QObject * _node;
+public:
+    const QObject *getNode();
 };
 
 class XMLDataBase : public XMLValueBase

@@ -16,6 +16,10 @@
 #include<QMutex>
 #include<QMutexLocker>
 #include<QThread>
+#include<QDebug>
+#include<QPushButton>
+#include<QMetaObject>
+#include<QCoreApplication>
 
 #include<deque>
 #include<vector>
@@ -106,22 +110,23 @@ using namespace RobotSDK;
     NODE_VARS_ARG, \
     NODE_DATA_ARG
 
-#define LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName) qLibrary.resolve(QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
-#define LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName) qLibrary.resolve(QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
-      qLibrary.resolve(QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
-    : LOAD_NODE_FUNC_PTR(qLibrary,nodeClass,funcName)
+#define LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName) QLibrary::resolve(libraryFileName, QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
+#define LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName) QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
+      QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
+    : LOAD_NODE_FUNC_PTR(libraryFileName,nodeClass,funcName)
 
 #define ADD_NODE_FUNC_PTR(returnType, funcName, ...) \
     protected: typedef returnType (*funcName##_Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
-    private: QString _funcptr_##funcName##_Func() \
-    {_funcloadmap.insert(QString(#funcName),[](QLibrary & qLibrary, QString nodeClass, QString exName)->QFunctionPointer \
-    {if(exName.size()==0){return LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName);} \
-    else{return LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName);}}); return QString(#funcName);}; \
+    private: QString _funcptr_##funcName##_Func(){ \
+    _funcptrlist.push_back(QString(#funcName)); \
+    _funcptrcloadmap.insert(QString(#funcName),[](QString libraryFileName, QString nodeClass, QString exName)->QFunctionPointer{ \
+    if(exName.size()==0){return LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName);} \
+    else{return LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName);}}); return QString(#funcName);}; \
     protected: QString funcName=_funcptr_##funcName##_Func();
 
 #define ADD_NODE_DEFAULT_FUNC_PTR(returnType, funcName, ...) ADD_NODE_FUNC_PTR(returnType, funcName, ##__VA_ARGS__)
 
-#define NODE_FUNC_PTR(funcName, ...) (funcName##_Fptr(_funcmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
+#define NODE_FUNC_PTR(funcName, ...) (funcName##_Fptr(_funcptrmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
 
@@ -233,12 +238,12 @@ using namespace RobotSDK;
 #define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName) \
     private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
     {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); return trigger;}; \
-    public: triggerType * triggerName=_qobject_##triggerType##_##triggerName##_Func();
+    public: triggerType * const triggerName=_qobject_##triggerType##_##triggerName##_Func();
 
 #define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
     private: triggerType * _qwidget_##triggerType##_##triggerName##_Func() \
     {triggerType * trigger=new triggerType; trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
-    public: triggerType * triggerName=_qwidget_##triggerType##_##triggerName##_Func();
+    public: triggerType * const triggerName=_qwidget_##triggerType##_##triggerName##_Func();
 
 #define ADD_INTERNAL_DEFAULT_CONNECTION(triggeName,signalName) \
     private: QString _default_connection_##triggerName##_##signalName##_Func() \
@@ -254,18 +259,18 @@ using namespace RobotSDK;
 #define ADD_QWIDGET(widgetType, widgetName) \
     private: widgetType * _qwidget_##widgetType##_##widgetName##_Func() \
     {widgetType * widget=new widgetType; widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
-    public: widgetType * widgetName=_qwidget_##widgetType##_##widgetName##_Func();
+    public: widgetType * const widgetName=_qwidget_##widgetType##_##widgetName##_Func();
 
 #define ADD_QLAYOUT(layoutType, layoutName) \
     private: layoutType * _qlayout_##layoutType##_##layoutName##_Func() \
     {layoutType * layout=new layoutType; layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
-    public: layoutType * layoutName=_qlayout_##layoutType##_##layoutName##_Func()
+    public: layoutType * const layoutName=_qlayout_##layoutType##_##layoutName##_Func();
 
 #define ADD_CONNECTION(emitterName,signalName,receiverName,slotName,...) \
     private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func() \
     {QPair< QString, QString > connection=QPair< QString, QString >(QString(SIGNAL(signalName(__VA_ARGS__))),QString(SLOT(slotName(__VA_ARGS__)))); \
-    _userconnectionmap.insert(QPair< emitterName, receiverName >, connection); return connection;}; \
-    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func()
+    _connectionmap.insert(QPair< QObject *, QObject * >(emitterName, receiverName), connection); return connection;}; \
+    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func();
 
 //=================================================================================
 //for Node Function

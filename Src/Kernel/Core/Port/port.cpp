@@ -19,9 +19,9 @@ OutputPort::OutputPort(uint portID, QObject *parent)
     portid=portID;
 }
 
-void OutputPort::slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData)
+void OutputPort::slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData)
 {
-    if(portid>=uint(filterFlag.size())||filterFlag.at(portid))
+    if(portid>=uint(outputData->_filterflag.size())||outputData->_filterflag.at(portid))
     {
         outputData->portid=portid;
         emit signalSendParamsData(outputParams, outputData);
@@ -32,6 +32,7 @@ InputPorts::InputPorts(uint portNum, std::shared_ptr<XMLVarsBase> nodeVars)
     : QObject(NULL)
 {
     portnum=portNum;
+    inputports.resize(portnum);
     portparamsbuffer.resize(portnum);
     portdatabuffer.resize(portnum);
     buffercount.resize(portnum);
@@ -42,6 +43,7 @@ InputPorts::InputPorts(uint portNum, std::shared_ptr<XMLVarsBase> nodeVars)
         InputPort * port=new InputPort(i,this);
         connect(port, SIGNAL(signalReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE,uint)),
                 this, SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE,uint)),Qt::DirectConnection);
+        inputports[i]=port;
     }
     nodevars=nodeVars;
 }
@@ -53,9 +55,10 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
     buffercount[inputPortID]++;
 
     QMutexLocker locker(&(nodevars->_inputportlock));
-    QList< uint > _buffersize=nodevars->_buffersize;
-    QList< ObtainBehavior > _obtaindatabehavior=nodevars->_obtaindatabehavior;
-    QList< uint > _obtaindatasize=nodevars->_obtaindatasize;
+    QVector< uint > _buffersize=nodevars->_buffersize;
+    QVector< ObtainBehavior > _obtaindatabehavior=nodevars->_obtaindatabehavior;
+    QVector< uint > _obtaindatasize=nodevars->_obtaindatasize;
+    QVector< bool > _triggerflag=nodevars->_triggerflag;
     locker.unlock();
 
     if(_buffersize.at(inputPortID)>0&&buffercount[inputPortID]>_buffersize.at(inputPortID))
@@ -63,6 +66,11 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
         portparamsbuffer[inputPortID].pop_back();
         portdatabuffer[inputPortID].pop_back();
         buffercount[inputPortID]--;
+    }
+
+    if(!_triggerflag.at(inputPortID))
+    {
+        return;
     }
 
     uint i;
@@ -153,16 +161,19 @@ void InputPorts::slotClearBuffer()
 OutputPorts::OutputPorts(uint portNum)
     : QObject(NULL)
 {
+    portnum=portNum;
+    outputports.resize(portnum);
     uint i;
-    for(i=0;i<portNum;i++)
+    for(i=0;i<portnum;i++)
     {
         OutputPort * port=new OutputPort(i,this);
-        connect(this, SIGNAL(signalSendParamsData(QList< bool >, TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),
-                port, SLOT(slotSendParamsData(QList< bool >, TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),Qt::DirectConnection);
+        connect(this, SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),
+                port, SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),Qt::DirectConnection);
+        outputports[i]=port;
     }
 }
 
-void OutputPorts::slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData)
+void OutputPorts::slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData)
 {
-    emit signalSendParamsData(filterFlag,outputParams,outputData);
+    emit signalSendParamsData(outputParams,outputData);
 }

@@ -28,7 +28,7 @@ public:
 protected:
     uint portid;
 public slots:
-    void slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+    void slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
 signals:
     void signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE outputParams, TRANSFER_PORT_DATA_TYPE outputData);
 };
@@ -38,10 +38,13 @@ signals:
 class InputPorts : public QObject
 {
     Q_OBJECT
+    friend class Node;
 public:
     InputPorts(uint portNum, TRANSFER_NODE_VARS_TYPE nodeVars);
 protected:
     uint portnum;
+    QVector< InputPort * > inputports;
+protected:
     QVector< PORT_PARAMS_BUFFER > portparamsbuffer;
     QVector< PORT_DATA_BUFFER > portdatabuffer;
     QVector< uint > buffercount;
@@ -56,13 +59,16 @@ signals:
 class OutputPorts : QObject
 {
     Q_OBJECT
+    friend class Node;
 public:
     OutputPorts(uint portNum);
-    ~OutputPorts();
+protected:
+    uint portnum;
+    QVector< OutputPort * > outputports;
 public slots:
-    void slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+    void slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
 signals:
-    void signalSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+    void signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
 };
 
 }

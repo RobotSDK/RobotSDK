@@ -12,12 +12,12 @@ XMLValueBase::~XMLValueBase()
 
 }
 
-void XMLValueBase::loadXMLValues(QString configName, QString nodeClass, QString nodeName)
+void XMLValueBase::loadXMLValues(QString configFileName, QString nodeClass, QString nodeName)
 {
     int i,n=_xmlloadfunclist.size();
     if(n>0)
     {
-        XMLDomInterface xmlloader(configName,nodeClass,nodeName);
+        XMLDomInterface xmlloader(configFileName,nodeClass,nodeName);
         for(i=0;i<n;i++)
         {
             _xmlloadfunclist.at(i)(xmlloader,this);
@@ -45,10 +45,44 @@ QString XMLParamsBase::getNodeName()
     return _nodename;
 }
 
+QString XMLParamsBase::getExName()
+{
+    return _exname;
+}
+
+const int NodeSwitcher::SwitchEventType=QEvent::registerEventType();
+const int NodeSwitcher::OpenNodeEventType=QEvent::registerEventType();
+const int NodeSwitcher::CloseNodeEventType=QEvent::registerEventType();
+
+NodeSwitcher::NodeSwitcher(QWidget *parent)
+    : QPushButton(parent)
+{
+    _node=NULL;
+    connect(this,SIGNAL(clicked()),this,SLOT(slotSwitchNode()),Qt::DirectConnection);
+}
+
+void NodeSwitcher::slotSwitchNode()
+{
+    QEvent * event=new QEvent(QEvent::Type(SwitchEventType));
+    QCoreApplication::postEvent(_node,event);
+}
+
+WidgetSwitcher::WidgetSwitcher(QWidget * parent)
+    : QPushButton(parent)
+{
+    visibleflag=0;
+    connect(this,SIGNAL(clicked()),this,SLOT(slotSwitchWidget()),Qt::DirectConnection);
+}
+
+void WidgetSwitcher::slotSwitchWidget()
+{
+    visibleflag=!visibleflag;
+    emit signalSwitchWidget(visibleflag);
+}
+
 XMLVarsBase::XMLVarsBase()
 {
-    mainWidget=new QWidget;
-    mainWidget->moveToThread(QApplication::instance()->thread());
+    widget->setVisible(0);
 }
 
 XMLVarsBase::~XMLVarsBase()
@@ -95,9 +129,9 @@ XMLVarsBase::~XMLVarsBase()
     }
     _qlayoutmap.clear();
 
-    if(mainWidget->parent()==NULL)
+    if(widget->parent()==NULL)
     {
-        delete mainWidget;
+        delete widget;
     }
 }
 
@@ -177,26 +211,26 @@ void XMLVarsBase::setInputPortTriggerFlag(QList<bool> triggerFlag)
     }
 }
 
-QObject * XMLVarsBase::getTrigger(QString triggerName)
+void XMLVarsBase::moveTriggerToPoolThread(QObject * node, QThread * poolThread)
 {
-    QObject * object=_qobjecttriggermap[triggerName];
-    if(object==NULL)
+    QMap< QString, QObject * >::const_iterator triggeriter;
+    for(triggeriter=_qobjecttriggermap.begin();triggeriter!=_qobjecttriggermap.end();triggeriter++)
     {
-        object=_qwidgettriggermap[triggerName];
+        if(triggeriter.value()->thread()==node->thread())
+        {
+            triggeriter.value()->moveToThread(poolThread);
+        }
     }
-    return object;
 }
 
-QWidget * XMLVarsBase::getWidget(QString widgetName)
+QWidget *XMLVarsBase::getWidget() const
 {
-    QWidget * widget=_qwidgetmap[widgetName];
     return widget;
 }
 
-QLayout * XMLVarsBase::getLayout(QString layoutName)
+const QObject *XMLVarsBase::getNode()
 {
-    QLayout * layout=_qlayoutmap[layoutName];
-    return layout;
+    return _node;
 }
 
 XMLDataBase::XMLDataBase()
