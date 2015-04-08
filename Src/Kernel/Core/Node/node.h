@@ -12,8 +12,11 @@ class Node : public QObject
 {
     Q_OBJECT
 public:
-    Node(QString libraryFileName, QString nodeClass, QString nodeName, QString configFileName);
+    Node(QString nodeClass, QString nodeName);
     ~Node();
+private:
+    QString _nodeclass;
+    QString _nodename;
 private:
     QThread _inputthread;
     InputPorts * _inputports;
@@ -30,13 +33,19 @@ protected:
     QMap< QString, std::function< QFunctionPointer(QLibrary &, QString, QString) > > _funcloadmap;
     QMap< QString, QFunctionPointer > _funcmap;
 private slots:
+    void slotInitialNode(QString );
     void slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
     void slotDefaultTrigger();
 public:
-    void loadFunctions();
-public:
-    ADD_NODE_FUNC_PTR(uint,getInputPortNum)
-
+    ADD_NODE_DEFAULT_FUNC_PTR(uint, getInputPortNum)
+    ADD_NODE_DEFAULT_FUNC_PTR(uint, getOutputPortNum)
+    ADD_NODE_DEFAULT_FUNC_PTR(XML_PARAMS_BASE_TYPE, generateNodeParams)
+    ADD_NODE_DEFAULT_FUNC_PTR(XML_VARS_BASE_TYPE, generateNodeVars)
+    ADD_NODE_DEFAULT_FUNC_PTR(XML_DATA_BASE_TYPE, generateNodeData)
+    ADD_NODE_FUNC_PTR(bool, initialNode)
+    ADD_NODE_FUNC_PTR(bool, openNode)
+    ADD_NODE_FUNC_PTR(bool, closeNode)
+    ADD_NODE_FUNC_PTR(bool, main)
 };
 
 }

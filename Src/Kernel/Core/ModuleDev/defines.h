@@ -106,20 +106,22 @@ using namespace RobotSDK;
     NODE_VARS_ARG, \
     NODE_DATA_ARG
 
-#define LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName) qLibrary.resolve(QString("%1_%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
-#define LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName) qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
-      qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
+#define LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName) qLibrary.resolve(QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
+#define LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName) qLibrary.resolve(QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
+      qLibrary.resolve(QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
     : LOAD_NODE_FUNC_PTR(qLibrary,nodeClass,funcName)
 
 #define ADD_NODE_FUNC_PTR(returnType, funcName, ...) \
-    protected: typedef returnType (*funcName##Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
+    protected: typedef returnType (*funcName##_Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
     private: QString _funcptr_##funcName##_Func() \
     {_funcloadmap.insert(QString(#funcName),[](QLibrary & qLibrary, QString nodeClass, QString exName)->QFunctionPointer \
     {if(exName.size()==0){return LOAD_NODE_FUNC_PTR(qLibrary, nodeClass, funcName);} \
     else{return LOAD_NODE_EXFUNC_PTR(qLibrary, nodeClass, funcName, exName);}}); return QString(#funcName);}; \
     protected: QString funcName=_funcptr_##funcName##_Func();
 
-#define NODE_FUNC_PTR(funcName, ...) (funcName##Fptr(_funcmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
+#define ADD_NODE_DEFAULT_FUNC_PTR(returnType, funcName, ...) ADD_NODE_FUNC_PTR(returnType, funcName, ##__VA_ARGS__)
+
+#define NODE_FUNC_PTR(funcName, ...) (funcName##_Fptr(_funcmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
 
@@ -274,7 +276,7 @@ using namespace RobotSDK;
 #define NODE_FUNC_DECL_H(returnType, funcName, ...) extern "C" RobotSDK_EXPORT NODE_FUNC_DEF(returnType, funcName, ##__VA_ARGS__);
 #define NODE_FUNC_DECL_CPP(returnType, funcName, ...) extern "C" RobotSDK_EXPORT NODE_FUNC_DEF(returnType, funcName, ##__VA_ARGS__)
 
-#define NODE_EXFUNC_NAME(funcName, exName) NODE_CLASS##__##funcName##_##exName
+#define NODE_EXFUNC_NAME(funcName, exName) NODE_CLASS##__##funcName##__##exName
 #define NODE_EXFUNC(funcName, exName, ...) NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS, ##__VA_ARGS__)
 #define NODE_EXFUNC_DEF(returnType, funcName, exName, ...) returnType NODE_EXFUNC(funcName, exName, ##__VA_ARGS__)
 #define NODE_EXFUNC_DECL_H(returnType, funcName, exName, ...) extern "C" RobotSDK_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, ##__VA_ARGS__);
