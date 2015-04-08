@@ -17,6 +17,9 @@
 #include<qtextstream.h>
 #include<qdatetime.h>
 
+namespace RobotSDK
+{
+
 /*! \def DEFAULTVALUENAME
 	\brief Defines the tag for the default value.
 */
@@ -77,17 +80,16 @@
 class XMLDomInterface
 {
 public:
-	/*! \fn XMLDomInterface(QString configName, QString nodeType, QString nodeClass, QString nodeName)
+        /*! \fn XMLDomInterface(QString configName, QString nodeClass, QString nodeName)
 		\brief Constructor of XMLDomInterface.
 		\param [in] configName The name of config file.
-		\param [in] nodeType The type-name of the Node.
 		\param [in] nodeClass The class-name of the Node.
 		\param [in] nodeName The node-name of the Node.
 		\details
 		- Load XML file.
 		- Locate the parameters.
 	*/
-	XMLDomInterface(QString configName, QString nodeType, QString nodeClass, QString nodeName);
+        XMLDomInterface(QString configName, QString nodeClass, QString nodeName);
 	/*! \fn ~XMLDomInterface()
 		\brief Destructor of XMLDomInterface.
 		\details
@@ -245,8 +247,8 @@ public:
 		- base 8 : "0" prefixed number
 	*/
 	bool getParamValue(QString paramName, int & param, QString valueName=QString(DEFAULTVALUENAME));
-	/*! \fn bool getParamValue(QString paramName, unsigned int & param, QString valueName=QString(DEFAULTVALUENAME))
-		\brief Get parameter's unsigned int value.
+	/*! \fn bool getParamValue(QString paramName, uint & param, QString valueName=QString(DEFAULTVALUENAME))
+		\brief Get parameter's uint value.
 		\param [in] paramName The name of the parameter.
 		\param [out] param The variable to store parameter value.
 		\param [in] valueName The name of the value.
@@ -257,7 +259,7 @@ public:
 		- base 16 : "0x" prefixed number
 		- base 8 : "0" prefixed number
 	*/
-	bool getParamValue(QString paramName, unsigned int & param, QString valueName=QString(DEFAULTVALUENAME));
+	bool getParamValue(QString paramName, uint & param, QString valueName=QString(DEFAULTVALUENAME));
 	/*! \fn bool getParamValue(QString paramName, short & param, QString valueName=QString(DEFAULTVALUENAME))
 		\brief Get parameter's short value.
 		\param [in] paramName The name of the parameter.
@@ -380,7 +382,7 @@ public:
 	template<class EnumType>
 	bool getUEnumParamValue(QString paramName, EnumType & param, QString valueName=QString(DEFAULTVALUENAME))
 	{
-		unsigned int tempi;
+		uint tempi;
 		bool flag=getParamValue(paramName,tempi,valueName);
 		if(flag)
 		{
@@ -425,6 +427,8 @@ public:
 		}
 	}
 };
+
+}
 
 /*! @}*/
 

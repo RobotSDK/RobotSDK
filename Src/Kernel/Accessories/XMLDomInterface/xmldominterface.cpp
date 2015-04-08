@@ -1,6 +1,8 @@
 #include "xmldominterface.h"
 
-XMLDomInterface::XMLDomInterface(QString configName, QString nodeType, QString nodeClass, QString nodeName)
+using namespace RobotSDK;
+
+XMLDomInterface::XMLDomInterface(QString configName, QString nodeClass, QString nodeName)
 {
 	editflag=0;
 	nullflag=0;
@@ -12,7 +14,6 @@ XMLDomInterface::XMLDomInterface(QString configName, QString nodeType, QString n
 		doc=new QDomDocument(QString("Configuration"));
 		doc->appendChild(doc->createElement("Configuration"));
 		getDomRoot(nodeClass);
-		getDomRoot(nodeType);
 		getDomRoot(nodeName);
 	}
 	else
@@ -27,8 +28,7 @@ XMLDomInterface::XMLDomInterface(QString configName, QString nodeType, QString n
 			}
 			else
 			{			
-				getDomRoot(nodeClass);
-				getDomRoot(nodeType);				
+				getDomRoot(nodeClass);		
 				getDomRoot(nodeName);
 			}
 			file.close();
@@ -276,13 +276,13 @@ bool XMLDomInterface::getParamValue(QString paramName, int & param, QString valu
 	}
 }
 
-bool XMLDomInterface::getParamValue(QString paramName, unsigned int & param, QString valueName)
+bool XMLDomInterface::getParamValue(QString paramName, uint & param, QString valueName)
 {
 	QString valuestr;
 	if(getParamValue(paramName,valuestr,valueName))
 	{
 		bool flag;
-		unsigned int tmp=valuestr.toUInt(&flag,0);
+		uint tmp=valuestr.toUInt(&flag,0);
 		if(flag)
 		{
 			param=tmp;

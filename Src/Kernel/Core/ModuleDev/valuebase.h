@@ -1,6 +1,10 @@
 #ifndef VALUEBASE
 #define VALUEBASE
 
+#include<QMutex>
+#include<QMutexLocker>
+#include<QCoreApplication>
+
 #include<Core/ModuleDev/defines.h>
 
 namespace RobotSDK
@@ -8,17 +12,13 @@ namespace RobotSDK
 
 class XMLValueBase
 {
-    friend class InputPorts;
-    friend class QObjectPool;
-    friend class OutputPorts;
-    friend class Node;
 public:
     XMLValueBase();
     virtual ~XMLValueBase();
 protected:
-    QList< std::function< void(XMLDomInterface &, void *) > > _xmlloadfunclist;
+    QList< std::function< void(XMLDomInterface &, XMLValueBase *) > > _xmlloadfunclist;
 public:
-    void loadXMLValues(QString configName, QString nodeType, QString nodeClass, QString nodeName);
+    void loadXMLValues(QString configName, QString nodeClass, QString nodeName);
 };
 
 class XMLParamsBase : public XMLValueBase
@@ -27,42 +27,35 @@ public:
     XMLParamsBase();
     ~XMLParamsBase();
 protected:
-    QString _nodetype;
     QString _nodeclass;
     QString _nodename;
 public:
-    QString getNodeType();
     QString getNodeClass();
     QString getNodeName();
 };
 
 class XMLVarsBase : public XMLValueBase
 {
+    friend class InputPorts;
 public:
     XMLVarsBase();
-    ~XMLValueBase();
+    ~XMLVarsBase();
 protected:
     QMutex _inputportlock;
-    unsigned int _inputportnum;
-    QList< unsigned int > _buffersize;
+    uint _inputportnum;
+    QList< uint > _buffersize;
     QList< ObtainBehavior > _obtaindatabehavior;
-    QList< unsigned int > _obtaindatasize;
+    QList< uint > _obtaindatasize;
     QList< bool > _triggerflag;
 public:
-    void setInputPortBufferSize(unsigned int portID, unsigned int bufferSize);
-    void setInputPortBufferSize(QList< unsigned int > bufferSize);
-    void setInputPortObtainDataBehavior(unsigned int portID, ObtainBehavior obtainDataBehavior);
+    void setInputPortBufferSize(uint portID, uint bufferSize);
+    void setInputPortBufferSize(QList< uint > bufferSize);
+    void setInputPortObtainDataBehavior(uint portID, ObtainBehavior obtainDataBehavior);
     void setInputPortObtainDataBehavior(QList< ObtainBehavior > obtainDataBehavior);
-    void setInputPortObtainDataSize(unsigned int portID, unsigned int obtainDataSize);
-    void setInputPortObtainDataSize(QList< unsigned int > obtainDataSize);
-    void setInputPortTriggerFlag(unsigned int portID, bool triggerFlag);
+    void setInputPortObtainDataSize(uint portID, uint obtainDataSize);
+    void setInputPortObtainDataSize(QList< uint > obtainDataSize);
+    void setInputPortTriggerFlag(uint portID, bool triggerFlag);
     void setInputPortTriggerFlag(QList< bool > triggerFlag);
-protected:
-    unsigned int _outputportnum;
-    QList< bool > _filterflag;
-public:
-    void setOutputPortFilterFlag(unsigned int portID, bool filterFlag);
-    void setOutputPortFilterFlag(QList< bool > filterFlag);
 protected:
     QMap< QString, QObject * > _qobjecttriggermap;
     QMap< QString, QObject * > _qwidgettriggermap;
@@ -77,6 +70,21 @@ public:
     QObject * getTrigger(QString triggerName);
     QWidget * getWidget(QString widgetName);
     QLayout * getLayout(QString layoutName);
+};
+
+class XMLDataBase : public XMLValueBase
+{
+    friend class OutputPort;
+public:
+    XMLDataBase();
+    ~XMLDataBase();
+protected:
+    QList< bool > _filterflag;
+    uint portid;
+public:
+    void setOutputPortFilterFlag(QList< bool > filterFlag);
+public:
+    QTime timestamp;
 };
 
 }

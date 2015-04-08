@@ -1,11 +1,6 @@
 #ifndef PORT_H
 #define PORT_H
 
-#include<QObject>
-#include<QList>
-#include<QMutex>
-#include<QMutexLocker>
-#include<memory>
 #include<Core/ModuleDev/valuebase.h>
 #include<Core/ModuleDev/defines.h>
 
@@ -16,71 +11,61 @@ class InputPort : public QObject
 {
     Q_OBJECT
 public:
-    InputPort(int portID, QObject * parent);
+    InputPort(uint portID, QObject * parent);
 protected:
-    unsigned int portid;
-signals:
-    void signalReceiveParamsData(unsigned int outputPortID, TRANSFER_CONST_TYPE inputParams, TRANSFER_CONST_TYPE inputData, unsigned int inputPortID);
+    uint portid;
 public slots:
-    void slotReceiveParamsData(unsigned int outputPortID, TRANSFER_CONST_TYPE inputParams, TRANSFER_CONST_TYPE inputData);
+    void slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TRANSFER_PORT_DATA_TYPE inputData);
+signals:
+    void signalReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TRANSFER_PORT_DATA_TYPE inputData, uint inputPortID);
 };
 
 class OutputPort : public QObject
 {
     Q_OBJECT
 public:
-    OutputPort(int portID, QObject * parent);
+    OutputPort(uint portID, QObject * parent);
 protected:
-    unsigned int portid;
-signals:
-    void signalSendParamsData(unsigned int outputPortID, TRANSFER_CONST_TYPE outputParams, TRANSFER_CONST_TYPE outputData);
+    uint portid;
 public slots:
-    void slotSendParamsData(TRANSFER_CONST_TYPE outputParams, TRANSFER_CONST_TYPE outputData);
+    void slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+signals:
+    void signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE outputParams, TRANSFER_PORT_DATA_TYPE outputData);
 };
 
 //========================================================================
 
 class InputPorts : public QObject
 {
+    Q_OBJECT
 public:
-    InputPorts(unsigned int portNum, std::shared_ptr<XMLVarsBase> nodeVars);
-    ~InputPorts();
+    InputPorts(uint portNum, TRANSFER_NODE_VARS_TYPE nodeVars);
 protected:
-    QList< _PORT_BUFFER > portparamsbuffer;
-    QList< _PORT_BUFFER > portdatabuffer;
-    QThread thread;
-    std::shared_ptr<XMLVarsBase> nodevars;
-signals:
-    void signalObtainParamsData(OBTAIN_CAPSULE inputParams, OBTAIN_CAPSULE inputData);
+    uint portnum;
+    QVector< PORT_PARAMS_BUFFER > portparamsbuffer;
+    QVector< PORT_DATA_BUFFER > portdatabuffer;
+    QVector< uint > buffercount;
+    TRANSFER_NODE_VARS_TYPE nodevars;
 public slots:
-    void slotReceiveParamsData(unsigned int outputPortID, TRANSFER_CONST_TYPE inputParams, TRANSFER_CONST_TYPE inputData, unsigned int inputPortID);
+    void slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TRANSFER_PORT_DATA_TYPE inputData, uint inputPortID);
+    void slotClearBuffer();
+signals:
+    void signalObtainParamsData(PORT_PARAMS_CAPSULE INPUT_PARAMS_ARG, PORT_DATA_CAPSULE INPUT_DATA_ARG);
 };
 
 class OutputPorts : QObject
 {
+    Q_OBJECT
 public:
-    OutputPorts(unsigned int portNum);
+    OutputPorts(uint portNum);
     ~OutputPorts();
-public:
-    QThread thread;
+public slots:
+    void slotSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+signals:
+    void signalSendParamsData(QList< bool > filterFlag, TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
 };
 
-//========================================================================
-
-
-class Ports
-{
-protected:
-
-protected:
-    QThread outputthread;
-    QList< OutputPort * > outputports;
-protected:
-    void setInputPortNum(unsigned int portNum);
-    void setOutputPortNum(unsigned int portNum);
-protected:
-    bool obtainInputData(OBTAIN_CAPSULE & inputParams, OBTAIN_CAPSULE & outputParams);
-};
+}
 
 #endif // PORT_H
 

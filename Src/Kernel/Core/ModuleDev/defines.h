@@ -12,59 +12,113 @@
 #include<QPair>
 #include<QLibrary>
 #include<QtGlobal>
+#include<deque>
+#include<vector>
+#include<algorithm>
 #include<memory>
 #include<functional>
 #include<Accessories/XMLDomInterface/xmldominterface.h>
 
-//#define RobotSDK_ModuleDev
+#define RobotSDK_Module
+#define RobotSDK_Kernel
+//#define RobotSDK_Application
 
 namespace RobotSDK
 {
+
+#ifndef RobotSDK_Application
 
 //=================================================================================
 
 enum ObtainBehavior
 {
-    GrabLatest,
-    CopyLatest,
-    GrabOldest,
-    CopyOldest,
-    GrabLatestStrictly,
-    CopyLatestStrictly,
-    GrabOldestStrictly,
-    CopyOldestStrictly
+    CopyOldest=0b000,
+    GrabOldest=0b001,
+    CopyLatest=0b010,
+    GrabLatest=0b011,
+    CopyOldestStrictly=0b100,
+    GrabOldestStrictly=0b101,
+    CopyLatestStrictly=0b110,
+    GrabLatestStrictly=0b111
 };
 
 //=================================================================================
 
-#define TRANSFER_NODE_PARAM_TYPE std::shared_ptr< const XMLParamsBase >
+
+#define TRANSFER_TYPE std::shared_ptr< XMLValueBase >
+#define TRANSFER_CONST_TYPE std::shared_ptr< const XMLValueBase >
+
+#define TRANSFER_NODE_PARAMS_TYPE std::shared_ptr< const XMLParamsBase >
 #define TRANSFER_NODE_VARS_TYPE std::shared_ptr< XMLVarsBase >
-#define TRANSFER_TYPE std::shared_ptr< void >
-#define TRANSFER_CONST_TYPE std::shared_ptr< const void >
-#define PORT_BUFFER QList< TRANSFER_CONST_TYPE >
-#define OBTAIN_CAPSULE QVector< PORT_BUFFER >
+#define TRANSFER_NODE_DATA_TYPE std::shared_ptr< XMLDataBase >
+
+#define TRANSFER_PORT_PARAMS_TYPE std::shared_ptr< const XMLParamsBase >
+#define TRANSFER_PORT_DATA_TYPE std::shared_ptr< const XMLDataBase >
+
+#define PORT_PARAMS_BUFFER QList< TRANSFER_PORT_PARAMS_TYPE >
+#define PORT_DATA_BUFFER QList< TRANSFER_PORT_DATA_TYPE >
+
+#define PORT_PARAMS_CAPSULE QVector< PORT_PARAMS_BUFFER >
+#define PORT_DATA_CAPSULE QVector< PORT_DATA_BUFFER >
 
 //=================================================================================
 
-#define ROBOTSDK_ARGS_DECL OBTAIN_CAPSULE _inputParams, OBTAIN_CAPSULE _inputData, TRANSFER_NODE_PARAM_TYPE _nodeParams, TRANSFER_NODE_VARS_TYPE _nodeVars, TRANSFER_TYPE _nodeData
-#define ROBOTSDK_ARGS _inputParams, _inputData, _nodeParams, _nodeVars, _nodeData
+#define INPUT_PARAMS_ARG _inputParams
+#define INPUT_DATA_ARG _inputData
+#define NODE_PARAMS_ARG _nodeParams
+#define NODE_VARS_ARG _nodeVars
+#define NODE_DATA_ARG _nodeData
+
+//=================================================================================
+
+#ifdef RobotSDK_Kernel
+using namespace RobotSDK;
+
+//=================================================================================
+//for Node extendion
+
+#define ROBOTSDK_ARGS_DECL \
+    PORT_PARAMS_CAPSULE INPUT_PARAMS_ARG, \
+    PORT_DATA_CAPSULE INPUT_DATA_ARG, \
+    TRANSFER_NODE_PARAMS_TYPE NODE_PARAMS_ARG, \
+    TRANSFER_NODE_VARS_TYPE NODE_VARS_ARG, \
+    TRANSFER_NODE_DATA_TYPE NODE_DATA_ARG
+#define ROBOTSDK_ARGS \
+    INPUT_PARAMS_ARG, \
+    INPUT_DATA_ARG, \
+    NODE_PARAMS_ARG, \
+    NODE_VARS_ARG, \
+    NODE_DATA_ARG
 
 #define NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName) funcName=(funcName##Fptr)(qLibrary.resolve(QString("%1_%2").arg(nodeClass).arg(#funcName).toUtf8().constData()));
 #define NODE_EXFUNC_PTR_LOAD(qLibrary, nodeClass, funcName, exName) funcName=(funcName##Fptr)(qLibrary.resolve(QString("%1_%2_%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())); \
     if(funcName==NULL){NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName)}
 
 #define NODE_FUNC_PTR_ADD(returnType, funcName, ...) \
-    protected: typedef returnType (*funcName##Fptr)(ROBOTSDK_ARGS_DECL, __VA_ARGS__); \
+    protected: typedef returnType (*funcName##Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
     private: funcName##Fptr _funcptr_##funcName##_Func() \
     {_funcptrlist.push_back([](QLibrary & qLibrary, QString nodeClass, QString exName) \
     {if(exName.size()==0){NODE_FUNC_PTR_LOAD(qLibrary, nodeClass, funcName)}else{NODE_EXFUNC_PTR_LOAD(qLibrary, nodeClass, funcName, exName)}}); return NULL;}; \
     protected: funcName##Fptr funcName=_funcptr_##funcName##_Func();
 
-#define NODE_FUNC_PTR_CALL(funcName, ...) funcName(ROBOTSDK_ARGS, __VA_ARGS__)
+#define NODE_FUNC_PTR_CALL(funcName, ...) funcName(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
 
-#ifdef RobotSDK_ModuleDev
+#endif
+
+//=================================================================================
+
+#ifdef RobotSDK_Module
+#define RobotSDK_EXPORT Q_DECL_EXPORT
+#else
+#define RobotSDK_EXPORT Q_DECL_IMPORT
+#endif
+
+//=================================================================================
+
+#ifdef RobotSDK_Module
+using namespace RobotSDK;
 
 //=================================================================================
 
@@ -73,83 +127,88 @@ enum ObtainBehavior
 #define _DATA_TYPE DataType
 
 //=================================================================================
+//for Node access
 
 #define NODE_PARAMS_TYPE _NODE_PARAMS_TYPE_1(NODE_CLASS)
 #define _NODE_PARAMS_TYPE_1(NODE_CLASS) _NODE_PARAMS_TYPE_2(NODE_CLASS)
 #define _NODE_PARAMS_TYPE_2(NODE_CLASS) NODE_CLASS##_##_PARAMS_TYPE
-#define NODE_PARAMS _nodeParams ? std::static_pointer_cast< const NODE_PARAMS_TYPE >(_nodeParams) : std::shared_ptr< const NODE_PARAMS_TYPE >()
+#define NODE_PARAMS NODE_PARAMS_ARG ? std::static_pointer_cast< const NODE_PARAMS_TYPE >(NODE_PARAMS_ARG) : std::shared_ptr< const NODE_PARAMS_TYPE >()
 
 #define NODE_VARS_TYPE _NODE_VARS_TYPE_1(NODE_CLASS)
 #define _NODE_VARS_TYPE_1(NODE_CLASS) _NODE_VARS_TYPE_2(NODE_CLASS)
 #define _NODE_VARS_TYPE_2(NODE_CLASS) NODE_CLASS##_##_VARS_TYPE
-#define NODE_VARS _nodeVars ? std::static_pointer_cast<NODE_VARS_TYPE>(_nodeVars) : std::shared_ptr< NODE_VARS_TYPE >()
+#define NODE_VARS NODE_VARS_ARG ? std::static_pointer_cast<NODE_VARS_TYPE>(NODE_VARS_ARG) : std::shared_ptr< NODE_VARS_TYPE >()
 
 #define NODE_DATA_TYPE _NODE_DATA_TYPE_1(NODE_CLASS)
 #define _NODE_DATA_TYPE_1(NODE_CLASS) _NODE_DATA_TYPE_2(NODE_CLASS)
 #define _NODE_DATA_TYPE_2(NODE_CLASS) NODE_CLASS##_##_DATA_TYPE
-#define NODE_DATA _nodeData ? std::static_pointer_cast<NODE_DATA_TYPE>(_nodeData) : std::shared_ptr< NODE_DATA_TYPE >()
+#define NODE_DATA NODE_DATA_ARG ? std::static_pointer_cast<NODE_DATA_TYPE>(NODE_DATA_ARG) : std::shared_ptr< NODE_DATA_TYPE >()
 
 //=================================================================================
-
+//for Port access
 //portID must be a const number not a variable
 
 #define PORT_PARAMS_TYPE(portID) NODE_CLASS##_INPUT_NODE_##portID##_##_PARAMS_TYPE
 #define PORT_DATA_TYPE(portID) NODE_CLASS##_INPUT_NODE_##portID##_##_DATA_TYPE
 #define PORT_DECL(portID, inputNodeClass) typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID);
 
-#define PORT_PARAMS_SIZE(portID) []()->unsigned int{return (portID>=0 && portID<INPUT_PORT_NUM) ? _inputParams[portID].size() : 0;}
-#define PORT_PARAMS(portID, paramsID) []()->std::shared_ptr< PORT_PARAMS_TYPE(portID) >{return (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && _inputParams[portID].at(paramsID)) ? \
-      std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(_inputParams[portID].at(paramsID)) \
+#define PORT_PARAMS_SIZE(portID) []()->uint{return (portID>=0 && portID<INPUT_PORT_NUM) ? INPUT_PARAMS_ARG[portID].size() : 0;}
+#define PORT_PARAMS(portID, paramsID) []()->std::shared_ptr< PORT_PARAMS_TYPE(portID) >{return (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && INPUT_PARAMS_ARG[portID].at(paramsID)) ? \
+      std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(INPUT_PARAMS_ARG[portID].at(paramsID)) \
     : std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >();}
 
-#define PORT_DATA_SIZE(portID) []()->unsigned int{return (portID>=0 && portID<INPUT_PORT_NUM) ? _inputData[portID].size() : 0;}
-#define PORT_DATA(portID, dataID) []()->std::shared_ptr< PORT_DATA_TYPE(portID) >{return (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && _inputData[portID].at(dataID)) ? \
-      std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(_inputData[portID].at(dataID)) \
+#define PORT_DATA_SIZE(portID) []()->uint{return (portID>=0 && portID<INPUT_PORT_NUM) ? INPUT_DATA_ARG[portID].size() : 0;}
+#define PORT_DATA(portID, dataID) []()->std::shared_ptr< PORT_DATA_TYPE(portID) >{return (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && INPUT_DATA_ARG[portID].at(dataID)) ? \
+      std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(INPUT_DATA_ARG[portID].at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >();}
 
 //=================================================================================
+//for XMLValueBase
 
 #define ADD_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * params) \
     {if(!(xmlloader.getParamValue(#valueName,(NODE_PARAMS_TYPE*(params))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_PARAMS_TYPE*(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueType##_##valueName##_Func();
 
 #define ADD_ENUM_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * params) \
     {if(!(xmlloader.getEnumParamValue(#valueName,(NODE_PARAMS_TYPE*(params))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_PARAMS_TYPE*(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueType##_##valueName##_Func();
 
 #define ADD_UENUM_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * params) \
     {if(!(xmlloader.getUEnumParamValue(#valueName,(NODE_PARAMS_TYPE*(params))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_PARAMS_TYPE*(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueType##_##valueName##_Func();
 
 #define ADD_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * vars) \
     {if(!(xmlloader.getParamValue(#valueName,(NODE_VARS_TYPE*(vars))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_VARS_TYPE*(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueType##_##valueName##_Func();
 
 #define ADD_ENUM_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * vars) \
     {if(!(xmlloader.getEnumParamValue(#valueName,(NODE_VARS_TYPE*(vars))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_VARS_TYPE*(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueType##_##valueName##_Func();
 
 #define ADD_UENUM_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueType##_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, void * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, XMLValueBase * vars) \
     {if(!(xmlloader.getUEnumParamValue(#valueName,(NODE_VARS_TYPE*(vars))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_VARS_TYPE*(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueType##_##valueName##_Func();
+
+//=================================================================================
+//for XMLVarsBase
 
 #define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName) \
     private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
@@ -189,18 +248,37 @@ enum ObtainBehavior
     private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func()
 
 //=================================================================================
+//for Node Function
 
 #define NODE_FUNC_NAME(funcName) NODE_CLASS##__##funcName
-#define NODE_FUNC(funcName, ...) NODE_FUNC_NAME(funcName)(ROBOTSDK_ARGS, __VA_ARGS__)
-#define NODE_FUNC_DEF(returnType, funcName, ...) returnType NODE_FUNC(funcName, __VA_ARGS__)
-#define NODE_FUNC_DECL(returnType, funcName, ...) extern "C" Q_DECL_EXPORT NODE_FUNC_DEF(returnType, funcName, __VA_ARGS__);
+#define NODE_FUNC(funcName, ...) NODE_FUNC_NAME(funcName)(ROBOTSDK_ARGS, ##__VA_ARGS__)
+#define NODE_FUNC_DEF(returnType, funcName, ...) returnType NODE_FUNC(funcName, ##__VA_ARGS__)
+#define NODE_FUNC_DECL_H(returnType, funcName, ...) extern "C" RobotSDK_EXPORT NODE_FUNC_DEF(returnType, funcName, ##__VA_ARGS__);
+#define NODE_FUNC_DECL_CPP(returnType, funcName, ...) extern "C" RobotSDK_EXPORT NODE_FUNC_DEF(returnType, funcName, ##__VA_ARGS__)
 
 #define NODE_EXFUNC_NAME(funcName, exName) NODE_CLASS##__##funcName##_##exName
-#define NODE_EXFUNC(funcName, exName, ...) NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS, __VA_ARGS__)
-#define NODE_EXFUNC_DEF(returnType, funcName, exName, ...) returnType NODE_EXFUNC(funcName, exName, __VA_ARGS__)
-#define NODE_EXFUNC_DECL(returnType, funcName, exName, ...) extern "C" Q_DECL_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, __VA_ARGS__);
+#define NODE_EXFUNC(funcName, exName, ...) NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS, ##__VA_ARGS__)
+#define NODE_EXFUNC_DEF(returnType, funcName, exName, ...) returnType NODE_EXFUNC(funcName, exName, ##__VA_ARGS__)
+#define NODE_EXFUNC_DECL_H(returnType, funcName, exName, ...) extern "C" RobotSDK_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, ##__VA_ARGS__);
+#define NODE_EXFUNC_DECL_CPP(returnType, funcName, exName, ...) extern "C" RobotSDK_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, ##__VA_ARGS__)
 
 //=================================================================================
+//for default Node Function
+#define NODE_DEFAULT_FUNC \
+    NODE_FUNC_DECL_CPP(uint, getInputPortNum){ \
+    return INPUT_PORT_NUM;} \
+    NODE_FUNC_DECL_CPP(uint, getOutputPortNum){ \
+    return OUTPUT_POPT_NUM;} \
+    NODE_FUNC_DECL_CPP(TRANSFER_NODE_PARAMS_TYPE, generateParams){ \
+    return TRANSFER_NODE_PARAMS_TYPE(new NODE_PARAMS_TYPE);} \
+    NODE_FUNC_DECL_CPP(TRANSFER_NODE_VARS_TYPE, generateVars){ \
+    return TRANSFER_NODE_VARS_TYPE(new NODE_VARS_TYPE);} \
+    NODE_FUNC_DECL_CPP(TRANSFER_TYPE, generateData){ \
+    return TRANSFER_TYPE(new NODE_DATA_TYPE);}
+
+//=================================================================================
+
+#endif
 
 #endif
 
