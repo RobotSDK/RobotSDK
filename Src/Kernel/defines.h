@@ -20,6 +20,9 @@
 #include<QPushButton>
 #include<QMetaObject>
 #include<QCoreApplication>
+#include<QDockWidget>
+#include<QTableWidget>
+#include<QTabWidget>
 
 #include<memory>
 #include<functional>

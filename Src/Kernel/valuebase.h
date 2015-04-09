@@ -66,6 +66,7 @@ class XMLVarsBase : public XMLValueBase
 {
     friend class InputPorts;
     friend class Node;
+    friend class Graph;
 public:
     XMLVarsBase();
     ~XMLVarsBase();

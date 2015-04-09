@@ -30,6 +30,10 @@ public slots:
 public slots:
     void openAllNode();
     void closeAllNode();
+protected:
+    QWidget * graph;
+    QVBoxLayout * nodeswitcher;
+    QVBoxLayout * widgetswitcher;
 };
 
 }

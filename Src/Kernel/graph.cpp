@@ -4,13 +4,22 @@ using namespace RobotSDK;
 
 Graph::Graph(QObject * parent)
     : QObject(parent)
-{
-
+{    
+    nodeswitcher=new QVBoxLayout;
+    nodeswitcher->addStretch();
+    widgetswitcher=new QVBoxLayout;
+    widgetswitcher->addStretch();
+    QHBoxLayout * layout=new QHBoxLayout;
+    layout->addLayout(nodeswitcher);
+    layout->addLayout(widgetswitcher);
+    graph=new QWidget;
+    graph->setLayout(layout);
 }
 
 Graph::~Graph()
 {
     clearNodes();
+    delete graph;
 }
 
 void Graph::addNode(QString nodeFullName, QString libraryFileName, QString configFileName)
@@ -56,6 +65,10 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     _nodes.insert(nodeFullName,QPair< std::shared_ptr< QThread >, Node * >(thread,node));
     node->moveToThread(thread.get());
     thread->start();
+
+    nodeswitcher->addWidget(node->NODE_VARS_ARG->getNodeSwitcher());
+    widgetswitcher->addWidget(node->NODE_VARS_ARG->getWidgetSwitcher());
+
     return;
 }
 
@@ -74,6 +87,9 @@ void Graph::removeNode(QString nodeFullName)
         _edges.remove(QPair< QString, QString >(nodeiter.key(),nodeFullName));
     }
 
+    nodeswitcher->addWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
+    widgetswitcher->addWidget(nodeiter.value().second->NODE_VARS_ARG->getWidgetSwitcher());
+
     _nodes[nodeFullName].first->quit();
     _nodes[nodeFullName].first->wait();
     _nodes.remove(nodeFullName);
@@ -85,6 +101,8 @@ void Graph::clearNodes()
     QMap< QString, QPair< std::shared_ptr<QThread>, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
+        nodeswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
+        widgetswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getWidgetSwitcher());
         nodeiter.value().first->exit();
     }
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
@@ -92,6 +110,7 @@ void Graph::clearNodes()
         nodeiter.value().first->wait();
     }
     _edges.clear();
+
 }
 
 void Graph::addEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID)
