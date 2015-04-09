@@ -17,7 +17,8 @@ SOURCES += \
     Core/Port/port.cpp \
     Accessories/XMLDomInterface/xmldominterface.cpp \
     Core/ModuleDev/valuebase.cpp \
-    Core/Node/node.cpp
+    Core/Node/node.cpp \
+    Core/Graph/graph.cpp
 
 HEADERS += \
     Core/Port/port.h \
@@ -26,6 +27,7 @@ HEADERS += \
     Core/defines.h \
     Core/ModuleDev/defines.h \
     Core/ModuleDev/valuebase.h \
-    Core/Node/node.h
+    Core/Node/node.h \
+    Core/Graph/graph.h
 
 INCLUDEPATH += .
