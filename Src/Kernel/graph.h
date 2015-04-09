@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include<Core/Node/node.h>
+#include<node.h>
 
 namespace RobotSDK
 {

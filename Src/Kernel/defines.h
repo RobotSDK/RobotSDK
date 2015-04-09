@@ -21,23 +21,16 @@
 #include<QMetaObject>
 #include<QCoreApplication>
 
-#include<deque>
-#include<vector>
-#include<algorithm>
 #include<memory>
 #include<functional>
 
-#include<Accessories/XMLDomInterface/xmldominterface.h>
-
-#define RobotSDK_Module
-#define RobotSDK_Kernel
-//#define RobotSDK_Application
+#include<xmldominterface.h>
 
 namespace RobotSDK
 {
 
-#ifndef RobotSDK_Application
-
+//=================================================================================
+//Common Area
 //=================================================================================
 
 enum ObtainBehavior
@@ -94,14 +87,6 @@ enum ObtainBehavior
 #define NODE_VARS_ARG _nodeVars
 #define NODE_DATA_ARG _nodeData
 
-//=================================================================================
-
-#ifdef RobotSDK_Kernel
-using namespace RobotSDK;
-
-//=================================================================================
-//for Node extendion
-
 #define ROBOTSDK_ARGS_DECL \
     PORT_PARAMS_CAPSULE INPUT_PARAMS_ARG, \
     PORT_DATA_CAPSULE INPUT_DATA_ARG, \
@@ -114,6 +99,69 @@ using namespace RobotSDK;
     NODE_PARAMS_ARG, \
     NODE_VARS_ARG, \
     NODE_DATA_ARG
+
+//=================================================================================
+
+#ifdef RobotSDK_Module
+#define RobotSDK_EXPORT Q_DECL_EXPORT
+#else
+#define RobotSDK_EXPORT Q_DECL_IMPORT
+#endif
+
+//=================================================================================
+//Non-APP Common Area
+//=================================================================================
+
+#ifndef RobotSDK_Application
+
+//=================================================================================
+//for NODE_VARS_BASE_TYPE
+
+#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName) \
+    private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
+    {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); return trigger;}; \
+    public: triggerType * const triggerName=_qobject_##triggerType##_##triggerName##_Func();
+
+#define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
+    private: triggerType * _qwidget_##triggerType##_##triggerName##_Func() \
+    {triggerType * trigger=new triggerType; trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
+    public: triggerType * const triggerName=_qwidget_##triggerType##_##triggerName##_Func();
+
+#define ADD_INTERNAL_DEFAULT_CONNECTION(triggeName,signalName) \
+    private: QString _default_connection_##triggerName##_##signalName##_Func() \
+    {QString connection=QString(SIGNAL(signalName())); _defaultconnectionmap.insert(triggerName,connection); return connection;}; \
+    private: QString _default_connection_##triggerName##_##signalName=_default_connection_##triggerName##_##signalName##_Func();
+
+#define ADD_INTERNAL_USER_CONNECTION(triggerName,signalName,slotName,...) \
+    private: QPair< QString, QString > _user_connection_##triggerName##_##signalName##_##slotName##_Func() \
+    {QPair< QString, QString > connection=QPair< QString, QString >(QString(SIGNAL(signalName(__VA_ARGS__))),QString(SLOT(slotName(__VA_ARGS__)))); \
+    _userconnectionmap.insert(triggerName,connection); return connection;}; \
+    private: QPair< QString, QString > _user_connection_##triggerName##_##signalName##_##slotName=_user_connection_##triggerName##_##signalName##_##slotName##_Func();
+
+#define ADD_QWIDGET(widgetType, widgetName) \
+    private: widgetType * _qwidget_##widgetType##_##widgetName##_Func() \
+    {widgetType * widget=new widgetType; widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
+    public: widgetType * const widgetName=_qwidget_##widgetType##_##widgetName##_Func();
+
+#define ADD_QLAYOUT(layoutType, layoutName) \
+    private: layoutType * _qlayout_##layoutType##_##layoutName##_Func() \
+    {layoutType * layout=new layoutType; layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
+    public: layoutType * const layoutName=_qlayout_##layoutType##_##layoutName##_Func();
+
+#define ADD_CONNECTION(emitterName,signalName,receiverName,slotName,...) \
+    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func() \
+    {QPair< QString, QString > connection=QPair< QString, QString >(QString(SIGNAL(signalName(__VA_ARGS__))),QString(SLOT(slotName(__VA_ARGS__)))); \
+    _connectionmap.insert(QPair< QObject *, QObject * >(emitterName, receiverName), connection); return connection;}; \
+    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func();
+
+//=================================================================================
+//Kernel Area
+//=================================================================================
+#ifdef RobotSDK_Kernel
+using namespace RobotSDK;
+
+//=================================================================================
+//for Node extendion
 
 #define LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName) QLibrary::resolve(libraryFileName, QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
 #define LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName) QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
@@ -138,15 +186,8 @@ using namespace RobotSDK;
 #endif
 
 //=================================================================================
-
-#ifdef RobotSDK_Module
-#define RobotSDK_EXPORT Q_DECL_EXPORT
-#else
-#define RobotSDK_EXPORT Q_DECL_IMPORT
-#endif
-
+//Module Area
 //=================================================================================
-
 #ifdef RobotSDK_Module
 using namespace RobotSDK;
 
@@ -238,46 +279,6 @@ using namespace RobotSDK;
     {if(!(xmlloader.getUEnumParamValue(#valueName,(NODE_VARS_TYPE*(vars))->valueName))) \
     {xmlloader.setParamDefault(#valueName,(NODE_VARS_TYPE*(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueType##_##valueName##_Func();
-
-//=================================================================================
-//for NODE_VARS_BASE_TYPE
-
-#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName) \
-    private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); return trigger;}; \
-    public: triggerType * const triggerName=_qobject_##triggerType##_##triggerName##_Func();
-
-#define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
-    private: triggerType * _qwidget_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
-    public: triggerType * const triggerName=_qwidget_##triggerType##_##triggerName##_Func();
-
-#define ADD_INTERNAL_DEFAULT_CONNECTION(triggeName,signalName) \
-    private: QString _default_connection_##triggerName##_##signalName##_Func() \
-    {QString connection=QString(SIGNAL(signalName())); _defaultconnectionmap.insert(triggerName,connection); return connection;}; \
-    private: QString _default_connection_##triggerName##_##signalName=_default_connection_##triggerName##_##signalName##_Func();
-
-#define ADD_INTERNAL_USER_CONNECTION(triggerName,signalName,slotName,...) \
-    private: QPair< QString, QString > _user_connection_##triggerName##_##signalName##_##slotName##_Func() \
-    {QPair< QString, QString > connection=QPair< QString, QString >(QString(SIGNAL(signalName(__VA_ARGS__))),QString(SLOT(slotName(__VA_ARGS__)))); \
-    _userconnectionmap.insert(triggerName,connection); return connection;}; \
-    private: QPair< QString, QString > _user_connection_##triggerName##_##signalName##_##slotName=_user_connection_##triggerName##_##signalName##_##slotName##_Func();
-
-#define ADD_QWIDGET(widgetType, widgetName) \
-    private: widgetType * _qwidget_##widgetType##_##widgetName##_Func() \
-    {widgetType * widget=new widgetType; widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
-    public: widgetType * const widgetName=_qwidget_##widgetType##_##widgetName##_Func();
-
-#define ADD_QLAYOUT(layoutType, layoutName) \
-    private: layoutType * _qlayout_##layoutType##_##layoutName##_Func() \
-    {layoutType * layout=new layoutType; layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
-    public: layoutType * const layoutName=_qlayout_##layoutType##_##layoutName##_Func();
-
-#define ADD_CONNECTION(emitterName,signalName,receiverName,slotName,...) \
-    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func() \
-    {QPair< QString, QString > connection=QPair< QString, QString >(QString(SIGNAL(signalName(__VA_ARGS__))),QString(SLOT(slotName(__VA_ARGS__)))); \
-    _connectionmap.insert(QPair< QObject *, QObject * >(emitterName, receiverName), connection); return connection;}; \
-    private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func();
 
 //=================================================================================
 //for Node Function
