@@ -228,6 +228,16 @@ QWidget *XMLVarsBase::getWidget() const
     return widget;
 }
 
+NodeSwitcher * XMLVarsBase::getNodeSwitcher() const
+{
+    return nodeSwitcher;
+}
+
+WidgetSwitcher * XMLVarsBase::getWidgetSwitcher() const
+{
+    return widgetSwitcher;
+}
+
 const QObject *XMLVarsBase::getNode()
 {
     return _node;

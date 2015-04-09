@@ -102,6 +102,8 @@ private:
     void moveTriggerToPoolThread(QObject * node, QThread *poolThread);
 public:
     QWidget * getWidget() const;
+    NodeSwitcher * getNodeSwitcher() const;
+    WidgetSwitcher * getWidgetSwitcher() const;
 protected:
     QObject * _node;
 public:

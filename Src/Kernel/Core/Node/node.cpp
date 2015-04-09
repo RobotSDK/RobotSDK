@@ -2,17 +2,17 @@
 
 using namespace RobotSDK;
 
-Node::Node(QString nodeClass, QString nodeName, QString libraryFileName, QString configFileName, QString exName)
+Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName)
     : QObject(NULL)
 {
     _openflag=0;
     installEventFilter(this);
 
+    _libraryfilename=libraryFileName;
+    _configfilename=configFileName;
     _nodeclass=nodeClass;
     _nodename=nodeName;
     _exname=exName;
-    _libraryfilename=libraryFileName;
-    _configfilename=configFileName;
 
     uint i,n=_funcptrlist.size();
     _loadflag=1;
@@ -65,19 +65,21 @@ Node::Node(QString nodeClass, QString nodeName, QString libraryFileName, QString
         if(_initializeflag)
         {
             _inputports=new InputPorts(_inputportnum, NODE_VARS_ARG);
-            connect(&_inputthread, SIGNAL(finished()), _inputports, SLOT(deleteLater()));
+            _inputthread=std::shared_ptr<QThread>(new QThread);
+            connect(_inputthread.get(), SIGNAL(finished()), _inputports, SLOT(deleteLater()));
             connect(_inputports, SIGNAL(signalObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE))
                     ,this, SLOT(slotObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)), Qt::QueuedConnection);
-            _inputports->moveToThread(&_inputthread);
-            _inputthread.start();
+            _inputports->moveToThread(_inputthread.get());
+            _inputthread->start();
 
 
             _outputports=new OutputPorts(_outputportnum);
-            connect(&_outputthread,SIGNAL(finished()),_outputports,SLOT(deleteLater()));
+            _outputthread=std::shared_ptr<QThread>(new QThread);
+            connect(_outputthread.get(),SIGNAL(finished()),_outputports,SLOT(deleteLater()));
             connect(this, SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
                     , _outputports, SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)), Qt::QueuedConnection);
-            _outputports->moveToThread(&_outputthread);
-            _outputthread.start();
+            _outputports->moveToThread(_outputthread.get());
+            _outputthread->start();
 
 
             QMap< QString, QObject * >::const_iterator triggeriter;
@@ -109,27 +111,45 @@ Node::Node(QString nodeClass, QString nodeName, QString libraryFileName, QString
             {
                 connect(connection.key().first, connection.value().first.toUtf8().data(), connection.key().second, connection.value().second.toUtf8().data());
             }
-            NODE_VARS_ARG->moveTriggerToPoolThread(this, &_poolthread);
-            _poolthread.start();
+            _poolthread=std::shared_ptr<QThread>(new QThread);
+            NODE_VARS_ARG->moveTriggerToPoolThread(this, _poolthread.get());
+            _poolthread->start();
         }
         else
         {
-            qDebug()<<QString("[FAILURE] Can not initialize %1::%2.").arg(_nodeclass).arg(_nodename);
+            if(_exname.size()==0)
+            {
+                qDebug()<<QString("[FAILURE] Can not initialize %1::%2.").arg(_nodeclass).arg(_nodename);
+            }
+            else
+            {
+                qDebug()<<QString("[FAILURE] Can not initialize %1::%2::%3.").arg(_nodeclass).arg(_nodename).arg(_exname);
+            }
         }
     }
     else
     {
         _funcptrmap.clear();
-        qDebug()<<QString("[FAILURE] Can not load %1::%2 from %3").arg(_nodeclass).arg(_nodename).arg(_libraryfilename);
+        if(_exname.size()==0)
+        {
+            qDebug()<<QString("[FAILURE] Can not load %1::%2 from %3").arg(_nodeclass).arg(_nodename).arg(_libraryfilename);
+        }
+        else
+        {
+            qDebug()<<QString("[FAILURE] Can not load %1::%2::%3 from %4").arg(_nodeclass).arg(_nodename).arg(_exname).arg(_libraryfilename);
+        }
     }
 }
 
 Node::~Node()
-{
-    _poolthread.quit();
-    _inputthread.quit();
-    _outputthread.quit();
-    _poolthread.wait();
+{    
+    _inputthread->quit();
+    _poolthread->quit();
+    _outputthread->quit();
+
+    _inputthread->wait();
+    _poolthread->wait();
+    _outputthread->wait();
 }
 
 bool Node::eventFilter(QObject *obj, QEvent *ev)
@@ -201,6 +221,8 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
 
 void Node::slotDefaultTrigger()
 {
+    INPUT_PARAMS_ARG.clear();
+    INPUT_DATA_ARG.clear();
     NODE_DATA_ARG=NODE_FUNC_PTR(generateNodeData);
     if(NODE_FUNC_PTR(main))
     {

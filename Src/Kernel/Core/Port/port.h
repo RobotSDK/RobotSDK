@@ -1,7 +1,6 @@
 #ifndef PORT_H
 #define PORT_H
 
-#include<Core/ModuleDev/defines.h>
 #include<Core/ModuleDev/valuebase.h>
 
 namespace RobotSDK

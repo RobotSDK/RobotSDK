@@ -28,7 +28,7 @@ void OutputPort::slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRAN
     }
 }
 
-InputPorts::InputPorts(uint portNum, std::shared_ptr<XMLVarsBase> nodeVars)
+InputPorts::InputPorts(uint portNum, TRANSFER_NODE_VARS_TYPE nodeVars)
     : QObject(NULL)
 {
     portnum=portNum;

@@ -1,8 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include<Core/ModuleDev/defines.h>
-#include<Core/ModuleDev/valuebase.h>
 #include<Core/Port/port.h>
 
 namespace RobotSDK
@@ -11,17 +9,18 @@ namespace RobotSDK
 class Node : public QObject
 {
     Q_OBJECT
+    friend class Graph;
 public:
-    Node(QString nodeClass, QString nodeName, QString libraryFileName, QString configFileName, QString exName=QString());
+    Node(QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName);
     ~Node();
 private:
     QString _nodeclass;
     QString _nodename;
     QString _exname;
 private:
-    QThread _inputthread;
-    QThread _poolthread;
-    QThread _outputthread;
+    std::shared_ptr<QThread> _inputthread;
+    std::shared_ptr<QThread> _poolthread;
+    std::shared_ptr<QThread> _outputthread;
 private:
     InputPorts * _inputports;
     OutputPorts * _outputports;
@@ -53,7 +52,7 @@ private slots:
     void slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
 signals:
     void signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
-protected:
+private:
     InputPort * getInputPort(uint portID);
     OutputPort * getOutputPort(uint portID);
 public:
