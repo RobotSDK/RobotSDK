@@ -9,13 +9,15 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
     vars->widget->setLayout(vars->layout);
     vars->layout->addWidget(vars->number);
     vars->number->setAlignment(Qt::AlignCenter);
+    vars->timer->setTimerType(Qt::PreciseTimer);
     return 1;
 }
 
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
     auto vars=NODE_VARS;
-    vars->timer->start(1000);
+    auto params=NODE_PARAMS;
+    vars->timer->start(params->interval);
     return 1;
 }
 
@@ -35,7 +37,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     data->result=random()%params->max+vars->offset;
     data->timestamp=QTime::currentTime();
 
-    vars->number->setText(QString("%1\n%2").arg(data->result).arg(data->timestamp.toString("HH:mm:ss")));
+    vars->number->setText(QString("%1\n%2").arg(data->result).arg(data->timestamp.toString(vars->format)));
 
     uint out=data->result%2;
     if(out==0)

@@ -33,10 +33,9 @@ public slots:
     void openAllNode();
     void closeAllNode();
 public:
-    QWidget * const graph=new QWidget;
+    QWidget * const switcherpanel=new QWidget;
 protected:
     QVBoxLayout * nodeswitcher;
-    QVBoxLayout * widgetswitcher;
 public:
     QWidget * getNodeWidget(QString nodeFullName);
 };

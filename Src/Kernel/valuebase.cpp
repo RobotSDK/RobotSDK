@@ -67,28 +67,9 @@ void NodeSwitcher::slotSwitchNode()
     QCoreApplication::postEvent(_node,event);
 }
 
-WidgetSwitcher::WidgetSwitcher(QWidget * parent)
-    : QPushButton(parent)
-{
-    visibleflag=0;
-    connect(this,SIGNAL(clicked()),this,SLOT(slotSwitchWidget()),Qt::DirectConnection);
-}
-
-void WidgetSwitcher::slotSwitchWidget()
-{
-    visibleflag=!visibleflag;
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Button, QColor(visibleflag ? Qt::green : Qt::red));
-    this->setAutoFillBackground(1);
-    this->setPalette(pal);
-    this->update();
-    this->setText(QString("%1").arg(visibleflag ? "Hide":"Show"));
-    emit signalSwitchWidget(visibleflag);
-}
-
 NODE_VARS_BASE_TYPE::NODE_VARS_BASE_TYPE()
 {
-    widget->setVisible(0);
+
 }
 
 NODE_VARS_BASE_TYPE::~NODE_VARS_BASE_TYPE()
@@ -244,11 +225,6 @@ QWidget *NODE_VARS_BASE_TYPE::getWidget() const
 NodeSwitcher * NODE_VARS_BASE_TYPE::getNodeSwitcher() const
 {
     return nodeSwitcher;
-}
-
-WidgetSwitcher * NODE_VARS_BASE_TYPE::getWidgetSwitcher() const
-{
-    return widgetSwitcher;
 }
 
 const QObject *NODE_VARS_BASE_TYPE::getNode()

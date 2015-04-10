@@ -77,13 +77,6 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
         NODE_VARS_ARG->nodeSwitcher->update();
         NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
 
-        pal=NODE_VARS_ARG->widgetSwitcher->palette();
-        pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
-        NODE_VARS_ARG->widgetSwitcher->setAutoFillBackground(1);
-        NODE_VARS_ARG->widgetSwitcher->setPalette(pal);
-        NODE_VARS_ARG->widgetSwitcher->update();
-        NODE_VARS_ARG->widgetSwitcher->setText(QString("%1").arg(_openflag?"Hide":"Show"));
-
         NODE_VARS_ARG->widget->setWindowTitle(QString("%1::%2").arg(_nodeclass).arg(_nodename));
 
 

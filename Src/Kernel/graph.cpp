@@ -8,20 +8,16 @@ Graph::Graph(QObject * parent)
     registerTransferData();
 
     nodeswitcher=new QVBoxLayout;
-    widgetswitcher=new QVBoxLayout;
-    QHBoxLayout * layout=new QHBoxLayout;
+    QVBoxLayout * layout=new QVBoxLayout;
     layout->addLayout(nodeswitcher);
-    layout->addLayout(widgetswitcher);
-    QVBoxLayout * nestlayout=new QVBoxLayout;
-    nestlayout->addLayout(layout);
-    nestlayout->addStretch();
-    graph->setLayout(nestlayout);
+    layout->addStretch();
+    switcherpanel->setLayout(layout);
 }
 
 Graph::~Graph()
 {
     clearNodes();
-    delete graph;
+    delete switcherpanel;
 }
 
 void Graph::registerTransferData()
@@ -80,8 +76,6 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     thread->start();
 
     nodeswitcher->addWidget(node->NODE_VARS_ARG->getNodeSwitcher());
-    widgetswitcher->addWidget(node->NODE_VARS_ARG->getWidgetSwitcher());
-
     return;
 }
 
@@ -101,7 +95,6 @@ void Graph::removeNode(QString nodeFullName)
     }
 
     nodeswitcher->addWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
-    widgetswitcher->addWidget(nodeiter.value().second->NODE_VARS_ARG->getWidgetSwitcher());
 
     _nodes[nodeFullName].first->quit();
     _nodes[nodeFullName].first->wait();
@@ -115,7 +108,6 @@ void Graph::clearNodes()
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
         nodeswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
-        widgetswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getWidgetSwitcher());
         nodeiter.value().first->exit();
     }
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)

@@ -6,9 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->graph->setWidget(graph.graph);
+    ui->graph->setWidget(graph.switcherpanel);
 
-    QString libraryname="/home/alexanderhmw/Git/dev/RobotSDK/Src/Sample/build-TestModule-Desktop_Qt_5_4_1_GCC_64bit-Debug/TestModule";
+    QString libraryname=QFileDialog::getOpenFileName(this,"Open TestModule Shared Library");
     QString configfile="config.xml";
 
     graph.addNode("RandomGenerator::random",libraryname,configfile);

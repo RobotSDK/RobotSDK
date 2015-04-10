@@ -19,7 +19,8 @@ PORT_DECL(0, RandomGenerator)
 
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-
+public:
+    ADD_PARAM(QString, format, QString("HH:mm:ss"))
 };
 
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE

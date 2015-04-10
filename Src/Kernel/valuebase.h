@@ -49,19 +49,6 @@ public slots:
     void slotSwitchNode();
 };
 
-class WidgetSwitcher : public QPushButton
-{
-    Q_OBJECT
-public:
-    WidgetSwitcher(QWidget * parent=0);
-protected:
-    bool visibleflag;
-public slots:
-    void slotSwitchWidget();
-signals:
-    void signalSwitchWidget(bool visiable);
-};
-
 class NODE_VARS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
 {
     friend class InputPorts;
@@ -98,14 +85,11 @@ protected:
 public:
     ADD_QWIDGET(QWidget, widget)
     ADD_QWIDGET(NodeSwitcher, nodeSwitcher)
-    ADD_QWIDGET(WidgetSwitcher, widgetSwitcher)
-    ADD_CONNECTION(widgetSwitcher, signalSwitchWidget, widget, setVisible, bool)
 private:
     void moveTriggerToPoolThread(QObject * node, QThread *poolThread);
 public:
     QWidget * getWidget() const;
     NodeSwitcher * getNodeSwitcher() const;
-    WidgetSwitcher * getWidgetSwitcher() const;
 protected:
     QObject * _node;
 public:
