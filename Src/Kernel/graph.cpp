@@ -46,7 +46,7 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     generateNode=(generateNodePtr)(QLibrary::resolve(libraryFileName,functionname.toUtf8().data()));
     if(generateNode==NULL)
     {
-        qDebug()<<QString("Can not resolve %1 from %2. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.");
+        qDebug()<<QString("Can not resolve %1 from %2. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.").arg(functionname).arg(libraryFileName);
         return;
     }
     Node * node=generateNode(libraryFileName, configFileName, nodeClass, nodeName, exName);

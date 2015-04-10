@@ -16,6 +16,30 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
 
     uint i,n=_funcptrlist.size();
     _loadflag=1;
+
+    if(_exname.size()==0)
+    {
+        getInputPortNum=(getInputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getInputPortNum);
+        getOutputPortNum=(getOutputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getOutputPortNum);
+        generateNodeParams=(generateNodeParamsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeParams);
+        generateNodeVars=(generateNodeVarsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeVars);
+        generateNodeData=(generateNodeDataFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeData);
+    }
+    else
+    {
+        getInputPortNum=(getInputPortNumFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, getInputPortNum,_exname);
+        getOutputPortNum=(getOutputPortNumFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, getOutputPortNum,_exname);
+        generateNodeParams=(generateNodeParamsFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeParams,_exname);
+        generateNodeVars=(generateNodeVarsFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeVars,_exname);
+        generateNodeData=(generateNodeDataFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeData,_exname);
+    }
+
+    if(getInputPortNum==NULL||getOutputPortNum==NULL||generateNodeParams==NULL||generateNodeVars==NULL||generateNodeData==NULL)
+    {
+        qDebug()<<QString("Can not resolve default functions from %1. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.").arg(_libraryfilename);
+        _loadflag=0;
+    }
+
     for(i=0;i<n;i++)
     {
         QFunctionPointer funcptr=_funcptrcloadmap[_funcptrlist.at(i)](_libraryfilename,_nodeclass,_exname);
@@ -37,16 +61,16 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
 
     if(_loadflag)
     {
-        _inputportnum=NODE_FUNC_PTR(getInputPortNum);
-        _outputportnum=NODE_FUNC_PTR(getOutputPortNum);
+        _inputportnum=getInputPortNum();
+        _outputportnum=getOutputPortNum();
 
-        NODE_PARAMS_ARG=NODE_FUNC_PTR(generateNodeParams);
+        NODE_PARAMS_ARG=generateNodeParams();
         NODE_PARAMS_ARG->_nodeclass=_nodeclass;
         NODE_PARAMS_ARG->_nodename=_nodename;
         NODE_PARAMS_ARG->_exname=_exname;
         NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
 
-        NODE_VARS_ARG=NODE_FUNC_PTR(generateNodeVars);
+        NODE_VARS_ARG=generateNodeVars();
         NODE_VARS_ARG->_inputportnum=_inputportnum;
         NODE_VARS_ARG->_buffersize.fill(1,_inputportnum);
         NODE_VARS_ARG->_obtaindatabehavior.fill(CopyOldest,_inputportnum);
@@ -57,8 +81,6 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
         NODE_VARS_ARG->_node=this;
 
         NODE_DATA_ARG=XML_DATA_BASE_TYPE();
-        INPUT_PARAMS_ARG.resize(_inputportnum);
-        INPUT_DATA_ARG.resize(_inputportnum);
 
         _initializeflag=NODE_FUNC_PTR(initializeNode);
 
@@ -223,7 +245,7 @@ void Node::slotDefaultTrigger()
 {
     INPUT_PARAMS_ARG.clear();
     INPUT_DATA_ARG.clear();
-    NODE_DATA_ARG=NODE_FUNC_PTR(generateNodeData);
+    NODE_DATA_ARG=generateNodeData);
     if(NODE_FUNC_PTR(main))
     {
         emit signalSendParamsData(NODE_PARAMS_ARG,NODE_DATA_ARG);

@@ -248,7 +248,7 @@ enum ObtainBehavior
       std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(INPUT_DATA_ARG[portID].at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >();}
 
-#define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()==0
+#define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()==0||INPUT_DATA_ARG.size()==0
 
 //=================================================================================
 //for NODE_VALUE_BASE_TYPE

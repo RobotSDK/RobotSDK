@@ -58,11 +58,14 @@ private:
 protected:
     typedef uint (*getInputPortNumFptr)();
     getInputPortNumFptr getInputPortNum;
-    ADD_NODE_DEFAULT_FUNC_PTR(uint, getInputPortNum)
-    ADD_NODE_DEFAULT_FUNC_PTR(uint, getOutputPortNum)
-    ADD_NODE_DEFAULT_FUNC_PTR(XML_PARAMS_BASE_TYPE, generateNodeParams)
-    ADD_NODE_DEFAULT_FUNC_PTR(XML_VARS_BASE_TYPE, generateNodeVars)
-    ADD_NODE_DEFAULT_FUNC_PTR(XML_DATA_BASE_TYPE, generateNodeData)
+    typedef uint (*getOutputPortNumFptr)();
+    getOutputPortNumFptr getOutputPortNum;
+    typedef XML_PARAMS_BASE_TYPE (*generateNodeParamsFptr)();
+    generateNodeParamsFptr generateNodeParams;
+    typedef XML_VARS_BASE_TYPE (*generateNodeVarsFptr)();
+    generateNodeVarsFptr generateNodeVars;
+    typedef XML_DATA_BASE_TYPE (*generateNodeDataFptr)();
+    generateNodeDataFptr generateNodeData;
     ADD_NODE_FUNC_PTR(bool, initializeNode)
     ADD_NODE_FUNC_PTR(bool, openNode)
     ADD_NODE_FUNC_PTR(bool, closeNode)
