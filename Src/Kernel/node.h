@@ -55,7 +55,9 @@ signals:
 private:
     InputPort * getInputPort(uint portID);
     OutputPort * getOutputPort(uint portID);
-public:
+protected:
+    typedef uint (*getInputPortNumFptr)();
+    getInputPortNumFptr getInputPortNum;
     ADD_NODE_DEFAULT_FUNC_PTR(uint, getInputPortNum)
     ADD_NODE_DEFAULT_FUNC_PTR(uint, getOutputPortNum)
     ADD_NODE_DEFAULT_FUNC_PTR(XML_PARAMS_BASE_TYPE, generateNodeParams)
@@ -66,6 +68,16 @@ public:
     ADD_NODE_FUNC_PTR(bool, closeNode)
     ADD_NODE_FUNC_PTR(bool, main)
 };
+
+#define USE_DEFAULT_NODE \
+    extern "C" RobotSDK_EXPORT Node * NODE_FUNC_NAME(generateNode) \
+    (QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName){ \
+    return (new Node(libraryFileName, configFileName, nodeClass, nodeName, exName));} NODE_DEFAULT_FUNC
+
+#define USE_EXTENDED_NODE(nodeType, ...) \
+    extern "C" RobotSDK_EXPORT Node * NODE_FUNC_NAME(generateNode) \
+    (QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName){ \
+    return dynamic_cast<Node>(new nodeType(libraryFileName, configFileName, nodeClass, nodeName, exName, ##__VA_ARGS__));} NODE_DEFAULT_FUNC
 
 }
 

@@ -9,8 +9,8 @@
 #include<node.h>
 #endif
 
-#ifdef RobotSDK_Modeule
-#include<valuebase.h>
+#ifdef RobotSDK_Module
+#include<node.h>
 #endif
 
 #endif // ROBOTSDK_GLOBAL_H

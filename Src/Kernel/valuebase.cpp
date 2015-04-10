@@ -2,17 +2,17 @@
 
 using namespace RobotSDK;
 
-XMLValueBase::XMLValueBase()
+NODE_VALUE_BASE_TYPE::NODE_VALUE_BASE_TYPE()
 {
 
 }
 
-XMLValueBase::~XMLValueBase()
+NODE_VALUE_BASE_TYPE::~NODE_VALUE_BASE_TYPE()
 {
 
 }
 
-void XMLValueBase::loadXMLValues(QString configFileName, QString nodeClass, QString nodeName)
+void NODE_VALUE_BASE_TYPE::loadXMLValues(QString configFileName, QString nodeClass, QString nodeName)
 {
     int i,n=_xmlloadfunclist.size();
     if(n>0)
@@ -25,27 +25,27 @@ void XMLValueBase::loadXMLValues(QString configFileName, QString nodeClass, QStr
     }
 }
 
-XMLParamsBase::XMLParamsBase()
+NODE_PARAMS_BASE_TYPE::NODE_PARAMS_BASE_TYPE()
 {
 
 }
 
-XMLParamsBase::~XMLParamsBase()
+NODE_PARAMS_BASE_TYPE::~NODE_PARAMS_BASE_TYPE()
 {
 
 }
 
-QString XMLParamsBase::getNodeClass()
+QString NODE_PARAMS_BASE_TYPE::getNodeClass()
 {
     return _nodeclass;
 }
 
-QString XMLParamsBase::getNodeName()
+QString NODE_PARAMS_BASE_TYPE::getNodeName()
 {
     return _nodename;
 }
 
-QString XMLParamsBase::getExName()
+QString NODE_PARAMS_BASE_TYPE::getExName()
 {
     return _exname;
 }
@@ -80,12 +80,12 @@ void WidgetSwitcher::slotSwitchWidget()
     emit signalSwitchWidget(visibleflag);
 }
 
-XMLVarsBase::XMLVarsBase()
+NODE_VARS_BASE_TYPE::NODE_VARS_BASE_TYPE()
 {
     widget->setVisible(0);
 }
 
-XMLVarsBase::~XMLVarsBase()
+NODE_VARS_BASE_TYPE::~NODE_VARS_BASE_TYPE()
 {
     QMap< QString, QObject * >::const_iterator objectiter;
     for(objectiter=_qobjecttriggermap.begin();objectiter!=_qobjecttriggermap.end();objectiter++)
@@ -135,7 +135,7 @@ XMLVarsBase::~XMLVarsBase()
     }
 }
 
-void XMLVarsBase::setInputPortBufferSize(uint portID, uint bufferSize)
+void NODE_VARS_BASE_TYPE::setInputPortBufferSize(uint portID, uint bufferSize)
 {
     QMutexLocker locker(&_inputportlock);
     if(portID<_inputportnum)
@@ -144,7 +144,7 @@ void XMLVarsBase::setInputPortBufferSize(uint portID, uint bufferSize)
     }
 }
 
-void XMLVarsBase::setInputPortBufferSize(QList<uint> bufferSize)
+void NODE_VARS_BASE_TYPE::setInputPortBufferSize(QList<uint> bufferSize)
 {
     QMutexLocker locker(&_inputportlock);
     uint i,n=bufferSize.size();
@@ -154,7 +154,7 @@ void XMLVarsBase::setInputPortBufferSize(QList<uint> bufferSize)
     }
 }
 
-void XMLVarsBase::setInputPortObtainDataBehavior(uint portID, ObtainBehavior obtainDataBehavior)
+void NODE_VARS_BASE_TYPE::setInputPortObtainDataBehavior(uint portID, ObtainBehavior obtainDataBehavior)
 {
     QMutexLocker locker(&_inputportlock);
     if(portID<_inputportnum)
@@ -163,7 +163,7 @@ void XMLVarsBase::setInputPortObtainDataBehavior(uint portID, ObtainBehavior obt
     }
 }
 
-void XMLVarsBase::setInputPortObtainDataBehavior(QList<ObtainBehavior> obtainDataBehavior)
+void NODE_VARS_BASE_TYPE::setInputPortObtainDataBehavior(QList<ObtainBehavior> obtainDataBehavior)
 {
     QMutexLocker locker(&_inputportlock);
     uint i,n=obtainDataBehavior.size();
@@ -173,7 +173,7 @@ void XMLVarsBase::setInputPortObtainDataBehavior(QList<ObtainBehavior> obtainDat
     }
 }
 
-void XMLVarsBase::setInputPortObtainDataSize(uint portID, uint obtainDataSize)
+void NODE_VARS_BASE_TYPE::setInputPortObtainDataSize(uint portID, uint obtainDataSize)
 {
     QMutexLocker locker(&_inputportlock);
     if(portID<_inputportnum)
@@ -182,7 +182,7 @@ void XMLVarsBase::setInputPortObtainDataSize(uint portID, uint obtainDataSize)
     }
 }
 
-void XMLVarsBase::setInputPortObtainDataSize(QList<uint> obtainDataSize)
+void NODE_VARS_BASE_TYPE::setInputPortObtainDataSize(QList<uint> obtainDataSize)
 {
     QMutexLocker locker(&_inputportlock);
     uint i,n=obtainDataSize.size();
@@ -192,7 +192,7 @@ void XMLVarsBase::setInputPortObtainDataSize(QList<uint> obtainDataSize)
     }
 }
 
-void XMLVarsBase::setInputPortTriggerFlag(uint portID, bool triggerFlag)
+void NODE_VARS_BASE_TYPE::setInputPortTriggerFlag(uint portID, bool triggerFlag)
 {
     QMutexLocker locker(&_inputportlock);
     if(portID<_inputportnum)
@@ -201,7 +201,7 @@ void XMLVarsBase::setInputPortTriggerFlag(uint portID, bool triggerFlag)
     }
 }
 
-void XMLVarsBase::setInputPortTriggerFlag(QList<bool> triggerFlag)
+void NODE_VARS_BASE_TYPE::setInputPortTriggerFlag(QList<bool> triggerFlag)
 {
     QMutexLocker locker(&_inputportlock);
     uint i,n=triggerFlag.size();
@@ -211,7 +211,7 @@ void XMLVarsBase::setInputPortTriggerFlag(QList<bool> triggerFlag)
     }
 }
 
-void XMLVarsBase::moveTriggerToPoolThread(QObject * node, QThread * poolThread)
+void NODE_VARS_BASE_TYPE::moveTriggerToPoolThread(QObject * node, QThread * poolThread)
 {
     QMap< QString, QObject * >::const_iterator triggeriter;
     for(triggeriter=_qobjecttriggermap.begin();triggeriter!=_qobjecttriggermap.end();triggeriter++)
@@ -223,37 +223,37 @@ void XMLVarsBase::moveTriggerToPoolThread(QObject * node, QThread * poolThread)
     }
 }
 
-QWidget *XMLVarsBase::getWidget() const
+QWidget *NODE_VARS_BASE_TYPE::getWidget() const
 {
     return widget;
 }
 
-NodeSwitcher * XMLVarsBase::getNodeSwitcher() const
+NodeSwitcher * NODE_VARS_BASE_TYPE::getNodeSwitcher() const
 {
     return nodeSwitcher;
 }
 
-WidgetSwitcher * XMLVarsBase::getWidgetSwitcher() const
+WidgetSwitcher * NODE_VARS_BASE_TYPE::getWidgetSwitcher() const
 {
     return widgetSwitcher;
 }
 
-const QObject *XMLVarsBase::getNode()
+const QObject *NODE_VARS_BASE_TYPE::getNode()
 {
     return _node;
 }
 
-XMLDataBase::XMLDataBase()
+NODE_DATA_BASE_TYPE::NODE_DATA_BASE_TYPE()
 {
 
 }
 
-XMLDataBase::~XMLDataBase()
+NODE_DATA_BASE_TYPE::~NODE_DATA_BASE_TYPE()
 {
 
 }
 
-void XMLDataBase::setOutputPortFilterFlag(QList<bool> filterFlag)
+void NODE_DATA_BASE_TYPE::setOutputPortFilterFlag(QList<bool> filterFlag)
 {
     _filterflag=filterFlag;
 }

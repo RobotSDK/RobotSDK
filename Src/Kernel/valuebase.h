@@ -6,23 +6,23 @@
 namespace RobotSDK
 {
 
-class XMLValueBase
+class NODE_VALUE_BASE_TYPE
 {
 public:
-    XMLValueBase();
-    virtual ~XMLValueBase();
+    NODE_VALUE_BASE_TYPE();
+    virtual ~NODE_VALUE_BASE_TYPE();
 protected:
-    QList< std::function< void(XMLDomInterface &, XMLValueBase *) > > _xmlloadfunclist;
+    QList< std::function< void(XMLDomInterface &, NODE_VALUE_BASE_TYPE *) > > _xmlloadfunclist;
 public:
     void loadXMLValues(QString configFileName, QString nodeClass, QString nodeName);
 };
 
-class XMLParamsBase : public XMLValueBase
+class NODE_PARAMS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
 {
     friend class Node;
 public:
-    XMLParamsBase();
-    ~XMLParamsBase();
+    NODE_PARAMS_BASE_TYPE();
+    ~NODE_PARAMS_BASE_TYPE();
 protected:
     QString _nodeclass;
     QString _nodename;
@@ -62,14 +62,14 @@ signals:
     void signalSwitchWidget(bool visiable);
 };
 
-class XMLVarsBase : public XMLValueBase
+class NODE_VARS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
 {
     friend class InputPorts;
     friend class Node;
     friend class Graph;
 public:
-    XMLVarsBase();
-    ~XMLVarsBase();
+    NODE_VARS_BASE_TYPE();
+    ~NODE_VARS_BASE_TYPE();
 protected:
     QMutex _inputportlock;
     uint _inputportnum;
@@ -111,12 +111,12 @@ public:
     const QObject *getNode();
 };
 
-class XMLDataBase : public XMLValueBase
+class NODE_DATA_BASE_TYPE : public NODE_VALUE_BASE_TYPE
 {
     friend class OutputPort;
 public:
-    XMLDataBase();
-    ~XMLDataBase();
+    NODE_DATA_BASE_TYPE();
+    ~NODE_DATA_BASE_TYPE();
 protected:
     QList< bool > _filterflag;
     uint portid;
