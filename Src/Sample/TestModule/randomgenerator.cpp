@@ -1,5 +1,4 @@
 #include "randomgenerator.h"
-using namespace RobotSDK;
 
 USE_DEFAULT_NODE
 

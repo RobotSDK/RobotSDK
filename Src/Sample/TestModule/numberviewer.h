@@ -4,7 +4,6 @@
 #include"randomgenerator.h"
 
 #include<RobotSDK_Global.h>
-using namespace RobotSDK;
 
 #undef NODE_CLASS
 #define NODE_CLASS NumberViewer
@@ -20,7 +19,7 @@ PORT_DECL(0, RandomGenerator)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
 public:
-    ADD_PARAM(QString, format, QString("HH:mm:ss"))
+    ADD_PARAM(QString, format, QString("HH:mm:ss:zzz"))
 };
 
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE

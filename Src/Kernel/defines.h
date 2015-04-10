@@ -37,22 +37,43 @@ class XMLValueBase;
 class XMLParamsBase;
 class XMLVarsBase;
 class XMLDataBase;
-class Node;
 
 //=================================================================================
 //Common Area
 //=================================================================================
 
+#ifdef Q_OS_LINUX
+#define NUM_0 0b000
+#define NUM_1 0b001
+#define NUM_2 0b010
+#define NUM_3 0b011
+#define NUM_4 0b100
+#define NUM_5 0b101
+#define NUM_6 0b110
+#define NUM_7 0b111
+#endif
+
+#ifdef Q_OS_WIN
+#define NUM_0 0
+#define NUM_1 1
+#define NUM_2 2
+#define NUM_3 3
+#define NUM_4 4
+#define NUM_5 5
+#define NUM_6 6
+#define NUM_7 7
+#endif
+
 enum ObtainBehavior
 {
-    CopyOldest=0b000,
-    GrabOldest=0b001,
-    CopyLatest=0b010,
-    GrabLatest=0b011,
-    CopyOldestStrictly=0b100,
-    GrabOldestStrictly=0b101,
-    CopyLatestStrictly=0b110,
-    GrabLatestStrictly=0b111
+    CopyOldest=NUM_0,
+    GrabOldest=NUM_1,
+    CopyLatest=NUM_2,
+    GrabLatest=NUM_3,
+    CopyOldestStrictly=NUM_4,
+    GrabOldestStrictly=NUM_5,
+    CopyLatestStrictly=NUM_6,
+    GrabLatestStrictly=NUM_7
 };
 
 //=================================================================================
@@ -225,12 +246,6 @@ enum ObtainBehavior
 #define NODE_FUNC_PTR(funcName, ...) (funcName##_Fptr(_funcptrmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
-//Non-APP Common Area
-//=================================================================================
-
-#ifndef RobotSDK_Application
-
-//=================================================================================
 //Module Area
 //=================================================================================
 #ifdef RobotSDK_Module
@@ -369,8 +384,6 @@ enum ObtainBehavior
     return XML_DATA_BASE_TYPE(new NODE_DATA_TYPE);}
 
 //=================================================================================
-
-#endif
 
 #endif
 

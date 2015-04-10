@@ -5,7 +5,6 @@
 #include<QLabel>
 
 #include<RobotSDK_Global.h>
-using namespace RobotSDK;
 
 #undef NODE_CLASS
 #define NODE_CLASS RandomGenerator
@@ -27,7 +26,7 @@ class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
     ADD_VAR(int, offset, 0)
-    ADD_VAR(QString, format, QString("HH:mm:ss"))
+    ADD_VAR(QString, format, QString("HH:mm:ss:zzz"))
     ADD_INTERNAL_QOBJECT_TRIGGER(QTimer, timer,0)
     ADD_INTERNAL_DEFAULT_CONNECTION(timer,timeout)
     ADD_QWIDGET(QLabel, number)

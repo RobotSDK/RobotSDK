@@ -1,5 +1,4 @@
 #include"numberviewer.h"
-using namespace RobotSDK;
 
 USE_DEFAULT_NODE
 

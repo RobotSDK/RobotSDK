@@ -76,7 +76,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
     bool sendFlag=1;
     for(i=0;i<portnum&&sendFlag;i++)
     {
-        if((0b100)&(_obtaindatabehavior.at(i)))
+        if((NUM_4)&(_obtaindatabehavior.at(i)))
         {
             sendFlag=_obtaindatasize.at(i)==0||buffercount[i]>=_obtaindatasize.at(i);
         }
@@ -91,7 +91,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
         {
             ObtainBehavior obtaindatabehavior=_obtaindatabehavior.at(i);
             uint obtaindatasize=_obtaindatasize.at(i);
-            if((0b010)&(obtaindatabehavior))
+            if((NUM_2)&(obtaindatabehavior))
             {
                 if(obtaindatasize>0)
                 {
@@ -103,7 +103,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
                     inputparams[i]=portparamsbuffer[i];
                     inputdata[i]=portdatabuffer[i];
                 }
-                if((0b001)&(_obtaindatabehavior.at(i)))
+                if((NUM_1)&(_obtaindatabehavior.at(i)))
                 {
                     portparamsbuffer[i].clear();
                     portdatabuffer[i].clear();
@@ -123,7 +123,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
                     inputparams[i]=portparamsbuffer[i];
                     inputdata[i]=portdatabuffer[i];
                 }
-                if((0b001)&(_obtaindatabehavior.at(i)))
+                if((NUM_1)&(_obtaindatabehavior.at(i)))
                 {
                     if(obtaindatasize>0)
                     {
