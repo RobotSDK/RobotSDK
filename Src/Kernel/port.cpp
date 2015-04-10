@@ -41,8 +41,7 @@ InputPorts::InputPorts(uint portNum, TRANSFER_NODE_VARS_TYPE nodeVars)
     for(i=0;i<portnum;i++)
     {
         InputPort * port=new InputPort(i,this);
-        connect(port, SIGNAL(signalReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE,uint)),
-                this, SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE,uint)),Qt::DirectConnection);
+        connect(port,INPUTPORT_SIGNAL,this,INPUTPORTS_SLOT,Qt::DirectConnection);
         inputports[i]=port;
     }
     nodevars=nodeVars;
@@ -96,8 +95,8 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
             {
                 if(obtaindatasize>0)
                 {
-                    std::copy(portparamsbuffer[i].begin(), portparamsbuffer[i].begin()+obtaindatasize, inputparams[i].begin());
-                    std::copy(portdatabuffer[i].begin(), portdatabuffer[i].begin()+obtaindatasize, inputdata[i].begin());
+                    inputparams[i]=portparamsbuffer[i].mid(0,obtaindatasize);
+                    inputdata[i]=portdatabuffer[i].mid(0,obtaindatasize);
                 }
                 else
                 {
@@ -115,8 +114,9 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
             {
                 if(obtaindatasize>0)
                 {
-                    std::copy(portparamsbuffer[i].end()-obtaindatasize, portparamsbuffer[i].end(), inputparams[i].begin());
-                    std::copy(portdatabuffer[i].end()-obtaindatasize, portdatabuffer[i].end(), inputdata[i].begin());
+                    uint beginpos=portparamsbuffer[i].size()-obtaindatasize;
+                    inputparams[i]=portparamsbuffer[i].mid(beginpos,obtaindatasize);
+                    inputdata[i]=portdatabuffer[i].mid(beginpos,obtaindatasize);
                 }
                 else
                 {
@@ -127,12 +127,9 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
                 {
                     if(obtaindatasize>0)
                     {
-                        while(obtaindatasize-->0)
-                        {
-                            portparamsbuffer[i].pop_back();
-                            portdatabuffer[i].pop_back();
-                            buffercount[i]--;
-                        }
+                        uint restsize=portparamsbuffer[i].size()-obtaindatasize;
+                        portparamsbuffer[i]=portparamsbuffer[i].mid(0,restsize);
+                        portdatabuffer[i]=portdatabuffer[i].mid(0,restsize);
                     }
                     else
                     {
@@ -167,8 +164,7 @@ OutputPorts::OutputPorts(uint portNum)
     for(i=0;i<portnum;i++)
     {
         OutputPort * port=new OutputPort(i,this);
-        connect(this, SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),
-                port, SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE,TRANSFER_NODE_DATA_TYPE)),Qt::DirectConnection);
+        connect(this,OUTPUTPORTS_SIGNAL,port,OUTPUTPORT_SLOT,Qt::DirectConnection);
         outputports[i]=port;
     }
 }

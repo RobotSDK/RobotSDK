@@ -17,22 +17,11 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
     uint i,n=_funcptrlist.size();
     _loadflag=1;
 
-    if(_exname.size()==0)
-    {
-        getInputPortNum=(getInputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getInputPortNum);
-        getOutputPortNum=(getOutputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getOutputPortNum);
-        generateNodeParams=(generateNodeParamsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeParams);
-        generateNodeVars=(generateNodeVarsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeVars);
-        generateNodeData=(generateNodeDataFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeData);
-    }
-    else
-    {
-        getInputPortNum=(getInputPortNumFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, getInputPortNum,_exname);
-        getOutputPortNum=(getOutputPortNumFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, getOutputPortNum,_exname);
-        generateNodeParams=(generateNodeParamsFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeParams,_exname);
-        generateNodeVars=(generateNodeVarsFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeVars,_exname);
-        generateNodeData=(generateNodeDataFptr)LOAD_NODE_EXFUNC_PTR(_libraryfilename, _nodeclass, generateNodeData,_exname);
-    }
+    getInputPortNum=(getInputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getInputPortNum);
+    getOutputPortNum=(getOutputPortNumFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, getOutputPortNum);
+    generateNodeParams=(generateNodeParamsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeParams);
+    generateNodeVars=(generateNodeVarsFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeVars);
+    generateNodeData=(generateNodeDataFptr)LOAD_NODE_FUNC_PTR(_libraryfilename, _nodeclass, generateNodeData);
 
     if(getInputPortNum==NULL||getOutputPortNum==NULL||generateNodeParams==NULL||generateNodeVars==NULL||generateNodeData==NULL)
     {
@@ -43,7 +32,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
     for(i=0;i<n;i++)
     {
         QFunctionPointer funcptr=_funcptrcloadmap[_funcptrlist.at(i)](_libraryfilename,_nodeclass,_exname);
-        if(funcptr==NULL)
+        if(funcptr==NULL&&_funcptrmandatoryflaglist.at(i))
         {
             if(_exname.size()==0)
             {
@@ -57,6 +46,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
             }
         }
         _funcptrmap.insert(_funcptrlist.at(i), funcptr);
+        _funcptrflag.insert(_funcptrlist.at(i), funcptr!=NULL);
     }
 
     if(_loadflag)
@@ -72,25 +62,48 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
 
         NODE_VARS_ARG=generateNodeVars();
         NODE_VARS_ARG->_inputportnum=_inputportnum;
-        NODE_VARS_ARG->_buffersize.fill(1,_inputportnum);
-        NODE_VARS_ARG->_obtaindatabehavior.fill(CopyOldest,_inputportnum);
-        NODE_VARS_ARG->_obtaindatasize.fill(0,_inputportnum);
-        NODE_VARS_ARG->_triggerflag.fill(0,_inputportnum);
+        NODE_VARS_ARG->_buffersize.fill(0,_inputportnum);
+        NODE_VARS_ARG->_obtaindatabehavior.fill(GrabLatest,_inputportnum);
+        NODE_VARS_ARG->_obtaindatasize.fill(1,_inputportnum);
+        NODE_VARS_ARG->_triggerflag.fill(1,_inputportnum);
         NODE_VARS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
+
         NODE_VARS_ARG->nodeSwitcher->_node=this;
         NODE_VARS_ARG->_node=this;
+        QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
+        pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
+        NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
+        NODE_VARS_ARG->nodeSwitcher->setPalette(pal);
+        NODE_VARS_ARG->nodeSwitcher->update();
+        NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
+
+        pal=NODE_VARS_ARG->widgetSwitcher->palette();
+        pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
+        NODE_VARS_ARG->widgetSwitcher->setAutoFillBackground(1);
+        NODE_VARS_ARG->widgetSwitcher->setPalette(pal);
+        NODE_VARS_ARG->widgetSwitcher->update();
+        NODE_VARS_ARG->widgetSwitcher->setText(QString("%1").arg(_openflag?"Hide":"Show"));
+
+        NODE_VARS_ARG->widget->setWindowTitle(QString("%1::%2").arg(_nodeclass).arg(_nodename));
+
 
         NODE_DATA_ARG=XML_DATA_BASE_TYPE();
 
-        _initializeflag=NODE_FUNC_PTR(initializeNode);
+        if(CHECK_NODE_FUNC_PTR(initializeNode))
+        {
+            _initializeflag=NODE_FUNC_PTR(initializeNode);
+        }
+        else
+        {
+            _initializeflag=1;
+        }
 
         if(_initializeflag)
         {
             _inputports=new InputPorts(_inputportnum, NODE_VARS_ARG);
             _inputthread=std::shared_ptr<QThread>(new QThread);
-            connect(_inputthread.get(), SIGNAL(finished()), _inputports, SLOT(deleteLater()));
-            connect(_inputports, SIGNAL(signalObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE))
-                    ,this, SLOT(slotObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)), Qt::QueuedConnection);
+            connect(_inputthread.get(),SIGNAL(finished()), _inputports, SLOT(deleteLater()));
+            connect(_inputports,INPUTPORTS_SIGNAL,this,NODE_SLOT,Qt::QueuedConnection);
             _inputports->moveToThread(_inputthread.get());
             _inputthread->start();
 
@@ -98,8 +111,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
             _outputports=new OutputPorts(_outputportnum);
             _outputthread=std::shared_ptr<QThread>(new QThread);
             connect(_outputthread.get(),SIGNAL(finished()),_outputports,SLOT(deleteLater()));
-            connect(this, SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
-                    , _outputports, SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)), Qt::QueuedConnection);
+            connect(this,NODE_SIGNAL, _outputports,OUTPUTPORTS_SLOT,Qt::QueuedConnection);
             _outputports->moveToThread(_outputthread.get());
             _outputthread->start();
 
@@ -111,7 +123,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
                 n=triggersignals.size();
                 for(i=0;i<n;i++)
                 {
-                    connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()));
+                    connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()), Qt::QueuedConnection);
                 }
             }
             for(triggeriter=NODE_VARS_ARG->_qwidgettriggermap.begin();triggeriter!=NODE_VARS_ARG->_qwidgettriggermap.end();triggeriter++)
@@ -120,13 +132,13 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
                 n=triggersignals.size();
                 for(i=0;i<n;i++)
                 {
-                    connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()));
+                    connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()), Qt::QueuedConnection);
                 }
             }
             QMultiMap< QObject *, QPair< QString, QString > >::const_iterator userconnection;
             for(userconnection=NODE_VARS_ARG->_userconnectionmap.begin();userconnection!=NODE_VARS_ARG->_userconnectionmap.end();userconnection++)
             {
-                connect(userconnection.key(), userconnection.value().first.toUtf8().data(), this, userconnection.value().second.toUtf8().data());
+                connect(userconnection.key(), userconnection.value().first.toUtf8().data(), this, userconnection.value().second.toUtf8().data(), Qt::QueuedConnection);
             }
             QMultiMap< QPair< QObject *, QObject * > , QPair< QString, QString > >::const_iterator connection;
             for(connection=NODE_VARS_ARG->_connectionmap.begin();connection!=NODE_VARS_ARG->_connectionmap.end();connection++)
@@ -176,6 +188,7 @@ Node::~Node()
 
 bool Node::eventFilter(QObject *obj, QEvent *ev)
 {
+    Q_UNUSED(obj);
     if(!_loadflag||!_initializeflag)
     {
         return 1;
@@ -193,11 +206,17 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             {
                 NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
                 NODE_VARS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
-                _openflag=NODE_FUNC_PTR(openNode);
+                if(CHECK_NODE_FUNC_PTR(openNode))
+                {
+                    _openflag=NODE_FUNC_PTR(openNode);
+                }
             }
             else
             {
-                _openflag=!NODE_FUNC_PTR(closeNode);
+                if(CHECK_NODE_FUNC_PTR(closeNode))
+                {
+                    _openflag=!NODE_FUNC_PTR(closeNode);
+                }
             }
 
             QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
@@ -212,7 +231,14 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
         {
             NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
             NODE_VARS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
-            _openflag=NODE_FUNC_PTR(openNode);
+            if(CHECK_NODE_FUNC_PTR(openNode))
+            {
+                _openflag=NODE_FUNC_PTR(openNode);
+            }
+            else
+            {
+                _openflag=1;
+            }
 
             QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
             pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
@@ -224,8 +250,14 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
         }
         else if(ev->type()==NodeSwitcher::CloseNodeEventType)
         {
-            _openflag=!NODE_FUNC_PTR(closeNode);
-
+            if(CHECK_NODE_FUNC_PTR(closeNode))
+            {
+                _openflag=!NODE_FUNC_PTR(closeNode);
+            }
+            else
+            {
+                _openflag=0;
+            }
             QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
             pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
             NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
@@ -245,7 +277,7 @@ void Node::slotDefaultTrigger()
 {
     INPUT_PARAMS_ARG.clear();
     INPUT_DATA_ARG.clear();
-    NODE_DATA_ARG=generateNodeData);
+    NODE_DATA_ARG=generateNodeData();
     if(NODE_FUNC_PTR(main))
     {
         emit signalSendParamsData(NODE_PARAMS_ARG,NODE_DATA_ARG);
@@ -256,7 +288,7 @@ void Node::slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSU
 {
     INPUT_PARAMS_ARG=inputParams;
     INPUT_DATA_ARG=inputData;
-    NODE_DATA_ARG=NODE_FUNC_PTR(generateNodeData);
+    NODE_DATA_ARG=generateNodeData();
     if(NODE_FUNC_PTR(main))
     {
         emit signalSendParamsData(NODE_PARAMS_ARG,NODE_DATA_ARG);

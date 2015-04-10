@@ -5,21 +5,34 @@ using namespace RobotSDK;
 Graph::Graph(QObject * parent)
     : QObject(parent)
 {    
+    registerTransferData();
+
     nodeswitcher=new QVBoxLayout;
-    nodeswitcher->addStretch();
     widgetswitcher=new QVBoxLayout;
-    widgetswitcher->addStretch();
     QHBoxLayout * layout=new QHBoxLayout;
     layout->addLayout(nodeswitcher);
     layout->addLayout(widgetswitcher);
-    graph=new QWidget;
-    graph->setLayout(layout);
+    QVBoxLayout * nestlayout=new QVBoxLayout;
+    nestlayout->addLayout(layout);
+    nestlayout->addStretch();
+    graph->setLayout(nestlayout);
 }
 
 Graph::~Graph()
 {
     clearNodes();
     delete graph;
+}
+
+void Graph::registerTransferData()
+{
+   REGISTER_TRANSFER_VALUE_TYPE(TRANSFER_NODE_PARAMS_TYPE);
+   REGISTER_TRANSFER_VALUE_TYPE(TRANSFER_NODE_VARS_TYPE);
+   REGISTER_TRANSFER_VALUE_TYPE(TRANSFER_NODE_DATA_TYPE);
+   REGISTER_TRANSFER_VALUE_TYPE(TRANSFER_PORT_PARAMS_TYPE);
+   REGISTER_TRANSFER_VALUE_TYPE(TRANSFER_PORT_DATA_TYPE);
+   REGISTER_TRANSFER_VALUE_TYPE(PORT_PARAMS_CAPSULE);
+   REGISTER_TRANSFER_VALUE_TYPE(PORT_DATA_CAPSULE);
 }
 
 void Graph::addNode(QString nodeFullName, QString libraryFileName, QString configFileName)
@@ -42,7 +55,7 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     {
         exName=nodenamelist.at(2);
     }
-    QString functionname=QString("%1__%2").arg(nodeClass).arg(nodeName);
+    QString functionname=QString("%1__%2").arg(nodeClass).arg("generateNode");
     generateNode=(generateNodePtr)(QLibrary::resolve(libraryFileName,functionname.toUtf8().data()));
     if(generateNode==NULL)
     {
@@ -135,8 +148,8 @@ void Graph::addEdge(QString outputNodeFullName, uint outputPortID, QString input
             qDebug()<<QString("Port ID is out of range");
             return;
         }
-        connect(outputport,SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE))
-                ,inputport,SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE)),Qt::QueuedConnection);
+        connect(outputport,OUTPUTPORT_SIGNAL
+                ,inputport,INPUTPORT_SLOT,Qt::QueuedConnection);
         _edges.insert(QPair< QString, QString >(outputNodeFullName, inputNodeFullName),QPair< uint, uint >(outputPortID, inputPortID));
     }
 }
@@ -148,8 +161,8 @@ void Graph::removeEdge(QString outputNodeFullName, uint outputPortID, QString in
     {
         OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
         InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
-        disconnect(outputport,SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE))
-                ,inputport,SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE)));
+        disconnect(outputport,OUTPUTPORT_SIGNAL
+                ,inputport,INPUTPORT_SLOT);
     }
 }
 
@@ -169,8 +182,8 @@ void Graph::removeEdgeByOutputPort(QString outputNodeFullName, uint outputPortID
             QString inputNodeFullName=edgeiter.key().second;
             uint inputPortID=edgeiter.value().second;
             InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
-            disconnect(outputport,SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE))
-                    ,inputport,SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE)));
+            disconnect(outputport,OUTPUTPORT_SIGNAL
+                    ,inputport,INPUTPORT_SLOT);
             _edges.remove(edgeiter.key(),edgeiter.value());
             edgeiter--;
         }
@@ -193,8 +206,8 @@ void Graph::removeEdgeByInputPort(QString inputNodeFullName, uint inputPortID)
             QString outputNodeFullName=edgeiter.key().first;
             uint outputPortID=edgeiter.value().first;
             OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
-            disconnect(outputport,SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE))
-                    ,inputport,SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE)));
+            disconnect(outputport,OUTPUTPORT_SIGNAL
+                    ,inputport,INPUTPORT_SLOT);
             _edges.remove(edgeiter.key(),edgeiter.value());
             edgeiter--;
         }
@@ -236,4 +249,14 @@ void Graph::closeAllNode()
         QEvent * openevent=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
         QCoreApplication::postEvent(nodeiter.value().second,openevent);
     }
+}
+
+QWidget * Graph::getNodeWidget(QString nodeFullName)
+{
+    if(_nodes.values(nodeFullName).size()==0)
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return NULL;
+    }
+    return _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget();
 }

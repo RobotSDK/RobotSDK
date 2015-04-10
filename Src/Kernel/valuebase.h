@@ -88,6 +88,7 @@ public:
     void setInputPortTriggerFlag(QList< bool > triggerFlag);
 protected:
     QMap< QString, QObject * > _qobjecttriggermap;
+    QMap< QString, bool > _qobjecttriggerpoolthreadflagmap;
     QMap< QString, QObject * > _qwidgettriggermap;
     QMultiMap< QObject *, QString > _defaultconnectionmap;
     QMultiMap< QObject *, QPair< QString, QString > > _userconnectionmap;

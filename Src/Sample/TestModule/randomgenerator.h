@@ -2,20 +2,18 @@
 #define TESTMODULE_H
 
 #include<QTimer>
-#include<QTime>
+#include<QLabel>
 
 #include<RobotSDK_Global.h>
 using namespace RobotSDK;
 
-#ifdef NODE_CLASS
 #undef NODE_CLASS
-#endif
 #define NODE_CLASS RandomGenerator
 
-//#undef INPUT_PORT_NUM
+#undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 0
 
-//#undef OUTPUT_PORT_NUM
+#undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 2
 
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
@@ -27,9 +25,11 @@ public:
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    ADD_VAR(int, offset, 50)
-    ADD_INTERNAL_QOBJECT_TRIGGER(QTimer, timer)
+    ADD_VAR(int, offset, 0)
+    ADD_INTERNAL_QOBJECT_TRIGGER(QTimer, timer,0)
     ADD_INTERNAL_DEFAULT_CONNECTION(timer,timeout)
+    ADD_QWIDGET(QLabel, number)
+    ADD_QLAYOUT(QHBoxLayout, layout)
 };
 
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE

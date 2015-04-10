@@ -11,6 +11,8 @@ class Graph : public QObject
 public:
     Graph(QObject * parent=0);
     ~Graph();
+protected:
+    void registerTransferData();
 private:
     typedef Node *(*generateNodePtr)(QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName);
     generateNodePtr generateNode;
@@ -30,10 +32,13 @@ public slots:
 public slots:
     void openAllNode();
     void closeAllNode();
+public:
+    QWidget * const graph=new QWidget;
 protected:
-    QWidget * graph;
     QVBoxLayout * nodeswitcher;
     QVBoxLayout * widgetswitcher;
+public:
+    QWidget * getNodeWidget(QString nodeFullName);
 };
 
 }

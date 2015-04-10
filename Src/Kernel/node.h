@@ -27,8 +27,10 @@ private:
 protected:
     QString _libraryfilename;
     QList< QString > _funcptrlist;
+    QList< bool > _funcptrmandatoryflaglist;
     QMap< QString, std::function< QFunctionPointer(QString, QString, QString) > > _funcptrcloadmap;
     QMap< QString, QFunctionPointer > _funcptrmap;
+    QMap< QString,  bool > _funcptrflag;
 protected:
     uint _inputportnum;
     uint _outputportnum;
@@ -66,10 +68,10 @@ protected:
     generateNodeVarsFptr generateNodeVars;
     typedef XML_DATA_BASE_TYPE (*generateNodeDataFptr)();
     generateNodeDataFptr generateNodeData;
-    ADD_NODE_FUNC_PTR(bool, initializeNode)
-    ADD_NODE_FUNC_PTR(bool, openNode)
-    ADD_NODE_FUNC_PTR(bool, closeNode)
-    ADD_NODE_FUNC_PTR(bool, main)
+    ADD_NODE_FUNC_PTR(bool, initializeNode, 0)
+    ADD_NODE_FUNC_PTR(bool, openNode, 0)
+    ADD_NODE_FUNC_PTR(bool, closeNode, 0)
+    ADD_NODE_FUNC_PTR(bool, main, 1)
 };
 
 #define USE_DEFAULT_NODE \

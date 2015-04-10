@@ -23,6 +23,7 @@
 #include<QDockWidget>
 #include<QTableWidget>
 #include<QTabWidget>
+#include<QListWidget>
 
 #include<memory>
 #include<functional>
@@ -88,6 +89,49 @@ enum ObtainBehavior
 #define PORT_PARAMS_CAPSULE QVector< PORT_PARAMS_BUFFER >
 #define PORT_DATA_CAPSULE QVector< PORT_DATA_BUFFER >
 
+#define REGISTER_TRANSFER_VALUE_TYPE(valueType) _REGISTER_TRANSFER_VALUE_TYPE_1(valueType)
+#define _REGISTER_TRANSFER_VALUE_TYPE_1(valueType) qRegisterMetaType< valueType >(#valueType);
+
+#define INPUTPORT_SLOT _INPUTPORT_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORT_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) _INPUTPORT_SLOT_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORT_SLOT_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE))
+
+#define INPUTPORT_SIGNAL _INPUTPORT_SIGNAL_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORT_SIGNAL_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) _INPUTPORT_SIGNAL_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORT_SIGNAL_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) SIGNAL(signalReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE, uint))
+
+#define OUTPUTPORT_SLOT _OUTPUTPORT_SLOT_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORT_SLOT_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) _OUTPUTPORT_SLOT_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORT_SLOT_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
+
+#define OUTPUTPORT_SIGNAL _OUTPUTPORT_SIGNAL_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _OUTPUTPORT_SIGNAL_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) _OUTPUTPORT_SIGNAL_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _OUTPUTPORT_SIGNAL_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE))
+
+#define INPUTPORTS_SLOT _INPUTPORTS_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORTS_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) _INPUTPORTS_SLOT_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
+#define _INPUTPORTS_SLOT_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE, uint))
+
+#define INPUTPORTS_SIGNAL _INPUTPORTS_SIGNAL_1(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)
+#define _INPUTPORTS_SIGNAL_1(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE) _INPUTPORTS_SIGNAL_2(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)
+#define _INPUTPORTS_SIGNAL_2(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE) SIGNAL(signalObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE))
+
+#define OUTPUTPORTS_SLOT _OUTPUTPORTS_SLOT_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORTS_SLOT_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) _OUTPUTPORTS_SLOT_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORTS_SLOT_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) SLOT(slotSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
+
+#define OUTPUTPORTS_SIGNAL _OUTPUTPORTS_SIGNAL_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORTS_SIGNAL_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) _OUTPUTPORTS_SIGNAL_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _OUTPUTPORTS_SIGNAL_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
+
+#define NODE_SLOT _NODE_SLOT_1(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)
+#define _NODE_SLOT_1(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE) _NODE_SLOT_2(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE)
+#define _NODE_SLOT_2(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE) SLOT(slotObtainParamsData(PORT_PARAMS_CAPSULE, PORT_DATA_CAPSULE))
+
+#define NODE_SIGNAL _NODE_SIGNAL_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _NODE_SIGNAL_1(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) _NODE_SIGNAL_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE)
+#define _NODE_SIGNAL_2(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE) SIGNAL(signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE, TRANSFER_NODE_DATA_TYPE))
+
 //=================================================================================
 
 #define INPUT_PARAMS_ARG _inputParams
@@ -118,17 +162,11 @@ enum ObtainBehavior
 #endif
 
 //=================================================================================
-//Non-APP Common Area
-//=================================================================================
-
-#ifndef RobotSDK_Application
-
-//=================================================================================
 //for NODE_VARS_BASE_TYPE
 
-#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName) \
+#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName, poolThreadFlag) \
     private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); return trigger;}; \
+    {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); _qobjecttriggerpoolthreadflagmap.insert(#triggerName,poolThreadFlag); return trigger;}; \
     public: triggerType * const triggerName=_qobject_##triggerType##_##triggerName##_Func();
 
 #define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
@@ -164,11 +202,6 @@ enum ObtainBehavior
     private: QPair< QString, QString > _connection_##emitterName##_##signalName##_##receiverName##_##slotName=_connection_##emitterName##_##signalName##_##receiverName##_##slotName_Func();
 
 //=================================================================================
-//Kernel Area
-//=================================================================================
-//#ifdef RobotSDK_Kernel
-
-//=================================================================================
 //for Node extendion
 
 #define LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName) QLibrary::resolve(libraryFileName, QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
@@ -176,22 +209,26 @@ enum ObtainBehavior
       QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
     : LOAD_NODE_FUNC_PTR(libraryFileName,nodeClass,funcName)
 
-#define ADD_NODE_FUNC_PTR(returnType, funcName, ...) \
+#define ADD_NODE_FUNC_PTR(returnType, funcName, mandatoryFlag, ...) \
     protected: typedef returnType (*funcName##_Fptr)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__); \
     private: QString _funcptr_##funcName##_Func(){ \
     _funcptrlist.push_back(QString(#funcName)); \
+    _funcptrmandatoryflaglist.push_back(mandatoryFlag); \
     _funcptrcloadmap.insert(QString(#funcName),[](QString libraryFileName, QString nodeClass, QString exName)->QFunctionPointer{ \
     if(exName.size()==0){return LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName);} \
     else{return LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName);}}); return QString(#funcName);}; \
     protected: QString funcName=_funcptr_##funcName##_Func();
 
-#define ADD_NODE_DEFAULT_FUNC_PTR(returnType, funcName, ...) ADD_NODE_FUNC_PTR(returnType, funcName, ##__VA_ARGS__)
+#define ADD_NODE_DEFAULT_FUNC_PTR(returnType, funcName, mandatoryFlag, ...) ADD_NODE_FUNC_PTR(returnType, funcName, mandatoryFlag, ##__VA_ARGS__)
 
+#define CHECK_NODE_FUNC_PTR(funcName) _funcptrflag[funcName]
 #define NODE_FUNC_PTR(funcName, ...) (funcName##_Fptr(_funcptrmap[funcName]))(ROBOTSDK_ARGS, ##__VA_ARGS__)
 
 //=================================================================================
+//Non-APP Common Area
+//=================================================================================
 
-//#endif
+#ifndef RobotSDK_Application
 
 //=================================================================================
 //Module Area
@@ -238,15 +275,15 @@ enum ObtainBehavior
 #define _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)
 #define _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID);
 
-#define PORT_PARAMS_SIZE(portID) []()->uint{return (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? INPUT_PARAMS_ARG[portID].size() : 0;}
-#define PORT_PARAMS(portID, paramsID) []()->std::shared_ptr< PORT_PARAMS_TYPE(portID) >{return (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && INPUT_PARAMS_ARG[portID].at(paramsID)) ? \
+#define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? INPUT_PARAMS_ARG[portID].size() : 0
+#define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && INPUT_PARAMS_ARG[portID].at(paramsID)) ? \
       std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(INPUT_PARAMS_ARG[portID].at(paramsID)) \
-    : std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >();}
+    : std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >()
 
-#define PORT_DATA_SIZE(portID) []()->uint{return (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? INPUT_DATA_ARG[portID].size() : 0;}
-#define PORT_DATA(portID, dataID) []()->std::shared_ptr< PORT_DATA_TYPE(portID) >{return (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && INPUT_DATA_ARG[portID].at(dataID)) ? \
+#define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? INPUT_DATA_ARG[portID].size() : 0
+#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && INPUT_DATA_ARG[portID].at(dataID)) ? \
       std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(INPUT_DATA_ARG[portID].at(dataID)) \
-    : std::shared_ptr< const PORT_DATA_TYPE(portID) >();}
+    : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
 #define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()==0||INPUT_DATA_ARG.size()==0
 
@@ -320,15 +357,15 @@ enum ObtainBehavior
 //for default Node Function
 
 #define NODE_DEFAULT_FUNC \
-    NODE_FUNC_DEF_EXPORT(uint, getInputPortNum){ \
+    extern "C" RobotSDK_EXPORT uint NODE_FUNC_NAME(getInputPortNum)(){ \
     return INPUT_PORT_NUM;} \
-    NODE_FUNC_DEF_EXPORT(uint, getOutputPortNum){ \
+    extern "C" RobotSDK_EXPORT uint NODE_FUNC_NAME(getOutputPortNum)(){ \
     return OUTPUT_PORT_NUM;} \
-    NODE_FUNC_DEF_EXPORT(XML_PARAMS_BASE_TYPE, generateNodeParams){ \
+    extern "C" RobotSDK_EXPORT XML_PARAMS_BASE_TYPE NODE_FUNC_NAME(generateNodeParams)(){ \
     return XML_PARAMS_BASE_TYPE(new NODE_PARAMS_TYPE);} \
-    NODE_FUNC_DEF_EXPORT(XML_VARS_BASE_TYPE, generateNodeVars){ \
+    extern "C" RobotSDK_EXPORT XML_VARS_BASE_TYPE NODE_FUNC_NAME(generateNodeVars)(){ \
     return XML_VARS_BASE_TYPE(new NODE_VARS_TYPE);} \
-    NODE_FUNC_DEF_EXPORT(XML_DATA_BASE_TYPE, generateNodeData){ \
+    extern "C" RobotSDK_EXPORT XML_DATA_BASE_TYPE NODE_FUNC_NAME(generateNodeData)(){ \
     return XML_DATA_BASE_TYPE(new NODE_DATA_TYPE);}
 
 //=================================================================================

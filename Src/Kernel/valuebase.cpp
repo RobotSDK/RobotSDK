@@ -77,6 +77,12 @@ WidgetSwitcher::WidgetSwitcher(QWidget * parent)
 void WidgetSwitcher::slotSwitchWidget()
 {
     visibleflag=!visibleflag;
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Button, QColor(visibleflag ? Qt::green : Qt::red));
+    this->setAutoFillBackground(1);
+    this->setPalette(pal);
+    this->update();
+    this->setText(QString("%1").arg(visibleflag ? "Hide":"Show"));
     emit signalSwitchWidget(visibleflag);
 }
 
@@ -111,7 +117,7 @@ NODE_VARS_BASE_TYPE::~NODE_VARS_BASE_TYPE()
     for(widgetiter=_qwidgetmap.begin();widgetiter!=_qwidgetmap.end();widgetiter++)
     {
         QWidget * widgetptr=widgetiter.value();
-        if(widgetptr->parent()==NULL)
+        if(widgetptr!=widget&&widgetptr->parent()==NULL)
         {
             delete widgetptr;
         }
@@ -218,7 +224,14 @@ void NODE_VARS_BASE_TYPE::moveTriggerToPoolThread(QObject * node, QThread * pool
     {
         if(triggeriter.value()->thread()==node->thread())
         {
-            triggeriter.value()->moveToThread(poolThread);
+            if(_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
+            {
+                triggeriter.value()->moveToThread(poolThread);
+            }
+            else
+            {
+                triggeriter.value()->setParent(node);
+            }
         }
     }
 }

@@ -17,9 +17,13 @@ DEFINES += RobotSDK_Module
 INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
 LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
 
-SOURCES += testmodule.cpp
+SOURCES += \
+    numberviewer.cpp \
+    randomgenerator.cpp
 
-HEADERS += testmodule.h
+HEADERS += \
+    numberviewer.h \
+    randomgenerator.h
 
 unix {
     target.path = /usr/lib
