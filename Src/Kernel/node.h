@@ -54,6 +54,7 @@ private slots:
     void slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
 signals:
     void signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
+    void signalNodeState(bool openFlag, QString nodeClass, QString nodeName);
 private:
     InputPort * getInputPort(uint portID);
     OutputPort * getOutputPort(uint portID);

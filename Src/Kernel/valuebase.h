@@ -23,14 +23,10 @@ class NODE_PARAMS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
 public:
     NODE_PARAMS_BASE_TYPE();
     ~NODE_PARAMS_BASE_TYPE();
-protected:
-    QString _nodeclass;
-    QString _nodename;
-    QString _exname;
 public:
-    QString getNodeClass();
-    QString getNodeName();
-    QString getExName();
+    QString nodeclass;
+    QString nodename;
+    QString exname;
 };
 
 class NodeSwitcher : public QPushButton
@@ -47,6 +43,7 @@ public:
     NodeSwitcher(QWidget * parent=0);
 public slots:
     void slotSwitchNode();
+    void slotNodeState(bool openFlag, QString nodeClass, QString nodeName);
 };
 
 class NODE_VARS_BASE_TYPE : public NODE_VALUE_BASE_TYPE

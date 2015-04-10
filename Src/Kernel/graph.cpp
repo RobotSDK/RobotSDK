@@ -16,6 +16,7 @@ Graph::Graph(QObject * parent)
 
 Graph::~Graph()
 {
+    closeAllNode();
     clearNodes();
     delete switcherpanel;
 }
@@ -114,8 +115,8 @@ void Graph::clearNodes()
     {
         nodeiter.value().first->wait();
     }
+    _nodes.clear();
     _edges.clear();
-
 }
 
 void Graph::addEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID)

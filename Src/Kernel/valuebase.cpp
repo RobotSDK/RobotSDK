@@ -35,21 +35,6 @@ NODE_PARAMS_BASE_TYPE::~NODE_PARAMS_BASE_TYPE()
 
 }
 
-QString NODE_PARAMS_BASE_TYPE::getNodeClass()
-{
-    return _nodeclass;
-}
-
-QString NODE_PARAMS_BASE_TYPE::getNodeName()
-{
-    return _nodename;
-}
-
-QString NODE_PARAMS_BASE_TYPE::getExName()
-{
-    return _exname;
-}
-
 const int NodeSwitcher::SwitchEventType=QEvent::registerEventType();
 const int NodeSwitcher::OpenNodeEventType=QEvent::registerEventType();
 const int NodeSwitcher::CloseNodeEventType=QEvent::registerEventType();
@@ -58,6 +43,7 @@ NodeSwitcher::NodeSwitcher(QWidget *parent)
     : QPushButton(parent)
 {
     _node=NULL;
+    setAutoFillBackground(1);
     connect(this,SIGNAL(clicked()),this,SLOT(slotSwitchNode()),Qt::DirectConnection);
 }
 
@@ -65,6 +51,23 @@ void NodeSwitcher::slotSwitchNode()
 {
     QEvent * event=new QEvent(QEvent::Type(SwitchEventType));
     QCoreApplication::postEvent(_node,event);
+}
+
+void NodeSwitcher::slotNodeState(bool openFlag, QString nodeClass, QString nodeName)
+{
+    if(openFlag)
+    {
+        QPalette palette=this->palette();
+        palette.setColor(QPalette::Button, QColor(Qt::green));
+        this->setPalette(palette);
+    }
+    else
+    {
+        QPalette palette=this->palette();
+        palette.setColor(QPalette::Button, QColor(Qt::red));
+        this->setPalette(palette);
+    }
+    setText(QString("%1 %2::%3").arg(openFlag?"Close":"Open").arg(nodeClass).arg(nodeName));
 }
 
 NODE_VARS_BASE_TYPE::NODE_VARS_BASE_TYPE()

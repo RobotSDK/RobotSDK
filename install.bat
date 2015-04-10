@@ -3,10 +3,7 @@
 set "TMPCURPATH=%cd%"
 set "TMPBATPATH=%~dp0"
 
-set "TMPDISKDRIVER="
-
-if not "%1"=="" set "TMPDISKDRIVER=%1" & goto ConfigRobotSDK
-set /p TMPDISKDRIVER=Input disk driver for RobotSDK (default c):
+set "TMPDISKDRIVER=c"
 
 :ConfigRobotSDK
 

@@ -33,10 +33,10 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto data=NODE_DATA;
 
-    data->result=random()%params->max+vars->offset;
+    data->result=qrand()%params->max+vars->offset;
     data->timestamp=QTime::currentTime();
 
-    vars->number->setText(QString("%1\n%2").arg(data->result).arg(data->timestamp.toString(vars->format)));
+    vars->number->setText(QString("%1::%2\n%3\n%4").arg(params->nodeclass).arg(params->nodename).arg(data->result).arg(data->timestamp.toString(vars->format)));
 
     uint out=data->result%2;
     if(out==0)

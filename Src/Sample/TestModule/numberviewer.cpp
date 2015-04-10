@@ -13,9 +13,9 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    auto vars=NODE_VARS;
     auto params=NODE_PARAMS;
+    auto vars=NODE_VARS;    
     auto data=PORT_DATA(0,0);
-    vars->number->setText(QString("%1\n%2").arg(data->result).arg(data->timestamp.toString(params->format)));
+    vars->number->setText(QString("%1::%2\n%3\n%4").arg(params->nodeclass).arg(params->nodename).arg(data->result).arg(data->timestamp.toString(params->format)));
     return 1;
 }

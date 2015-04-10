@@ -55,9 +55,9 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
         _outputportnum=getOutputPortNum();
 
         NODE_PARAMS_ARG=generateNodeParams();
-        NODE_PARAMS_ARG->_nodeclass=_nodeclass;
-        NODE_PARAMS_ARG->_nodename=_nodename;
-        NODE_PARAMS_ARG->_exname=_exname;
+        NODE_PARAMS_ARG->nodeclass=_nodeclass;
+        NODE_PARAMS_ARG->nodename=_nodename;
+        NODE_PARAMS_ARG->exname=_exname;
         NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodeclass,_nodename);
 
         NODE_VARS_ARG=generateNodeVars();
@@ -70,12 +70,8 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeClass, Q
 
         NODE_VARS_ARG->nodeSwitcher->_node=this;
         NODE_VARS_ARG->_node=this;
-        QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
-        pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
-        NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
-        NODE_VARS_ARG->nodeSwitcher->setPalette(pal);
-        NODE_VARS_ARG->nodeSwitcher->update();
-        NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
+        connect(this,SIGNAL(signalNodeState(bool,QString,QString)),NODE_VARS_ARG->nodeSwitcher,SLOT(slotNodeState(bool,QString,QString)));
+        emit signalNodeState(_openflag,_nodeclass,_nodename);
 
         NODE_VARS_ARG->widget->setWindowTitle(QString("%1::%2").arg(_nodeclass).arg(_nodename));
 
@@ -211,13 +207,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
                     _openflag=!NODE_FUNC_PTR(closeNode);
                 }
             }
-
-            QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
-            pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
-            NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
-            NODE_VARS_ARG->nodeSwitcher->setPalette(pal);
-            NODE_VARS_ARG->nodeSwitcher->update();
-            NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
+            emit signalNodeState(_openflag,_nodeclass,_nodename);
             return 1;
         }
         else if(ev->type()==NodeSwitcher::OpenNodeEventType)
@@ -232,13 +222,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             {
                 _openflag=1;
             }
-
-            QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
-            pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
-            NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
-            NODE_VARS_ARG->nodeSwitcher->setPalette(pal);
-            NODE_VARS_ARG->nodeSwitcher->update();
-            NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
+            emit signalNodeState(_openflag,_nodeclass,_nodename);
             return 1;
         }
         else if(ev->type()==NodeSwitcher::CloseNodeEventType)
@@ -251,12 +235,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             {
                 _openflag=0;
             }
-            QPalette pal=NODE_VARS_ARG->nodeSwitcher->palette();
-            pal.setColor(QPalette::Button, QColor(_openflag ? Qt::green : Qt::red));
-            NODE_VARS_ARG->nodeSwitcher->setAutoFillBackground(1);
-            NODE_VARS_ARG->nodeSwitcher->setPalette(pal);
-            NODE_VARS_ARG->nodeSwitcher->update();
-            NODE_VARS_ARG->nodeSwitcher->setText(QString("%1 %2::%3").arg(_openflag?"Close":"Open").arg(_nodeclass).arg(_nodename));
+            emit signalNodeState(_openflag,_nodeclass,_nodename);
             return 1;
         }
         else

@@ -13,9 +13,15 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-DEFINES += RobotSDK_Application
-INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
-LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+unix {
+    INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
+    LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+}
+
+win32 {
+    INCLUDEPATH += c:/SDK/RobotSDK_4.0/Kernel/include
+    LIBS += -Lc:/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+}
 
 SOURCES += main.cpp\
         mainwindow.cpp

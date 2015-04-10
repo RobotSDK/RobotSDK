@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->graph->setWidget(graph.switcherpanel);
 
     QString libraryname=QFileDialog::getOpenFileName(this,"Open TestModule Shared Library");
     QString configfile="config.xml";
@@ -18,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     graph.addEdge("RandomGenerator::random",0,"NumberViewer::odd",0);
     graph.addEdge("RandomGenerator::random",1,"NumberViewer::even",0);
 
+    ui->graph->setWidget(graph.switcherpanel);
     ui->source->setWidget(graph.getNodeWidget("RandomGenerator::random"));
     ui->drain0->setWidget(graph.getNodeWidget("NumberViewer::odd"));
     ui->drain1->setWidget(graph.getNodeWidget("NumberViewer::even"));
@@ -25,7 +25,5 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    graph.closeAllNode();
-    graph.clearNodes();
     delete ui;
 }

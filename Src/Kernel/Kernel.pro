@@ -5,8 +5,6 @@ CONFIG += c++11
 
 INCLUDEPATH += .
 
-DEFINES += RobotSDK_Kernel
-
 HEADERS += \
     defines.h \
     graph.h \
@@ -30,10 +28,7 @@ unix{
 }
 
 win32{
-	isEmpty( TMPDISKDRIVER ){
-		TMPDISKDRIVER = c
-	}
-	ROBOTSDKDIR=$$(TMPDISKDRIVER):/SDK/RobotSDK_4.0
+    ROBOTSDKDIR=C:/SDK/RobotSDK_4.0
 }
 
 MOC_DIR = $$ROBOTSDKDIR/Build/Kernel/MOC
