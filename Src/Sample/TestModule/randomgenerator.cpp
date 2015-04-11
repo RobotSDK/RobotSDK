@@ -27,13 +27,21 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
     return 1;
 }
 
+NODE_FUNC_DEF(uint, generateRandom)
+{
+    auto params=NODE_PARAMS;
+    auto vars=NODE_VARS;
+
+    return qrand()%(params->max)+vars->offset;
+}
+
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
     auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
     auto data=NODE_DATA;
 
-    data->result=qrand()%params->max+vars->offset;
+    data->result=NODE_FUNC(generateRandom);
     data->timestamp=QTime::currentTime();
 
     vars->number->setText(QString("%1::%2\n%3\n%4").arg(params->nodeclass).arg(params->nodename).arg(data->result).arg(data->timestamp.toString(vars->format)));
