@@ -34,7 +34,7 @@ void Graph::registerTransferData()
 
 void Graph::addNode(QString nodeFullName, QString libraryFileName, QString configFileName)
 {
-    if(_nodes.values(nodeFullName).size()>0)
+    if(_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 has already existed in the graph.").arg(nodeFullName);
         return;
@@ -59,7 +59,7 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
         qDebug()<<QString("Can not resolve %1 from %2. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.").arg(functionname).arg(libraryFileName);
         return;
     }
-    Node * node=generateNode(libraryFileName, configFileName, nodeClass, nodeName, exName);
+    Node * node=generateNode(libraryFileName, configFileName, nodeFullName);
     if(node==NULL)
     {
         qDebug()<<QString("Can not build node. May the node's type is not extended from RobotSDK::Node");
@@ -77,16 +77,19 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     thread->start();
 
     nodeswitcher->addWidget(node->NODE_VARS_ARG->getNodeSwitcher());
+    emit changeNodeResult(1,_nodes[nodeFullName].second);
     return;
 }
 
 void Graph::removeNode(QString nodeFullName)
 {
-    if(_nodes.values(nodeFullName).size()==0)
+    if(!_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
+
+    closeNode(nodeFullName);
 
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
@@ -95,7 +98,7 @@ void Graph::removeNode(QString nodeFullName)
         _edges.remove(QPair< QString, QString >(nodeiter.key(),nodeFullName));
     }
 
-    nodeswitcher->addWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
+    nodeswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
 
     _nodes[nodeFullName].first->quit();
     _nodes[nodeFullName].first->wait();
@@ -134,8 +137,8 @@ void Graph::addEdge(QString outputNodeFullName, uint outputPortID, QString input
     }
     if(insertflag)
     {
-        OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
-        InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+        const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+        const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
         if(outputport==NULL||inputport==NULL)
         {
             qDebug()<<QString("Port ID is out of range");
@@ -152,8 +155,8 @@ void Graph::removeEdge(QString outputNodeFullName, uint outputPortID, QString in
     int removednum=_edges.remove(QPair< QString, QString >(outputNodeFullName, inputNodeFullName),QPair< uint, uint >(outputPortID, inputPortID));
     if(removednum>0)
     {
-        OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
-        InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+        const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+        const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
         disconnect(outputport,OUTPUTPORT_SIGNAL
                 ,inputport,INPUTPORT_SLOT);
     }
@@ -161,12 +164,12 @@ void Graph::removeEdge(QString outputNodeFullName, uint outputPortID, QString in
 
 void Graph::removeEdgeByOutputPort(QString outputNodeFullName, uint outputPortID)
 {
-    if(_nodes.values(outputNodeFullName).size()==0)
+    if(!_nodes.contains(outputNodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(outputNodeFullName);
         return;
     }
-    OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+    const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
     QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
     for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
     {
@@ -174,7 +177,7 @@ void Graph::removeEdgeByOutputPort(QString outputNodeFullName, uint outputPortID
         {
             QString inputNodeFullName=edgeiter.key().second;
             uint inputPortID=edgeiter.value().second;
-            InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+            const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
             disconnect(outputport,OUTPUTPORT_SIGNAL
                     ,inputport,INPUTPORT_SLOT);
             _edges.remove(edgeiter.key(),edgeiter.value());
@@ -185,12 +188,12 @@ void Graph::removeEdgeByOutputPort(QString outputNodeFullName, uint outputPortID
 
 void Graph::removeEdgeByInputPort(QString inputNodeFullName, uint inputPortID)
 {
-    if(_nodes.values(inputNodeFullName).size()==0)
+    if(!_nodes.contains(inputNodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(inputNodeFullName);
         return;
     }
-    InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+    const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
     QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
     for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
     {
@@ -198,7 +201,7 @@ void Graph::removeEdgeByInputPort(QString inputNodeFullName, uint inputPortID)
         {
             QString outputNodeFullName=edgeiter.key().first;
             uint outputPortID=edgeiter.value().first;
-            OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+            const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
             disconnect(outputport,OUTPUTPORT_SIGNAL
                     ,inputport,INPUTPORT_SLOT);
             _edges.remove(edgeiter.key(),edgeiter.value());
@@ -214,14 +217,145 @@ void Graph::clearEdges()
     {
         QString outputNodeFullName=edgeiter.key().first;
         uint outputPortID=edgeiter.value().first;
-        OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+        const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
         QString inputNodeFullName=edgeiter.key().second;
         uint inputPortID=edgeiter.value().second;
-        InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+        const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
         disconnect(outputport,SIGNAL(signalSendParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE))
                 ,inputport,SLOT(slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE,TRANSFER_PORT_DATA_TYPE)));
     }
     _edges.clear();
+}
+
+void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
+{
+    if(!_nodes.contains(oldNodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(oldNodeFullName);
+        return;
+    }
+    if(_nodes.contains(newNodeFullName))
+    {
+        qDebug()<<QString("%1 has already existed in the graph.").arg(newNodeFullName);
+        return;
+    }
+    QStringList oldnamelist=oldNodeFullName.split(QString("::"),QString::SkipEmptyParts);
+    QStringList newnamelist=newNodeFullName.split(QString("::"),QString::SkipEmptyParts);
+    if(newnamelist.size()<2||newnamelist.size()>3)
+    {
+        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        return;
+    }
+    else if(oldnamelist.at(0)!=newnamelist.at(0)||oldnamelist.at(1)!=newnamelist.at(1))
+    {
+        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        return;
+    }
+
+    QMultiMap< QPair< QString, QString >, QPair< uint, uint > > oldedgesback;
+    QMultiMap< QPair< QString, QString >, QPair< uint, uint > > newedgesback;
+    QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
+    for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
+    {
+        if(edgeiter.key().first==oldNodeFullName)
+        {
+            oldedgesback.insert(edgeiter.key(),edgeiter.value());
+            newedgesback.insert(QPair< QString, QString >(newNodeFullName,edgeiter.key().second),edgeiter.value());
+        }
+        else if(edgeiter.key().second==oldNodeFullName)
+        {
+            oldedgesback.insert(edgeiter.key(),edgeiter.value());
+            newedgesback.insert(QPair< QString, QString >(edgeiter.key().first,newNodeFullName),edgeiter.value());
+        }
+    }
+    QString libraryfilenameback=_nodes[oldNodeFullName].second->_libraryfilename;
+    QString configfilenameback=_nodes[oldNodeFullName].second->_configfilename;
+    removeNode(oldNodeFullName);
+    addNode(newNodeFullName,libraryfilenameback,configfilenameback);
+    if(_nodes.contains(newNodeFullName))
+    {
+        emit changeNodeResult(1,_nodes[newNodeFullName].second);
+        for(edgeiter=newedgesback.begin();edgeiter!=newedgesback.end();edgeiter++)
+        {
+            addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
+        }
+    }
+    else
+    {
+        addNode(oldNodeFullName,libraryfilenameback,configfilenameback);
+        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        for(edgeiter=oldedgesback.begin();edgeiter!=oldedgesback.end();edgeiter++)
+        {
+            addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
+        }
+    }
+}
+
+void Graph::changeNodeLibrary(QString nodeFullName, QString libraryFileName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    QMultiMap< QPair< QString, QString >, QPair< uint, uint > > edgesback;
+    QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
+    for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
+    {
+        if(edgeiter.key().first==nodeFullName||edgeiter.key().second==nodeFullName)
+        {
+            edgesback.insert(edgeiter.key(),edgeiter.value());
+        }
+    }
+    QString libraryfilenameback=_nodes[nodeFullName].second->_libraryfilename;
+    QString configfilenameback=_nodes[nodeFullName].second->_configfilename;
+    removeNode(nodeFullName);
+    addNode(nodeFullName,libraryFileName,configfilenameback);
+    if(_nodes.contains(nodeFullName))
+    {
+        emit changeNodeResult(1,_nodes[nodeFullName].second);
+    }
+    else
+    {
+        addNode(nodeFullName,libraryfilenameback,configfilenameback);
+        emit changeNodeResult(0,_nodes[nodeFullName].second);
+    }
+    for(edgeiter=edgesback.begin();edgeiter!=edgesback.end();edgeiter++)
+    {
+        addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
+    }
+}
+
+void Graph::changeNodeConfigFile(QString nodeFullName, QString configFileName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    _nodes[nodeFullName].second->_libraryfilename=configFileName;
+}
+
+void Graph::openNode(QString nodeFullName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::OpenNodeEventType));
+    QCoreApplication::postEvent(_nodes[nodeFullName].second,event);
+}
+
+void Graph::closeNode(QString nodeFullName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
+    QCoreApplication::postEvent(_nodes[nodeFullName].second,event);
 }
 
 void Graph::openAllNode()
@@ -229,8 +363,8 @@ void Graph::openAllNode()
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
-        QEvent * openevent=new QEvent(QEvent::Type(NodeSwitcher::OpenNodeEventType));
-        QCoreApplication::postEvent(nodeiter.value().second,openevent);
+        QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::OpenNodeEventType));
+        QCoreApplication::postEvent(nodeiter.value().second,event);
     }
 }
 
@@ -239,17 +373,70 @@ void Graph::closeAllNode()
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
-        QEvent * openevent=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
-        QCoreApplication::postEvent(nodeiter.value().second,openevent);
+        QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
+        QCoreApplication::postEvent(nodeiter.value().second,event);
     }
 }
 
-QWidget * Graph::getNodeWidget(QString nodeFullName)
+void Graph::showWidget(QString nodeFullName)
 {
-    if(_nodes.values(nodeFullName).size()==0)
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(1);
+}
+
+void Graph::hideWidget(QString nodeFullName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return;
+    }
+    _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(0);
+}
+
+void Graph::showAllWidget()
+{
+    QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
+    for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
+    {
+        nodeiter.value().second->NODE_VARS_ARG->getWidget()->setVisible(1);
+    }
+}
+
+void Graph::hideAllWidget()
+{
+    QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
+    for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
+    {
+        nodeiter.value().second->NODE_VARS_ARG->getWidget()->setVisible(0);
+    }
+}
+
+const Node *Graph::getNode(QString nodeFullName)
+{
+    if(!_nodes.contains(nodeFullName))
+    {
+        qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        return NULL;
+    }
+    return _nodes[nodeFullName].second;
+}
+
+const QWidget *Graph::getNodeWidget(QString nodeFullName)
+{
+    if(!_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return NULL;
     }
     return _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget();
+}
+
+bool Graph::contains(QString nodeFullName)
+{
+    return _nodes.contains(nodeFullName);
 }

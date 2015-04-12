@@ -12,12 +12,13 @@ NODE_VALUE_BASE_TYPE::~NODE_VALUE_BASE_TYPE()
 
 }
 
-void NODE_VALUE_BASE_TYPE::loadXMLValues(QString configFileName, QString nodeClass, QString nodeName)
+void NODE_VALUE_BASE_TYPE::loadXMLValues(QString configFileName, QString nodeFullName)
 {
     int i,n=_xmlloadfunclist.size();
     if(n>0)
     {
-        XMLDomInterface xmlloader(configFileName,nodeClass,nodeName);
+        QStringList nodefullname=nodeFullName.split(QString("::"),QString::SkipEmptyParts);
+        XMLDomInterface xmlloader(configFileName,nodefullname);
         for(i=0;i<n;i++)
         {
             _xmlloadfunclist.at(i)(xmlloader,this);
@@ -53,7 +54,7 @@ void NodeSwitcher::slotSwitchNode()
     QCoreApplication::postEvent(_node,event);
 }
 
-void NodeSwitcher::slotNodeState(bool openFlag, QString nodeClass, QString nodeName)
+void NodeSwitcher::slotNodeState(bool openFlag, QString nodeFullName)
 {
     if(openFlag)
     {
@@ -67,12 +68,12 @@ void NodeSwitcher::slotNodeState(bool openFlag, QString nodeClass, QString nodeN
         palette.setColor(QPalette::Button, QColor(Qt::red));
         this->setPalette(palette);
     }
-    setText(QString("%1 %2::%3").arg(openFlag?"Close":"Open").arg(nodeClass).arg(nodeName));
+    setText(QString("%1 %2").arg(openFlag?"Close":"Open").arg(nodeFullName));
 }
 
 NODE_VARS_BASE_TYPE::NODE_VARS_BASE_TYPE()
 {
-
+    widget->setVisible(0);
 }
 
 NODE_VARS_BASE_TYPE::~NODE_VARS_BASE_TYPE()
@@ -220,12 +221,12 @@ void NODE_VARS_BASE_TYPE::moveTriggerToPoolThread(QObject * node, QThread * pool
     }
 }
 
-QWidget *NODE_VARS_BASE_TYPE::getWidget() const
+QWidget *XMLVarsBase::getWidget()
 {
     return widget;
 }
 
-NodeSwitcher * NODE_VARS_BASE_TYPE::getNodeSwitcher() const
+NodeSwitcher *XMLVarsBase::getNodeSwitcher()
 {
     return nodeSwitcher;
 }

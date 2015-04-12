@@ -2,7 +2,7 @@
 
 using namespace RobotSDK;
 
-XMLDomInterface::XMLDomInterface(QString configName, QString nodeClass, QString nodeName)
+XMLDomInterface::XMLDomInterface(QString configName, QStringList nodeFullName)
 {
 	editflag=0;
 	nullflag=0;
@@ -13,8 +13,11 @@ XMLDomInterface::XMLDomInterface(QString configName, QString nodeClass, QString 
 	{
 		doc=new QDomDocument(QString("Configuration"));
 		doc->appendChild(doc->createElement("Configuration"));
-		getDomRoot(nodeClass);
-		getDomRoot(nodeName);
+        uint i,n=nodeFullName.size();
+        for(i=0;i<n;i++)
+        {
+            getDomRoot(nodeFullName.at(i));
+        }
 	}
 	else
 	{
@@ -27,9 +30,12 @@ XMLDomInterface::XMLDomInterface(QString configName, QString nodeClass, QString 
 				doc=NULL;
 			}
 			else
-			{			
-				getDomRoot(nodeClass);		
-				getDomRoot(nodeName);
+            {
+                uint i,n=nodeFullName.size();
+                for(i=0;i<n;i++)
+                {
+                    getDomRoot(nodeFullName.at(i));
+                }
 			}
 			file.close();
 		}

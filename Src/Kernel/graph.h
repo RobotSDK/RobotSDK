@@ -8,13 +8,14 @@ namespace RobotSDK
 
 class Graph : public QObject
 {
+    Q_OBJECT
 public:
     Graph(QObject * parent=0);
     ~Graph();
 protected:
     void registerTransferData();
 private:
-    typedef Node *(*generateNodePtr)(QString libraryFileName, QString configFileName, QString nodeClass, QString nodeName, QString exName);
+    typedef Node *(*generateNodePtr)(QString libraryFileName, QString configFileName, QString nodeFullName);
     generateNodePtr generateNode;
 private:
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > > _nodes;
@@ -30,14 +31,29 @@ public slots:
     void removeEdgeByInputPort(QString inputNodeFullName, uint inputPortID);
     void clearEdges();
 public slots:
+    void changeNodeExName(QString oldNodeFullName, QString newNodeFullName);
+    void changeNodeLibrary(QString nodeFullName, QString libraryFileName);
+    void changeNodeConfigFile(QString nodeFullName, QString configFileName);
+signals:
+    void changeNodeResult(bool successFlag, const Node * node);
+public slots:
+    void openNode(QString nodeFullName);
+    void closeNode(QString nodeFullName);
     void openAllNode();
     void closeAllNode();
+public slots:
+    void showWidget(QString nodeFullName);
+    void hideWidget(QString nodeFullName);
+    void showAllWidget();
+    void hideAllWidget();
 public:
     QWidget * const switcherpanel=new QWidget;
 protected:
     QVBoxLayout * nodeswitcher;
 public:
-    QWidget * getNodeWidget(QString nodeFullName);
+    const Node * getNode(QString nodeFullName);
+    const QWidget * getNodeWidget(QString nodeFullName);
+    bool contains(QString nodeFullName);
 };
 
 }

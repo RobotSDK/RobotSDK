@@ -80,16 +80,15 @@ namespace RobotSDK
 class XMLDomInterface
 {
 public:
-        /*! \fn XMLDomInterface(QString configName, QString nodeClass, QString nodeName)
+        /*! \fn XMLDomInterface(QString configName, QStringList nodeFullName)
 		\brief Constructor of XMLDomInterface.
 		\param [in] configName The name of config file.
-		\param [in] nodeClass The class-name of the Node.
-		\param [in] nodeName The node-name of the Node.
+        \param [in] nodeFullName The full name of the Node.
 		\details
 		- Load XML file.
 		- Locate the parameters.
 	*/
-        XMLDomInterface(QString configName, QString nodeClass, QString nodeName);
+        XMLDomInterface(QString configName, QStringList nodeFullName);
 	/*! \fn ~XMLDomInterface()
 		\brief Destructor of XMLDomInterface.
 		\details

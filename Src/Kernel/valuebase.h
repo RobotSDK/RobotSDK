@@ -14,7 +14,7 @@ public:
 protected:
     QList< std::function< void(XMLDomInterface &, NODE_VALUE_BASE_TYPE *) > > _xmlloadfunclist;
 public:
-    void loadXMLValues(QString configFileName, QString nodeClass, QString nodeName);
+    void loadXMLValues(QString configFileName, QString nodeFullName);
 };
 
 class NODE_PARAMS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
@@ -43,7 +43,7 @@ public:
     NodeSwitcher(QWidget * parent=0);
 public slots:
     void slotSwitchNode();
-    void slotNodeState(bool openFlag, QString nodeClass, QString nodeName);
+    void slotNodeState(bool openFlag, QString nodeFullName);
 };
 
 class NODE_VARS_BASE_TYPE : public NODE_VALUE_BASE_TYPE
@@ -85,8 +85,8 @@ public:
 private:
     void moveTriggerToPoolThread(QObject * node, QThread *poolThread);
 public:
-    QWidget * getWidget() const;
-    NodeSwitcher * getNodeSwitcher() const;
+    QWidget * getWidget();
+    NodeSwitcher * getNodeSwitcher();
 protected:
     QObject * _node;
 public:
