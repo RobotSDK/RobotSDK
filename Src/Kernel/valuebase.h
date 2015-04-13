@@ -33,10 +33,6 @@ class NodeSwitcher : public QPushButton
 {
     Q_OBJECT
     friend class Node;
-public:
-    static const int SwitchEventType;
-    static const int OpenNodeEventType;
-    static const int CloseNodeEventType;
 protected:
     QObject * _node;
 public:

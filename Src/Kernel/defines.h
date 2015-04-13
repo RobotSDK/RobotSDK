@@ -24,6 +24,7 @@
 #include<QTableWidget>
 #include<QTabWidget>
 #include<QListWidget>
+#include<QEvent>
 
 #include<memory>
 #include<functional>
@@ -173,6 +174,12 @@ enum ObtainBehavior
     NODE_PARAMS_ARG, \
     NODE_VARS_ARG, \
     NODE_DATA_ARG
+
+//=================================================================================
+
+#define SwitchEventType QEvent::User+0
+#define OpenNodeEventType QEvent::User+1
+#define CloseNodeEventType QEvent::User+2
 
 //=================================================================================
 

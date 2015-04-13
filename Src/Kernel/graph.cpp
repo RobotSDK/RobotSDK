@@ -37,12 +37,14 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     if(_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 has already existed in the graph.").arg(nodeFullName);
+        emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
     QStringList nodenamelist=nodeFullName.split(QString("::"),QString::SkipEmptyParts);
     if(nodenamelist.size()<2||nodenamelist.size()>3)
     {
         qDebug()<<QString("%1 is not a valid node full name (NodeClass::NodeName[::ExName]).");
+        emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
     QString nodeClass=nodenamelist.at(0);
@@ -57,17 +59,20 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     if(generateNode==NULL)
     {
         qDebug()<<QString("Can not resolve %1 from %2. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.").arg(functionname).arg(libraryFileName);
+        emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
     Node * node=generateNode(libraryFileName, configFileName, nodeFullName);
     if(node==NULL)
     {
         qDebug()<<QString("Can not build node. May the node's type is not extended from RobotSDK::Node");
+        emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
     if(!node->_loadflag||!node->_initializeflag)
     {
         delete node;
+        emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
     std::shared_ptr<QThread> thread=std::shared_ptr<QThread>(new QThread);
@@ -77,7 +82,7 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     thread->start();
 
     nodeswitcher->addWidget(node->NODE_VARS_ARG->getNodeSwitcher());
-    emit changeNodeResult(1,_nodes[nodeFullName].second);
+    emit addNodeResult(1,nodeFullName,_nodes[nodeFullName].second);
     return;
 }
 
@@ -98,8 +103,7 @@ void Graph::removeNode(QString nodeFullName)
         _edges.remove(QPair< QString, QString >(nodeiter.key(),nodeFullName));
     }
 
-    nodeswitcher->removeWidget(nodeiter.value().second->NODE_VARS_ARG->getNodeSwitcher());
-
+    nodeswitcher->removeWidget(_nodes[nodeFullName].second->NODE_VARS_ARG->getNodeSwitcher());
     _nodes[nodeFullName].first->quit();
     _nodes[nodeFullName].first->wait();
     _nodes.remove(nodeFullName);
@@ -232,23 +236,25 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
     if(!_nodes.contains(oldNodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(oldNodeFullName);
+        emit changeNodeExNameResult(0,oldNodeFullName,NULL);
         return;
     }
     if(_nodes.contains(newNodeFullName))
     {
         qDebug()<<QString("%1 has already existed in the graph.").arg(newNodeFullName);
+        emit changeNodeExNameResult(0,oldNodeFullName,NULL);
         return;
     }
     QStringList oldnamelist=oldNodeFullName.split(QString("::"),QString::SkipEmptyParts);
     QStringList newnamelist=newNodeFullName.split(QString("::"),QString::SkipEmptyParts);
     if(newnamelist.size()<2||newnamelist.size()>3)
     {
-        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        emit changeNodeExNameResult(0,oldNodeFullName,NULL);
         return;
     }
     else if(oldnamelist.at(0)!=newnamelist.at(0)||oldnamelist.at(1)!=newnamelist.at(1))
     {
-        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        emit changeNodeExNameResult(0,oldNodeFullName,NULL);
         return;
     }
 
@@ -260,7 +266,14 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
         if(edgeiter.key().first==oldNodeFullName)
         {
             oldedgesback.insert(edgeiter.key(),edgeiter.value());
-            newedgesback.insert(QPair< QString, QString >(newNodeFullName,edgeiter.key().second),edgeiter.value());
+            if(edgeiter.key().second==oldNodeFullName)
+            {
+                newedgesback.insert(QPair< QString, QString >(newNodeFullName,newNodeFullName),edgeiter.value());
+            }
+            else
+            {
+                newedgesback.insert(QPair< QString, QString >(newNodeFullName,edgeiter.key().second),edgeiter.value());
+            }
         }
         else if(edgeiter.key().second==oldNodeFullName)
         {
@@ -273,8 +286,8 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
     removeNode(oldNodeFullName);
     addNode(newNodeFullName,libraryfilenameback,configfilenameback);
     if(_nodes.contains(newNodeFullName))
-    {
-        emit changeNodeResult(1,_nodes[newNodeFullName].second);
+    {        
+        emit changeNodeExNameResult(1,oldNodeFullName,_nodes[oldNodeFullName].second);
         for(edgeiter=newedgesback.begin();edgeiter!=newedgesback.end();edgeiter++)
         {
             addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
@@ -283,11 +296,11 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
     else
     {
         addNode(oldNodeFullName,libraryfilenameback,configfilenameback);
-        emit changeNodeResult(0,_nodes[oldNodeFullName].second);
+        emit changeNodeExNameResult(0,oldNodeFullName,_nodes[oldNodeFullName].second);
         for(edgeiter=oldedgesback.begin();edgeiter!=oldedgesback.end();edgeiter++)
         {
             addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
-        }
+        }        
     }
 }
 
@@ -296,6 +309,7 @@ void Graph::changeNodeLibrary(QString nodeFullName, QString libraryFileName)
     if(!_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
+        emit changeNodeLibraryResult(0,nodeFullName,NULL);
         return;
     }
     QMultiMap< QPair< QString, QString >, QPair< uint, uint > > edgesback;
@@ -313,12 +327,12 @@ void Graph::changeNodeLibrary(QString nodeFullName, QString libraryFileName)
     addNode(nodeFullName,libraryFileName,configfilenameback);
     if(_nodes.contains(nodeFullName))
     {
-        emit changeNodeResult(1,_nodes[nodeFullName].second);
+        emit changeNodeLibraryResult(1,nodeFullName,_nodes[nodeFullName].second);
     }
     else
     {
         addNode(nodeFullName,libraryfilenameback,configfilenameback);
-        emit changeNodeResult(0,_nodes[nodeFullName].second);
+        emit changeNodeLibraryResult(0,nodeFullName,_nodes[nodeFullName].second);
     }
     for(edgeiter=edgesback.begin();edgeiter!=edgesback.end();edgeiter++)
     {
@@ -343,7 +357,7 @@ void Graph::openNode(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::OpenNodeEventType));
+    QEvent * event=new QEvent(QEvent::Type(OpenNodeEventType));
     QCoreApplication::postEvent(_nodes[nodeFullName].second,event);
 }
 
@@ -354,7 +368,7 @@ void Graph::closeNode(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
+    QEvent * event=new QEvent(QEvent::Type(CloseNodeEventType));
     QCoreApplication::postEvent(_nodes[nodeFullName].second,event);
 }
 
@@ -363,7 +377,7 @@ void Graph::openAllNode()
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
-        QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::OpenNodeEventType));
+        QEvent * event=new QEvent(QEvent::Type(OpenNodeEventType));
         QCoreApplication::postEvent(nodeiter.value().second,event);
     }
 }
@@ -373,7 +387,7 @@ void Graph::closeAllNode()
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
     for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
     {
-        QEvent * event=new QEvent(QEvent::Type(NodeSwitcher::CloseNodeEventType));
+        QEvent * event=new QEvent(QEvent::Type(CloseNodeEventType));
         QCoreApplication::postEvent(nodeiter.value().second,event);
     }
 }

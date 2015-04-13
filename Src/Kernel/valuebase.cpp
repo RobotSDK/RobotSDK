@@ -36,10 +36,6 @@ NODE_PARAMS_BASE_TYPE::~NODE_PARAMS_BASE_TYPE()
 
 }
 
-const int NodeSwitcher::SwitchEventType=QEvent::registerEventType();
-const int NodeSwitcher::OpenNodeEventType=QEvent::registerEventType();
-const int NodeSwitcher::CloseNodeEventType=QEvent::registerEventType();
-
 NodeSwitcher::NodeSwitcher(QWidget *parent)
     : QPushButton(parent)
 {

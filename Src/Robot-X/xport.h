@@ -10,6 +10,7 @@
 #include<QDragLeaveEvent>
 #include<QDropEvent>
 #include<QStringList>
+#include<QFontMetrics>
 
 #include<RobotSDK_Global.h>
 
@@ -37,6 +38,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent * event);
     void dragLeaveEvent(QDragLeaveEvent * event);
+    void dragMoveEvent(QDragMoveEvent * event);
     void dropEvent(QDropEvent * event);
 };
 

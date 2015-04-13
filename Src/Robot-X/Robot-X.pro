@@ -16,6 +16,10 @@ CONFIG += c++11
 unix {
     INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
     LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+
+    INCLUDEPATH += /usr/include/graphviz
+    LIBS += -L/usr/lib -lcgraph
+    LIBS += -L/usr/lib -lgvc
 }
 
 win32 {
@@ -38,4 +42,4 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-INCLUDEPATH += $(HOME)/
+

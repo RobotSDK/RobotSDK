@@ -8,6 +8,7 @@ qmake -makefile $TMPBASEDIR/Src/Kernel/Kernel.pro -r -o "Makefile.Debug" "CONFIG
 make -f Makefile.Debug;
 make -f Makefile.Debug install;
 rm Makefile.Debug;
+rm install;
 cd $TMPBASEDIR/Doc/Doxygen;
 doxygen RobotSDK;
 cd $TMPBASEDIR/Doc/html;

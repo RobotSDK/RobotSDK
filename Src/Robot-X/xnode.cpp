@@ -12,17 +12,23 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
 
     connect(this,SIGNAL(signalAddEdge(QString,uint,QString,uint)),_graph,SLOT(addEdge(QString,uint,QString,uint)));
+
+    connect(this,SIGNAL(signalAddNode(QString,QString,QString)),_graph,SLOT(addNode(QString,QString,QString)));
     connect(this,SIGNAL(signalChangeNodeExName(QString,QString)),_graph,SLOT(changeNodeExName(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
-    connect(this,SIGNAL(signalAddEdge(QString,uint,QString,uint)),_graph,SLOT(addNode(QString,QString,QString)));
     connect(this,SIGNAL(signalChangeNodeConfigFile(QString,QString)),_graph,SLOT(changeNodeConfigFile(QString,QString)));
-    connect(_graph,SIGNAL(changeNodeResult(bool, const RobotSDK::Node *)),this,SLOT(slotChangeNodeResult(bool,const RobotSDK::Node*)));
+
+    connect(_graph,SIGNAL(addNodeResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotAddNodeResult(bool,QString,const RobotSDK::Node*)));
+    connect(_graph,SIGNAL(changeNodeExNameResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeExNameResult(bool,QString,const RobotSDK::Node*)));
+    connect(_graph,SIGNAL(changeNodeLibraryResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeLibraryResult(bool,QString,const RobotSDK::Node*)));
+
+    connect(this,SIGNAL(signalRemoveNode(QString)),_graph,SLOT(removeNode(QString)));
 
     uint i;
     QLabel *label;
     QPalette palette;
 
-    QWidget * widget=new QWidget;
+    widget=new QWidget;
     this->setWidget(widget);
 
     QHBoxLayout * layout=new QHBoxLayout;
@@ -34,8 +40,10 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     QVBoxLayout * nodelayout=new QVBoxLayout;
     layout->addLayout(nodelayout);
 
-    nodefullname=new QLabel(nodeFullName);
-    nodefullname->setAlignment(Qt::AlignCenter);
+    nodefullname=new QLineEdit(nodeFullName);
+    nodefullname->setReadOnly(1);
+    nodefullname->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(nodefullname,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(slotNodeFullNameMenu(const QPoint &)));
     nodelayout->addWidget(nodefullname);
 
     changeexname=new QPushButton("Change ExName");
@@ -79,16 +87,13 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     QVBoxLayout * outputports=new QVBoxLayout;
     layout->addLayout(outputports);
 
-    uint inputportnum;
-    uint outputportnum;
-
     if(graph->contains(nodeFullName))
     {
         _node=_graph->getNode(nodeFullName);
         connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
 
-        inputportnum=_node->_inputportnum;
-        outputportnum=_node->_outputportnum;
+        _inputportnum=_node->_inputportnum;
+        _outputportnum=_node->_outputportnum;
 
         libraryfilename->setText(_node->_libraryfilename);
         configfilename->setText(_node->_configfilename);
@@ -97,19 +102,19 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     {
         _node=NULL;
 
-        inputportnum=QInputDialog::getInt(widget,"Set Number of Input Ports","Number of Input Ports",0);
-        outputportnum=QInputDialog::getInt(widget,"Set Number of Output Ports","Number of Output Ports",0);
+        _inputportnum=QInputDialog::getInt(widget,QString("Set Input Ports Number of %1").arg(nodeFullName),"Number of Input Ports",0);
+        _outputportnum=QInputDialog::getInt(widget,QString("Set Output Ports Number of %1").arg(nodeFullName),"Number of Output Ports",0);
 
         libraryfilename->setText("Developing...");
         configfilename->setText("Config.xml");
     }
-    label=new QLabel(QString("%1 Input Ports").arg(inputportnum));
+    label=new QLabel(QString("%1 Input Ports").arg(_inputportnum));
     label->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     label->setAlignment(Qt::AlignCenter);
     inputports->addWidget(label);
 
     inputportslist.clear();
-    for(i=0;i<inputportnum;i++)
+    for(i=0;i<_inputportnum;i++)
     {
         XPort * port=new XPort;
         port->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -123,13 +128,13 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
         inputportslist.push_back(port);
     }
 
-    label=new QLabel(QString("%1 Output Port").arg(outputportnum));
+    label=new QLabel(QString("%1 Output Ports").arg(_outputportnum));
     label->setFrameStyle(QFrame::Panel|QFrame::Sunken);
     label->setAlignment(Qt::AlignCenter);
     outputports->addWidget(label);
 
     outputportslist.clear();
-    for(i=0;i<outputportnum;i++)
+    for(i=0;i<_outputportnum;i++)
     {
         XPort * port=new XPort;
         port->setFrameStyle(QFrame::Panel|QFrame::Sunken);
@@ -142,6 +147,8 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
         connect(port,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)));
         outputportslist.push_back(port);
     }
+    resizeFlag=1;
+    widget->adjustSize();
 }
 
 XNode::~XNode()
@@ -206,9 +213,9 @@ void XNode::slotShowWidget()
     }
 }
 
-void XNode::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFull, uint inputPortID)
+void XNode::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID)
 {
-    emit signalAddEdge(outputNodeFullName,outputPortID,inputNodeFull,inputPortID);
+    emit signalAddEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
 }
 
 void XNode::slotChangeNodeExName()
@@ -218,6 +225,7 @@ void XNode::slotChangeNodeExName()
     {
         if(_graph->contains(nodefullname->text()))
         {
+            tmpnewnodefullname=newnodefullname;
             emit signalChangeNodeExName(nodefullname->text(),newnodefullname);
         }
         else
@@ -228,7 +236,7 @@ void XNode::slotChangeNodeExName()
             {
                 if(oldnodefullnamelist.at(0)==newnodefullnamelist.at(0)&&oldnodefullnamelist.at(1)==newnodefullnamelist.at(1))
                 {
-                    emit signalNodeUpdate(nodefullname->text(),newnodefullname);
+                    emit signalUpdateNode(nodefullname->text(),newnodefullname);
                     nodefullname->setText(newnodefullname);
                 }
             }
@@ -273,28 +281,69 @@ void XNode::slotChangeNodeConfigFile()
     }
 }
 
-void XNode::slotChangeNodeResult(bool successFlag, const RobotSDK::Node *node)
+void XNode::slotAddNodeResult(bool successFlag, QString nodeFullName, const RobotSDK::Node *node)
 {
-    connect(node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
-    if(successFlag)
+    if(successFlag&&nodeFullName==nodefullname->text())
     {
         _node=node;
         connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
-        if(nodefullname->text()!=node->_nodefullname)
+    }
+}
+
+void XNode::slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName, const RobotSDK::Node *node)
+{
+    if(oldNodeFullName==nodefullname->text())
+    {
+        if(node!=NULL)
         {
-            emit signalNodeUpdate(nodefullname->text(),node->_nodefullname);
+            _node=node;
+            connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
+            if(successFlag)
+            {
+                emit signalUpdateNode(nodefullname->text(),node->_nodefullname);
+                nodefullname->setText(node->_nodefullname);
+                uint i;
+                for(i=0;i<node->_inputportnum;i++)
+                {
+                    inputportslist.at(i)->nodefullname=node->_nodefullname;
+                }
+                for(i=0;i<node->_outputportnum;i++)
+                {
+                    outputportslist.at(i)->nodefullname=node->_nodefullname;
+                }
+            }
         }
-        nodefullname->setText(node->_nodefullname);
-        libraryfilename->setText(node->_libraryfilename);
-        configfilename->setText(node->_configfilename);
-        uint i;
-        for(i=0;i<node->_inputportnum;i++)
+    }
+}
+
+void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, const RobotSDK::Node *node)
+{
+    if(nodeFullName==nodefullname->text())
+    {
+        if(node!=NULL)
         {
-            inputportslist.at(i)->nodefullname=node->_nodefullname;
+            _node=node;
+            connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
+            if(successFlag)
+            {
+                libraryfilename->setText(node->_libraryfilename);
+            }
         }
-        for(i=0;i<node->_outputportnum;i++)
+    }
+}
+
+void XNode::slotNodeFullNameMenu(const QPoint &pos)
+{
+    QPoint globalpos=nodefullname->mapToGlobal(pos);
+
+    QMenu menu;
+    menu.addAction("Delete Node");
+    QAction * selecteditem=menu.exec(globalpos);
+    if(selecteditem)
+    {
+        if(selecteditem->text()==QString("Delete Node"))
         {
-            outputportslist.at(i)->nodefullname=node->_nodefullname;
+            emit signalRemoveNode(nodefullname->text());
         }
     }
 }
@@ -302,4 +351,13 @@ void XNode::slotChangeNodeResult(bool successFlag, const RobotSDK::Node *node)
 void XNode::slotGenerateCode()
 {
 
+}
+
+void XNode::resizeEvent(QGraphicsSceneResizeEvent *event)
+{
+    if(resizeFlag)
+    {
+        emit signalResize(nodefullname->text(),event->newSize());
+    }
+    QGraphicsProxyWidget::resizeEvent(event);
 }

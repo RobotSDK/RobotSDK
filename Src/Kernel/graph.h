@@ -35,7 +35,9 @@ public slots:
     void changeNodeLibrary(QString nodeFullName, QString libraryFileName);
     void changeNodeConfigFile(QString nodeFullName, QString configFileName);
 signals:
-    void changeNodeResult(bool successFlag, const Node * node);
+    void addNodeResult(bool successFlag, QString nodeFullName, const RobotSDK::Node * node);
+    void changeNodeExNameResult(bool successFlag, QString oldNodeFullName, const RobotSDK::Node * node);
+    void changeNodeLibraryResult(bool successFlag, QString nodeFullName, const RobotSDK::Node * node);
 public slots:
     void openNode(QString nodeFullName);
     void closeNode(QString nodeFullName);

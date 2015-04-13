@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include<xgraph.h>
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +19,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+protected:
+    XGraph * graph;
 };
 
 #endif // MAINWINDOW_H

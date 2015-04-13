@@ -209,7 +209,8 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
     }
     else
     {
-        if(ev->type()==NodeSwitcher::SwitchEventType)
+        int type=int(ev->type());
+        if(type==SwitchEventType)
         {
             _openflag=!_openflag;
             if(_openflag)
@@ -231,7 +232,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             emit signalNodeState(_openflag,_nodefullname);
             return 1;
         }
-        else if(ev->type()==NodeSwitcher::OpenNodeEventType)
+        else if(type==OpenNodeEventType)
         {
             NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodefullname);
             NODE_VARS_ARG->loadXMLValues(_configfilename,_nodefullname);
@@ -246,7 +247,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             emit signalNodeState(_openflag,_nodefullname);
             return 1;
         }
-        else if(ev->type()==NodeSwitcher::CloseNodeEventType)
+        else if(type==CloseNodeEventType)
         {
             if(CHECK_NODE_FUNC_PTR(closeNode))
             {
