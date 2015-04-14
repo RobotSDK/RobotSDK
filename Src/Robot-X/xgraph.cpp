@@ -4,6 +4,7 @@ XGraph::XGraph(QObject *parent)
     : QGraphicsScene(parent)
 {
     graph=new RobotSDK::Graph;
+    connect(this,SIGNAL(signalRemoveEdge(QString,uint,QString,uint)),graph,SLOT(removeEdge(QString,uint,QString,uint)));
 
     _context=gvContext();
     _graph=_agopen("Robot-X");
@@ -229,6 +230,8 @@ void XGraph::slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QStri
     }
     if(i<n)
     {
+        emit signalRemoveEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
+
         edges.remove(QPair< QString, QString >(outputNodeFullName, inputNodeFullName), candedges.at(i));
         this->removeItem(candedges.at(i));
         delete candedges[i];

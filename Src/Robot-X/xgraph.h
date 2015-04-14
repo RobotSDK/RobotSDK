@@ -36,6 +36,8 @@ protected slots:
     void slotRemoveNode(QString nodeFullName);
     void slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
     void slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+signals:
+    void signalRemoveEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
 public slots:
     void slotApplyLayout();
 protected:
