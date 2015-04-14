@@ -2,12 +2,27 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsView>
 
 #include<xgraph.h>
 
 namespace Ui {
 class MainWindow;
 }
+
+class GraphView : public QGraphicsView
+{
+    Q_OBJECT
+public:
+    GraphView(QWidget * parent=0);
+signals:
+    void signalHandleMenu();
+protected:
+    double ratio=1;
+protected:
+    void mousePressEvent(QMouseEvent * event);
+    void wheelEvent(QWheelEvent *event);
+};
 
 class MainWindow : public QMainWindow
 {
@@ -21,6 +36,7 @@ private:
     Ui::MainWindow *ui;
 
 protected:
+    GraphView * view;
     XGraph * graph;
 };
 

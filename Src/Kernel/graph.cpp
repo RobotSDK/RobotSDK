@@ -128,6 +128,11 @@ void Graph::clearNodes()
 
 void Graph::addEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID)
 {
+    if(!_nodes.contains(outputNodeFullName)||!_nodes.contains(inputNodeFullName))
+    {
+        qDebug()<<QString("%1 or %2 do not exist in the graph.").arg(outputNodeFullName).arg(outputNodeFullName);
+        return;
+    }
     QList< QPair< uint, uint > > edges=_edges.values(QPair< QString, QString >(outputNodeFullName, inputNodeFullName));
     uint i,n=edges.size();
     bool insertflag=1;
@@ -174,6 +179,11 @@ void Graph::removeEdgeByOutputPort(QString outputNodeFullName, uint outputPortID
         return;
     }
     const OutputPort * outputport=_nodes[outputNodeFullName].second->getOutputPort(outputPortID);
+    if(outputport==NULL)
+    {
+        qDebug()<<QString("Port ID is out of range");
+        return;
+    }
     QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
     for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
     {
@@ -198,6 +208,11 @@ void Graph::removeEdgeByInputPort(QString inputNodeFullName, uint inputPortID)
         return;
     }
     const InputPort * inputport=_nodes[inputNodeFullName].second->getInputPort(inputPortID);
+    if(inputport==NULL)
+    {
+        qDebug()<<QString("Port ID is out of range");
+        return;
+    }
     QMultiMap< QPair< QString, QString >, QPair< uint, uint > >::const_iterator edgeiter;
     for(edgeiter=_edges.begin();edgeiter!=_edges.end();edgeiter++)
     {

@@ -281,6 +281,18 @@ enum ObtainBehavior
 #define _NODE_DATA_TYPE_2(NODE_CLASS, _DATA_TYPE) NODE_CLASS##_##_DATA_TYPE
 #define NODE_DATA NODE_DATA_ARG ? std::static_pointer_cast<NODE_DATA_TYPE>(NODE_DATA_ARG) : std::shared_ptr< NODE_DATA_TYPE >()
 
+#define NODE_PARAMS_TYPE_REF(nodeClass) _NODE_PARAMS_TYPE_REF_1(_PARAMS_TYPE)
+#define _NODE_PARAMS_TYPE_REF_1(_PARAMS_TYPE) _NODE_PARAMS_TYPE_REF_2(_PARAMS_TYPE)
+#define _NODE_PARAMS_TYPE_REF_2(_PARAMS_TYPE) typedef nodeClass##_##_PARAMS_TYPE NODE_PARAMS_TYPE
+
+#define NODE_VARS_TYPE_REF(nodeClass) _NODE_VARS_TYPE_REF_1(_VARS_TYPE)
+#define _NODE_VARS_TYPE_REF_1(_VARS_TYPE) _NODE_VARS_TYPE_REF_2(_VARS_TYPE)
+#define _NODE_VARS_TYPE_REF_2(_VARS_TYPE) typedef nodeClass##_##_VARS_TYPE NODE_VARS_TYPE
+
+#define NODE_DATA_TYPE_REF(nodeClass) _NODE_DATA_TYPE_REF_1(_DATA_TYPE)
+#define _NODE_DATA_TYPE_REF_1(_DATA_TYPE) _NODE_DATA_TYPE_REF_2(_DATA_TYPE)
+#define _NODE_DATA_TYPE_REF_2(_DATA_TYPE) typedef nodeClass##_##_DATA_TYPE NODE_DATA_TYPE
+
 //=================================================================================
 //for Port access
 //portID must be a const number not a variable

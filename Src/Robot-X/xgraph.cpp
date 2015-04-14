@@ -4,12 +4,22 @@ XGraph::XGraph(QObject *parent)
     : QGraphicsScene(parent)
 {
     graph=new RobotSDK::Graph;
+
+    connect(this,SIGNAL(signalAddEdge(QString,uint,QString,uint)),graph,SLOT(addEdge(QString,uint,QString,uint)));
+    connect(this,SIGNAL(signalRemoveNode(QString)),graph,SLOT(removeNode(QString)));
     connect(this,SIGNAL(signalRemoveEdge(QString,uint,QString,uint)),graph,SLOT(removeEdge(QString,uint,QString,uint)));
+    connect(this,SIGNAL(signalRemoveEdgeByOutputPort(QString,uint)),graph,SLOT(removeEdgeByOutputPort(QString,uint)));
+    connect(this,SIGNAL(signalRemoveEdgeByInputPort(QString,uint)),graph,SLOT(removeEdgeByInputPort(QString,uint)));
 
     _context=gvContext();
     _graph=_agopen("Robot-X");
+    _agset(_graph, "overlap", "prism");
     _agset(_graph, "splines", "true");
-    _agset(_graph, "nodesep", "0.4");
+    _agset(_graph, "nodesep", "2");
+    _agset(_graph, "ranksep", "2");
+    _agset(_graph, "rankdir", "LR");
+
+    qRegisterMetaType<XPort::PORTTYPE>("XPort::PORTTYPE");
 }
 
 XGraph::~XGraph()
@@ -26,6 +36,11 @@ void XGraph::slotAddNode(QString nodeFullName, QString libraryFileName, QString 
     {
         return;
     }
+    QStringList checkname=nodeFullName.split("::",QString::SkipEmptyParts);
+    if(checkname.size()<2||checkname.size()>3)
+    {
+        return;
+    }
     if(libraryFileName.size()>0)
     {
         graph->addNode(nodeFullName,libraryFileName,configFileName);
@@ -35,29 +50,15 @@ void XGraph::slotAddNode(QString nodeFullName, QString libraryFileName, QString 
     connect(node,SIGNAL(signalUpdateNode(QString,QString)),this,SLOT(slotUpdateNode(QString,QString)),Qt::QueuedConnection);
     connect(node,SIGNAL(signalRemoveNode(QString)),this,SLOT(slotRemoveNode(QString)),Qt::QueuedConnection);
     connect(node,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
+    connect(node,SIGNAL(signalRemovePort(XPort::PORTTYPE,QString,uint)),this,SLOT(slotRemovePort(XPort::PORTTYPE,QString,uint)),Qt::QueuedConnection);
+    connect(node,SIGNAL(signalResetPortNum(QString)),this,SLOT(slotResetPortNum(QString)));
     this->addItem(node);
     nodes.insert(nodeFullName,node);
 
     Agnode_t * tmpnode=_agnode(_graph, nodeFullName,1);
-    _agset(tmpnode,"shape","record");
-    _agset(tmpnode,"height",QString("%1").arg(node->geometry().height()/DotDefaultDPI));
-    _agset(tmpnode,"width",QString("%1").arg(node->geometry().width()/DotDefaultDPI));
-
-    uint i;
-    QString inputlabel=QString("Input Ports");
-    for(i=0;i<node->_inputportnum;i++)
-    {
-        inputlabel+=QString(" | <in_%1> #%1").arg(i);
-    }
-    QString outputlabel=QString("Output Ports");
-    for(i=0;i<node->_outputportnum;i++)
-    {
-        outputlabel+=QString(" | <out_%1> #%1").arg(i);
-    }
-    QString nodelabel=QString("{%1} | %2 | {%3}").arg(inputlabel).arg(nodeFullName).arg(outputlabel);
-    _agset(tmpnode,"label",nodelabel);
-
     _nodes.insert(node,tmpnode);
+    _agset(tmpnode,"shape","record");
+    slotResetPortNum(nodeFullName);
 }
 
 void XGraph::slotResize(QString nodeFullName, QSizeF newSize)
@@ -98,32 +99,24 @@ void XGraph::slotUpdateNode(QString oldNodeFullName, QString newNodeFullName)
             {
                 candedgelist[i].first.second=newNodeFullName;
                 candedgelist[i].second->inputnodefullname=newNodeFullName;
-            }
+            }            
             edges.insert(candedgelist.at(i).first,candedgelist.at(i).second);
+            XEdge * edge=candedgelist.at(i).second;
+            edge->setToolTip(QString("%1~Port_%2 -> %3~Port_%4").arg(edge->outputnodefullname)
+                             .arg(edge->outputportid).arg(edge->inputnodefullname).arg(edge->inputportid));
         }
 
         agdelete(_graph,_nodes[node]);
         _nodes.remove(node);
 
-        Agnode_t * tmpnode=_agnode(_graph, newNodeFullName,1);
+        Agnode_t * tmpnode=_agnode(_graph, newNodeFullName,1);        
+        _nodes.insert(node,tmpnode);
+
         _agset(tmpnode,"shape","record");
         _agset(tmpnode,"height",QString("%1").arg(node->geometry().height()/DotDefaultDPI));
         _agset(tmpnode,"width",QString("%1").arg(node->geometry().width()/DotDefaultDPI));
 
-        QString inputlabel=QString("Input Ports");
-        for(i=0;i<node->_inputportnum;i++)
-        {
-            inputlabel+=QString(" | <in_%1> #%1").arg(i);
-        }
-        QString outputlabel=QString("Output Ports");
-        for(i=0;i<node->_outputportnum;i++)
-        {
-            outputlabel+=QString(" | <out_%1> #%1").arg(i);
-        }
-        QString nodelabel=QString("{%1} | %2 | {%3}").arg(inputlabel).arg(newNodeFullName).arg(outputlabel);
-        _agset(tmpnode,"label",nodelabel);
-
-        _nodes.insert(node,tmpnode);
+        slotResetPortNum(newNodeFullName);
 
         for(i=0;i<n;i++)
         {
@@ -146,6 +139,11 @@ void XGraph::slotRemoveNode(QString nodeFullName)
 {
     if(nodes.contains(nodeFullName))
     {
+        if(graph->contains(nodeFullName))
+        {
+            emit signalRemoveNode(nodeFullName);
+        }
+
         XNode * node=nodes[nodeFullName];
         this->removeItem(node);
         nodes.remove(nodeFullName);
@@ -180,6 +178,10 @@ void XGraph::slotRemoveNode(QString nodeFullName)
 
 void XGraph::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID)
 {
+    if(graph->contains(outputNodeFullName)&&graph->contains(inputNodeFullName))
+    {
+        emit signalAddEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
+    }
     QList<XEdge *> candedges=edges.values(QPair< QString, QString >(outputNodeFullName, inputNodeFullName));
     uint i,n=candedges.size();
     for(i=0;i<n;i++)
@@ -196,6 +198,8 @@ void XGraph::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString 
         edge->outputportid=outputPortID;
         edge->inputnodefullname=inputNodeFullName;
         edge->inputportid=inputPortID;
+        edge->setToolTip(QString("%1~Port_%2 -> %3~Port_%4").arg(edge->outputnodefullname)
+                         .arg(edge->outputportid).arg(edge->inputnodefullname).arg(edge->inputportid));
         connect(edge,SIGNAL(signalRemoveEdge(QString,uint,QString,uint)),this,SLOT(slotRemoveEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
         this->addItem(edge);
         edges.insert(QPair< QString, QString >(outputNodeFullName, inputNodeFullName), edge);
@@ -204,11 +208,6 @@ void XGraph::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString 
         XNode * target=nodes[edge->inputnodefullname];
         QString outputport=QString("out_%1:e").arg(edge->outputportid);
         QString inputport=QString("in_%1:w").arg(edge->inputportid);
-        QString edgename=QString("%1~~%2~~%3~~%4")
-                .arg(edge->outputnodefullname)
-                .arg(outputport)
-                .arg(edge->inputnodefullname)
-                .arg(inputport);
         Agedge_t * tmpedge=_agedge(_graph,_nodes[source],_nodes[target],QString(),1);
         _agset(tmpedge,"tailport",outputport);
         _agset(tmpedge,"headport",inputport);
@@ -230,7 +229,10 @@ void XGraph::slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QStri
     }
     if(i<n)
     {
-        emit signalRemoveEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
+        if(graph->contains(outputNodeFullName)&&graph->contains(inputNodeFullName))
+        {
+            emit signalRemoveEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
+        }
 
         edges.remove(QPair< QString, QString >(outputNodeFullName, inputNodeFullName), candedges.at(i));
         this->removeItem(candedges.at(i));
@@ -240,6 +242,66 @@ void XGraph::slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QStri
 
         slotApplyLayout();
     }
+}
+
+void XGraph::slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName, uint portID)
+{
+    if(nodes.contains(nodeFullName))
+    {
+        if(graph->contains(nodeFullName))
+        {
+            switch (portType) {
+            case XPort::PORTTYPE::InputPort:
+                emit signalRemoveEdgeByInputPort(nodeFullName,portID);
+                break;
+            case XPort::PORTTYPE::OutputPort:
+                emit signalRemoveEdgeByOutputPort(nodeFullName,portID);
+                break;
+            default:
+                break;
+            }
+        }
+
+        QMultiMap< QPair< QString, QString >, XEdge * >::const_iterator edgeiter;
+        QList< QPair< QPair< QString, QString >, XEdge * > > candedgelist;
+        for(edgeiter=edges.begin();edgeiter!=edges.end();edgeiter++)
+        {
+            if((portType==XPort::PORTTYPE::OutputPort&&edgeiter.key().first==nodeFullName)
+                    ||(portType==XPort::PORTTYPE::InputPort&&edgeiter.key().second==nodeFullName))
+            {
+                candedgelist.push_back(QPair< QPair< QString, QString >, XEdge * >(edgeiter.key(),edgeiter.value()));
+            }
+        }
+        uint i,n=candedgelist.size();
+        for(i=0;i<n;i++)
+        {
+            edges.remove(candedgelist.at(i).first,candedgelist.at(i).second);
+            this->removeItem(candedgelist.at(i).second);
+            delete candedgelist[i].second;
+            agdelete(_graph,_edges[candedgelist[i].second]);
+            _edges.remove(candedgelist[i].second);
+        }
+        slotApplyLayout();
+    }
+}
+
+void XGraph::slotResetPortNum(QString nodeFullName)
+{
+    Agnode_t * tmpnode=_nodes[nodes[nodeFullName]];
+    XNode * node=nodes[nodeFullName];
+    uint i;
+    QString inputlabel=QString("Input");
+    for(i=0;i<node->_inputportnum;i++)
+    {
+        inputlabel+=QString(" | <in_%1> Port_%1").arg(i);
+    }
+    QString outputlabel=QString("Output");
+    for(i=0;i<node->_outputportnum;i++)
+    {
+        outputlabel+=QString(" | <out_%1> Port_%1").arg(i);
+    }
+    QString nodelabel=QString("{{%1} | %2 | {%3}}").arg(inputlabel).arg(nodeFullName).arg(outputlabel);
+    _agset(tmpnode,"label",nodelabel);
 }
 
 void XGraph::slotApplyLayout()
@@ -262,8 +324,6 @@ void XGraph::slotApplyLayout()
         drawEdgePath(edgelist[i]);
     }
 
-    gvRenderFilename(_context,_graph,"png","./out.png");
-    gvRenderFilename(_context,_graph,"dot","./out.dot");
     gvFreeLayout(_context,_graph);
 }
 
@@ -358,4 +418,203 @@ Agedge_t * XGraph::_agedge(Agraph_t *object, Agnode_t *source, Agnode_t *target,
 int XGraph::_gvLayout(GVC_t *context, Agraph_t *object, QString layout)
 {
     return gvLayout(context,object,const_cast<char *>(qPrintable(layout)));
+}
+
+void XGraph::slotHandleMenu()
+{
+    QMenu menu;
+    menu.addAction("Add a Virtual Node...");
+    menu.addAction("Add a Real Node...");
+    menu.addSeparator();
+    menu.addAction("Load Graph...");
+    menu.addAction("Save Graph...");
+    menu.addSeparator();
+    menu.addAction("Open All Nodes");
+    menu.addAction("Close All Nodes");
+    menu.addAction("Show All Widgets");
+    menu.addAction("Hide All Widgets");
+    menu.addSeparator();
+    menu.addAction("Export Graph Image...");
+    menu.addAction("Export Dot File...");
+    menu.addSeparator();
+    menu.addAction("Clean Graph");
+    QAction * selecteditem=menu.exec(QCursor::pos());
+    if(selecteditem)
+    {
+        if(selecteditem->text()==QString("Add a Virtual Node..."))
+        {
+            QString nodefullname=QInputDialog::getText(NULL,"Add a Virtual Node","Node Full Name (NodeClass::NodeName[::ExName])");
+            if(nodefullname.size()>0)
+            {
+                slotAddNode(nodefullname);
+            }
+        }
+        else if(selecteditem->text()==QString("Add a Real Node..."))
+        {
+            QString nodefullname=QInputDialog::getText(NULL,"Add a Real Node","Node Full Name (NodeClass::NodeName[::ExName])");
+            if(nodefullname.size()>0)
+            {
+#ifdef Q_OS_LINUX
+                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",QString(),QString("Shared Library (*.so)"));
+#endif
+#ifdef Q_OS_WIN32
+                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",QString(),QString("Shared Library (*.dll)"));
+#endif
+                if(libraryfilename.size()>0)
+                {
+                    slotAddNode(nodefullname,libraryfilename);
+                }
+            }
+        }
+        else if(selecteditem->text()==QString("Load Graph..."))
+        {
+            QString filename=QFileDialog::getOpenFileName(NULL,"Load Graph",QString(),QString("X (*.x)"));
+            if(filename.size()>0)
+            {
+                slotLoadGraph(filename);
+            }
+        }
+        else if(selecteditem->text()==QString("Save Graph..."))
+        {
+            QString filename=QFileDialog::getSaveFileName(NULL,"Save Graph",QString(),QString("X (*.x)"));
+            if(filename.size()>0)
+            {
+                slotSaveGraph(filename);
+            }
+        }
+        else if(selecteditem->text()==QString("Open All Nodes"))
+        {
+            graph->openAllNode();
+        }
+        else if(selecteditem->text()==QString("Close All Nodes"))
+        {
+            graph->closeAllNode();
+        }
+        else if(selecteditem->text()==QString("Show All Widgets"))
+        {
+            graph->showAllWidget();
+            QMap< QString, XNode * >::const_iterator nodeiter;
+            for(nodeiter=nodes.begin();nodeiter!=nodes.end();nodeiter++)
+            {
+                if(graph->contains(nodeiter.key()))
+                {
+                    nodeiter.value()->showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
+                    nodeiter.value()->showwidget->setText("Hide Widget");
+                }
+            }
+        }
+        else if(selecteditem->text()==QString("Hide All Widgets"))
+        {
+            graph->hideAllWidget();
+            QMap< QString, XNode * >::const_iterator nodeiter;
+            for(nodeiter=nodes.begin();nodeiter!=nodes.end();nodeiter++)
+            {
+                if(graph->contains(nodeiter.key()))
+                {
+                    nodeiter.value()->showwidget->setStyleSheet("QPushButton {background-color: red; color: black;}");
+                    nodeiter.value()->showwidget->setText("Show Widget");
+                }
+            }
+        }
+        else if(selecteditem->text()==QString("Export Graph Image..."))
+        {
+            QString filename=QFileDialog::getSaveFileName(NULL,"Export Graph Image",QString(),QString("Image (*.png)"));
+            if(filename.size()>0)
+            {
+                _gvLayout(_context,_graph,"dot");
+                gvRenderFilename(_context,_graph,"png",filename.toUtf8().data());
+                gvFreeLayout(_context,_graph);
+            }
+        }
+        else if(selecteditem->text()==QString("Export Dot File..."))
+        {
+            QString filename=QFileDialog::getSaveFileName(NULL,"Export Dot File",QString(),QString("Dot (*.dot)"));
+            if(filename.size()>0)
+            {
+                _gvLayout(_context,_graph,"dot");
+                gvRenderFilename(_context,_graph,"dot",filename.toUtf8().data());
+                gvFreeLayout(_context,_graph);
+            }
+        }
+        else if(selecteditem->text()==QString("Clean Graph"))
+        {
+            QStringList nodelist=nodes.keys();
+            uint i,n=nodelist.size();
+            for(i=0;i<n;i++)
+            {
+                slotRemoveNode(nodelist.at(i));
+            }
+        }
+    }
+}
+
+void XGraph::slotLoadGraph(QString xFileName)
+{
+    QFile file(xFileName);
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        while(!file.atEnd())
+        {
+            QString line=file.readLine();
+            if(line.size()>0)
+            {
+                QStringList data=line.split(QString(","));
+                if(data.at(0).trimmed()=="N"&&data.size()==6)
+                {
+                    slotAddNode(data.at(1).trimmed(),data.at(2).trimmed(),data.at(3).trimmed());
+                    nodes[data.at(1).trimmed()]->slotResetPortNum("Input",data.at(4).toUInt());
+                    nodes[data.at(1).trimmed()]->slotResetPortNum("Output",data.at(5).toUInt());
+                }
+                else if(data.at(0).trimmed()=="E"&&data.size()==5)
+                {
+                    slotAddEdge(data.at(1),data.at(2).toUInt(),data.at(3),data.at(4).toUInt());
+                }
+            }
+        }
+        file.close();
+    }
+}
+
+void XGraph::slotSaveGraph(QString xFileName)
+{
+    QFile file(xFileName);
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream stream(&file);
+        uint i,n;
+        QList< XNode * > nodelist=nodes.values();
+        n=nodelist.size();
+        for(i=0;i<n;i++)
+        {
+            if(graph->contains(nodelist.at(i)->nodefullname->text()))
+            {
+                stream<<QString("N,%1,%2,%3,%4,%5\n")
+                        .arg(nodelist.at(i)->nodefullname->text())
+                        .arg(nodelist.at(i)->libraryfilename->text())
+                        .arg(nodelist.at(i)->configfilename->text())
+                        .arg(nodelist.at(i)->_inputportnum)
+                        .arg(nodelist.at(i)->_outputportnum);
+            }
+            else
+            {
+                stream<<QString("N,%1,%2,%3,%4,%5\n")
+                        .arg(nodelist.at(i)->nodefullname->text())
+                        .arg(" ")
+                        .arg(nodelist.at(i)->configfilename->text())
+                        .arg(nodelist.at(i)->_inputportnum)
+                        .arg(nodelist.at(i)->_outputportnum);
+            }
+        }
+        QList< XEdge *> edgelist=edges.values();
+        n=edgelist.size();
+        for(i=0;i<n;i++)
+        {
+            stream<<QString("E,%1,%2,%3,%4\n")
+                    .arg(edgelist.at(i)->outputnodefullname)
+                    .arg(edgelist.at(i)->outputportid)
+                    .arg(edgelist.at(i)->inputnodefullname)
+                    .arg(edgelist.at(i)->inputportid);
+        }
+        file.close();
+    }
 }

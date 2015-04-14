@@ -13,6 +13,10 @@
 #include<QMenu>
 #include<QAction>
 #include<QGraphicsSceneResizeEvent>
+#include<QFile>
+#include<QTextStream>
+#include<QDir>
+#include<QFileInfo>
 
 #include<assert.h>
 
@@ -27,7 +31,7 @@ class XNode : public QGraphicsProxyWidget
 public:
     XNode(RobotSDK::Graph * graph, QString nodeFullName);
     ~XNode();
-protected:
+public:
     RobotSDK::Graph * _graph;
     const RobotSDK::Node * _node;
     uint _inputportnum;
@@ -36,15 +40,14 @@ protected:
 public:
     bool resizeFlag=0;
     QWidget * widget=NULL;
+    QVBoxLayout * inputports=NULL;
+    QVBoxLayout * nodelayout=NULL;
+    QVBoxLayout * outputports=NULL;
     QLabel * nodefullname=NULL;
-    QPushButton * changeexname=NULL;
     QLineEdit * libraryfilename=NULL;
-    QPushButton * changelibraryfilename=NULL;
     QLineEdit * configfilename=NULL;
-    QPushButton * changeconfigfilename=NULL;
     QPushButton * opennode=NULL;
     QPushButton * showwidget=NULL;
-    QPushButton * generatecode=NULL;
 protected:
     QList<XPort *> inputportslist;
     QList<XPort *> outputportslist;
@@ -61,10 +64,14 @@ signals:
     void signalCloseNode(QString nodeFullName);
     void signalShowWidget(QString nodeFullName);
     void signalHideWidget(QString nodeFullName);
-protected slots:
+public slots:
     void slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+    void slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName,uint portID);
+    void slotResetPortNum(QString text, uint portNum);
 signals:
     void signalAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+    void signalRemovePort(XPort::PORTTYPE portType, QString nodeFullName,uint portID);
+    void signalResetPortNum(QString nodeFullName);
 protected slots:
     void slotChangeNodeExName();
     void slotChangeNodeLibrary();
@@ -85,7 +92,7 @@ protected slots:
 signals:
     void signalRemoveNode(QString nodeFullName);
 protected slots:
-    void slotGenerateCode();
+    void slotGenerateCode(QString dir);
 };
 
 #endif // XNODE_H

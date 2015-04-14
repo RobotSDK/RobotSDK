@@ -8,16 +8,45 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     graph=new XGraph;
-    ui->graphicsView->setScene(graph);
-
-    QString libraryname=QString("/home/alexanderhmw/Git/dev/RobotSDK/Src/Sample/build-TestModule-Desktop_Qt_5_4_1_GCC_64bit-Debug/libTestModule.so");
-
-    graph->slotAddNode("RandomGenerator::random",libraryname);
-    graph->slotAddNode("NumberViewer::odd",libraryname);
-    graph->slotAddNode("NumberViewer::even",libraryname);
+    view=new GraphView;
+    view->setScene(graph);
+    ui->layout->addWidget(view);
+    connect(view,SIGNAL(signalHandleMenu()), graph, SLOT(slotHandleMenu()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+GraphView::GraphView(QWidget *parent)
+    : QGraphicsView(parent)
+{
+
+}
+
+void GraphView::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button()==Qt::RightButton)
+    {
+        QGraphicsItem * item=itemAt(event->pos());
+        if(item==NULL)
+        {
+            emit signalHandleMenu();
+        }
+    }
+    QGraphicsView::mousePressEvent(event);
+}
+
+void GraphView::wheelEvent(QWheelEvent *event)
+{
+    if(event->delta()>0)
+    {
+        ratio=0.9;
+    }
+    else
+    {
+        ratio=1.1;
+    }
+    this->scale(ratio,ratio);
 }

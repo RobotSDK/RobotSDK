@@ -11,8 +11,27 @@
 #include<QDropEvent>
 #include<QStringList>
 #include<QFontMetrics>
+#include<QInputDialog>
+#include<QMenu>
+#include<QAction>
+#include<QBitmap>
 
 #include<RobotSDK_Global.h>
+
+class XPortHead : public QLabel
+{
+    Q_OBJECT
+public:
+    XPortHead(QWidget * parent=0);
+    XPortHead(QString text, QWidget * parent=0);
+public:
+    QString nodefullname;
+    uint portnum;
+protected:
+    void mousePressEvent(QMouseEvent * event);
+signals:
+    void signalResetPortNum(QString text, uint portNum);
+};
 
 class XPort : public QLabel
 {
@@ -32,8 +51,7 @@ public:
     uint portid;
 signals:
     void signalAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFull, uint inputPortID);
-public slots:
-    //void slotPopMenu(const QPoint & pos);
+    void signalRemovePort(XPort::PORTTYPE portType, QString nodeFullName,uint portID);
 protected:
     void mousePressEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent * event);

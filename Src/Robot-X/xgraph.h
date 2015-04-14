@@ -5,6 +5,8 @@
 #include<QMap>
 #include<QMultiMap>
 #include<QPair>
+#include<QFile>
+#include<QTextStream>
 
 #include<gvc.h>
 
@@ -30,14 +32,20 @@ protected:
     QMap< XEdge *, Agedge_t * > _edges;
 public slots:
     void slotAddNode(QString nodeFullName, QString libraryFileName=QString(), QString configFileName=QString("Config.xml"));
-    void slotResize(QString nodeFullName, QSizeF newSize);
 protected slots:
+    void slotResize(QString nodeFullName, QSizeF newSize);
     void slotUpdateNode(QString oldNodeFullName, QString newNodeFullName);
     void slotRemoveNode(QString nodeFullName);
     void slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
     void slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+    void slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName,uint portID);
+    void slotResetPortNum(QString nodeFullName);
 signals:
+    void signalAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+    void signalRemoveNode(QString nodeFullName);
     void signalRemoveEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
+    void signalRemoveEdgeByOutputPort(QString outputNodeFullName, uint outputPortID);
+    void signalRemoveEdgeByInputPort(QString inputNodeFullName, uint inputPortID);
 public slots:
     void slotApplyLayout();
 protected:
@@ -51,6 +59,11 @@ private:
     Agnode_t * _agnode(Agraph_t * object, QString name, int flag);
     Agedge_t * _agedge(Agraph_t * object, Agnode_t * source, Agnode_t * target, QString name, int flag);
     int _gvLayout(GVC_t * context, Agraph_t * object, QString layout);
+public slots:
+    void slotHandleMenu();
+public slots:
+    void slotLoadGraph(QString xFileName);
+    void slotSaveGraph(QString xFileName);
 };
 
 #endif // XGRAPH_H

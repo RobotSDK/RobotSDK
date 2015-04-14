@@ -11,8 +11,6 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     connect(this,SIGNAL(signalShowWidget(QString)),_graph,SLOT(showWidget(QString)));
     connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
 
-    connect(this,SIGNAL(signalAddEdge(QString,uint,QString,uint)),_graph,SLOT(addEdge(QString,uint,QString,uint)));
-
     connect(this,SIGNAL(signalAddNode(QString,QString,QString)),_graph,SLOT(addNode(QString,QString,QString)));
     connect(this,SIGNAL(signalChangeNodeExName(QString,QString)),_graph,SLOT(changeNodeExName(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
@@ -22,69 +20,48 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     connect(_graph,SIGNAL(changeNodeExNameResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeExNameResult(bool,QString,const RobotSDK::Node*)));
     connect(_graph,SIGNAL(changeNodeLibraryResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeLibraryResult(bool,QString,const RobotSDK::Node*)));
 
-    connect(this,SIGNAL(signalRemoveNode(QString)),_graph,SLOT(removeNode(QString)));
-
-    uint i;
-    QLabel *label;
-    QPalette palette;
-
     widget=new QWidget;
+    widget->setStyleSheet(QString("QWidget {border: 1px solid black}"));
     this->setWidget(widget);
 
     QHBoxLayout * layout=new QHBoxLayout;
     widget->setLayout(layout);
 
-    QVBoxLayout * inputports=new QVBoxLayout;
+    inputports=new QVBoxLayout;
     layout->addLayout(inputports);
 
-    QVBoxLayout * nodelayout=new QVBoxLayout;
+    nodelayout=new QVBoxLayout;
     layout->addLayout(nodelayout);
 
+    outputports=new QVBoxLayout;
+    layout->addLayout(outputports);
+
     nodefullname=new QLabel(nodeFullName);
+    nodefullname->setStyleSheet("QLabel {border: 2px solid black; font: bold}");
+    nodefullname->setAlignment(Qt::AlignCenter);
     nodefullname->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(nodefullname,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(slotNodeFullNameMenu(const QPoint &)));
     nodelayout->addWidget(nodefullname);
-
-    changeexname=new QPushButton("Change ExName");
-    connect(changeexname,SIGNAL(clicked()),this,SLOT(slotChangeNodeExName()));
-    nodelayout->addWidget(changeexname);
 
     libraryfilename=new QLineEdit;
     libraryfilename->setReadOnly(1);
     nodelayout->addWidget(libraryfilename);
 
-    changelibraryfilename=new QPushButton("Change Library");
-    connect(changelibraryfilename,SIGNAL(clicked()),this,SLOT(slotChangeNodeLibrary()));
-    nodelayout->addWidget(changelibraryfilename);
-
     configfilename=new QLineEdit;
     configfilename->setReadOnly(1);
     nodelayout->addWidget(configfilename);
 
-    changeconfigfilename=new QPushButton("Change Configure");
-    connect(changeconfigfilename,SIGNAL(clicked()),this,SLOT(slotChangeNodeConfigFile()));
-    nodelayout->addWidget(changeconfigfilename);
-
     opennode=new QPushButton("Open Node");
     connect(opennode,SIGNAL(clicked()),this,SLOT(slotOpenNode()));
     nodelayout->addWidget(opennode);
-    palette=opennode->palette();
-    palette.setColor(QPalette::Button, QColor(Qt::red));
-    opennode->setPalette(palette);
+    opennode->setStyleSheet("QPushButton {background-color: red; color: black;}");
 
     showwidget=new QPushButton("Show Widget");
     connect(showwidget,SIGNAL(clicked()),this,SLOT(slotShowWidget()));
     nodelayout->addWidget(showwidget);
-    palette=showwidget->palette();
-    palette.setColor(QPalette::Button, QColor(Qt::red));
-    showwidget->setPalette(palette);
+    showwidget->setStyleSheet("QPushButton {background-color: red; color: black;}");
 
-    generatecode=new QPushButton("Generate Code");
-    connect(generatecode,SIGNAL(clicked()),this,SLOT(slotGenerateCode()));
-    nodelayout->addWidget(generatecode);
 
-    QVBoxLayout * outputports=new QVBoxLayout;
-    layout->addLayout(outputports);
 
     if(graph->contains(nodeFullName))
     {
@@ -95,57 +72,46 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
         _outputportnum=_node->_outputportnum;
 
         libraryfilename->setText(_node->_libraryfilename);
+        libraryfilename->setToolTip(_node->_libraryfilename);
         configfilename->setText(_node->_configfilename);
+        configfilename->setToolTip(_node->_configfilename);
     }
     else
     {
         _node=NULL;
 
-        _inputportnum=QInputDialog::getInt(widget,QString("Set Input Ports Number of %1").arg(nodeFullName),"Number of Input Ports",0);
-        _outputportnum=QInputDialog::getInt(widget,QString("Set Output Ports Number of %1").arg(nodeFullName),"Number of Output Ports",0);
+        _inputportnum=0;
+        _outputportnum=0;
 
         libraryfilename->setText("Developing...");
+        libraryfilename->setToolTip("Virtual Node");
+        configfilename->setText("Config.xml");
         configfilename->setText("Config.xml");
     }
-    label=new QLabel(QString("%1 Input Ports").arg(_inputportnum));
-    label->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+
+
+    XPortHead *label;
+
+    label=new XPortHead(QString("Input"));
+    connect(label,SIGNAL(signalResetPortNum(QString,uint)),this,SLOT(slotResetPortNum(QString,uint)));
+    label->setStyleSheet(QString("QLabel {border: 1px solid black}"));
     label->setAlignment(Qt::AlignCenter);
+    label->nodefullname=nodeFullName;
+    label->portnum=_inputportnum;
     inputports->addWidget(label);
-
     inputportslist.clear();
-    for(i=0;i<_inputportnum;i++)
-    {
-        XPort * port=new XPort;
-        port->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-        port->setText(QString("#%1").arg(i));
-        port->setAlignment(Qt::AlignCenter);
-        port->porttype=XPort::InputPort;
-        port->nodefullname=nodeFullName;
-        port->portid=i;
-        inputports->addWidget(port);
-        connect(port,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)));
-        inputportslist.push_back(port);
-    }
+    slotResetPortNum("Input",_inputportnum);
 
-    label=new QLabel(QString("%1 Output Ports").arg(_outputportnum));
-    label->setFrameStyle(QFrame::Panel|QFrame::Sunken);
+    label=new XPortHead(QString("Output"));
+    connect(label,SIGNAL(signalResetPortNum(QString,uint)),this,SLOT(slotResetPortNum(QString,uint)));
+    label->setStyleSheet(QString("QLabel {border: 1px solid black}"));
     label->setAlignment(Qt::AlignCenter);
+    label->nodefullname=nodeFullName;
+    label->portnum=_outputportnum;
     outputports->addWidget(label);
-
     outputportslist.clear();
-    for(i=0;i<_outputportnum;i++)
-    {
-        XPort * port=new XPort;
-        port->setFrameStyle(QFrame::Panel|QFrame::Sunken);
-        port->setText(QString("#%1").arg(i));
-        port->setAlignment(Qt::AlignCenter);
-        port->porttype=XPort::OutputPort;
-        port->nodefullname=nodeFullName;
-        port->portid=i;
-        outputports->addWidget(port);
-        connect(port,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)));
-        outputportslist.push_back(port);
-    }
+    slotResetPortNum("Output",_outputportnum);
+
     resizeFlag=1;
     widget->adjustSize();
 }
@@ -175,16 +141,12 @@ void XNode::slotNodeState(bool openFlag, QString nodeFullName)
     Q_UNUSED(nodeFullName);
     if(openFlag)
     {
-        QPalette palette=opennode->palette();
-        palette.setColor(QPalette::Button, QColor(Qt::green));
-        opennode->setPalette(palette);
+        opennode->setStyleSheet("QPushButton {background-color: green; color: black;}");
         opennode->setText("Close Node");
     }
     else
     {
-        QPalette palette=opennode->palette();
-        palette.setColor(QPalette::Button, QColor(Qt::red));
-        opennode->setPalette(palette);
+        opennode->setStyleSheet("QPushButton {background-color: red; color: black;}");
         opennode->setText("Open Node");
     }
 }
@@ -196,17 +158,13 @@ void XNode::slotShowWidget()
         if(showwidget->text()==QString("Show Widget"))
         {
             emit signalShowWidget(nodefullname->text());
-            QPalette palette=showwidget->palette();
-            palette.setColor(QPalette::Button, QColor(Qt::green));
-            showwidget->setPalette(palette);
+            showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
             showwidget->setText("Hide Widget");
         }
         else
         {
             emit signalHideWidget(nodefullname->text());
-            QPalette palette=showwidget->palette();
-            palette.setColor(QPalette::Button, QColor(Qt::red));
-            showwidget->setPalette(palette);
+            showwidget->setStyleSheet("QPushButton {background-color: red; color: black;}");
             showwidget->setText("Show Widget");
         }
     }
@@ -217,9 +175,63 @@ void XNode::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString i
     emit signalAddEdge(outputNodeFullName,outputPortID,inputNodeFullName,inputPortID);
 }
 
+void XNode::slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName, uint portID)
+{
+    emit signalRemovePort(portType, nodeFullName,portID);
+}
+
+void XNode::slotResetPortNum(QString text, uint portNum)
+{
+    QVBoxLayout * tmplayout;
+    if(text=="Input")
+    {
+        tmplayout=inputports;
+        _inputportnum=portNum;
+    }
+    else if(text=="Output")
+    {
+        tmplayout=outputports;
+        _outputportnum=portNum;
+    }
+    uint count=tmplayout->count()-1;
+    uint i;
+    if(count>portNum)
+    {
+        for(i=count;i>portNum;i--)
+        {
+            delete(tmplayout->takeAt(i)->widget());
+        }
+    }
+    else if(count<portNum)
+    {
+        for(i=count;i<portNum;i++)
+        {
+            XPort * port=new XPort;
+            connect(port,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
+            connect(port,SIGNAL(signalRemovePort(XPort::PORTTYPE,QString,uint)),this,SLOT(slotRemovePort(XPort::PORTTYPE,QString,uint)),Qt::QueuedConnection);
+            port->setText(QString("Port_%1").arg(i));
+            port->nodefullname=nodefullname->text();
+            port->portid=i;
+            if(text=="Input")
+            {
+                port->porttype=XPort::InputPort;
+                inputports->addWidget(port);
+                inputportslist.push_back(port);
+            }
+            else if(text=="Output")
+            {
+                port->porttype=XPort::OutputPort;
+                outputports->addWidget(port);
+                outputportslist.push_back(port);
+            }
+        }
+    }
+    emit signalResetPortNum(nodefullname->text());
+}
+
 void XNode::slotChangeNodeExName()
 {
-    QString newnodefullname=QInputDialog::getText(changeexname,"Input Node Full Name with New ExName","New Node Full Name",QLineEdit::Normal,nodefullname->text());
+    QString newnodefullname=QInputDialog::getText(NULL,"Input Node Full Name with New ExName","New Node Full Name",QLineEdit::Normal,nodefullname->text());
     if(newnodefullname.size()>0)
     {
         if(_graph->contains(nodefullname->text()))
@@ -246,10 +258,10 @@ void XNode::slotChangeNodeExName()
 void XNode::slotChangeNodeLibrary()
 {
 #ifdef Q_OS_LINUX
-    QString newlibrary=QFileDialog::getOpenFileName(changelibraryfilename,"Open Library",QString(),QString("Shared Library (*.so)"));
+    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("Shared Library (*.so)"));
 #endif
 #ifdef Q_OS_WIN32
-    QString newlibrary=QFileDialog::getOpenFileName(this,"Open Library",QString(),QString("Shared Library (*.dll)"));
+    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("Shared Library (*.dll)"));
 #endif
     if(newlibrary.size()>0)
     {
@@ -266,17 +278,15 @@ void XNode::slotChangeNodeLibrary()
 
 void XNode::slotChangeNodeConfigFile()
 {
-    QString newconfigfile=QFileDialog::getOpenFileName(changeconfigfilename,"Open Library",QString(),QString("XML File (*.xml)"));
+    QString newconfigfile=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("XML File (*.xml)"));
     if(newconfigfile.size()>0)
     {
         if(_graph->contains(nodefullname->text()))
         {
             emit signalChangeNodeConfigFile(nodefullname->text(),newconfigfile);
         }
-        else
-        {
-            configfilename->setText(newconfigfile);
-        }
+        configfilename->setText(newconfigfile);
+        configfilename->setToolTip(newconfigfile);
     }
 }
 
@@ -286,6 +296,8 @@ void XNode::slotAddNodeResult(bool successFlag, QString nodeFullName, const Robo
     {
         _node=node;
         connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
+        libraryfilename->setText(node->_libraryfilename);
+        libraryfilename->setToolTip(node->_libraryfilename);
     }
 }
 
@@ -326,6 +338,7 @@ void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, 
             if(successFlag)
             {
                 libraryfilename->setText(node->_libraryfilename);
+                libraryfilename->setToolTip(node->_libraryfilename);
             }
         }
     }
@@ -333,23 +346,43 @@ void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, 
 
 void XNode::slotNodeFullNameMenu(const QPoint &pos)
 {
-    QPoint globalpos=nodefullname->mapToGlobal(pos);
-
+    Q_UNUSED(pos);
     QMenu menu;
+    menu.addAction("Change ExName");
+    menu.addAction("Change Library");
+    menu.addAction("Change Config File");
+    menu.addSeparator();
+    menu.addAction("Generate Code");
+    menu.addSeparator();
     menu.addAction("Delete Node");
-    QAction * selecteditem=menu.exec(globalpos);
+    QAction * selecteditem=menu.exec(QCursor::pos());
     if(selecteditem)
     {
-        if(selecteditem->text()==QString("Delete Node"))
+        if(selecteditem->text()==QString("Change ExName"))
+        {
+            slotChangeNodeExName();
+        }
+        else if(selecteditem->text()==QString("Change Library"))
+        {
+            slotChangeNodeLibrary();
+        }
+        else if(selecteditem->text()==QString("Change Config File"))
+        {
+            slotChangeNodeConfigFile();
+        }
+        else if(selecteditem->text()==QString("Generate Code"))
+        {
+            QString dir=QFileDialog::getExistingDirectory(NULL,QString("Generate Code for %1").arg(nodefullname->text()),QString(),QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+            if(dir.size()>0)
+            {
+                slotGenerateCode(dir);
+            }
+        }
+        else if(selecteditem->text()==QString("Delete Node"))
         {
             emit signalRemoveNode(nodefullname->text());
         }
     }
-}
-
-void XNode::slotGenerateCode()
-{
-
 }
 
 void XNode::resizeEvent(QGraphicsSceneResizeEvent *event)
@@ -359,4 +392,203 @@ void XNode::resizeEvent(QGraphicsSceneResizeEvent *event)
         emit signalResize(nodefullname->text(),event->newSize());
     }
     QGraphicsProxyWidget::resizeEvent(event);
+}
+
+void XNode::slotGenerateCode(QString dir)
+{
+    QStringList namelist=nodefullname->text().split(QString("::"),QString::SkipEmptyParts);
+    QString nodeclass=namelist.at(0);
+    QString exname=QString();
+    if(namelist.size()==3)
+    {
+            exname=namelist.at(2);
+    }
+    QString headerfile=QString("%1/%2.h").arg(dir).arg(nodeclass);
+    QString cppfile=QString("%1/%2.cpp").arg(dir).arg(nodeclass);
+
+    QFileInfo headerinfo(headerfile);
+    if(!headerinfo.exists())
+    {
+        QFile file(headerfile);
+        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream stream(&file);
+            stream<<QString("#ifndef %1").arg(nodeclass.toUpper())<<"\n";
+            stream<<QString("#define %1").arg(nodeclass.toUpper())<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Please add headers here:")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Port configuration")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("#undef NODE_CLASS")<<"\n";
+            stream<<QString("#define NODE_CLASS %1").arg(nodeclass)<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("#undef INPUT_PORT_NUM")<<"\n";
+            stream<<QString("#define INPUT_PORT_NUM %1").arg(_inputportnum)<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("#undef OUTPUT_PORT_NUM")<<"\n";
+            stream<<QString("#define OUTPUT_PORT_NUM %1").arg(_outputportnum)<<"\n";
+            stream<<QString("")<<"\n";
+            if(_inputportnum>0)
+            {
+                stream<<QString("//Uncomment below PORT_DECL and set input node class name")<<"\n";
+                uint i;
+                for(i=0;i<_inputportnum;i++)
+                {
+                    stream<<QString("//PORT_DECL(%1, InputNodeClassName)")<<"\n";
+                }
+                stream<<QString("")<<"\n";
+            }
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Params types configuration")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you need refer params type of other node class, please uncomment below and comment its own params type.")<<"\n";
+            stream<<QString("//NODE_PARAMS_TYPE_REF(RefNodeClassName)")<<"\n";
+            stream<<QString("class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("};")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Vars types configuration")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you need refer vars type of other node class, please uncomment below and comment its own vars type.")<<"\n";
+            stream<<QString("//NODE_VARS_TYPE_REF(RefNodeClassName)")<<"\n";
+            stream<<QString("class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("};")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Data types configuration")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you need refer data type of other node class, please uncomment below and comment its own data type.")<<"\n";
+            stream<<QString("//NODE_DATA_TYPE_REF(RefNodeClassName)")<<"\n";
+            stream<<QString("class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("};")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//You can declare functions here")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("#endif")<<"\n";
+            file.close();
+        }
+    }
+
+    QFileInfo cppinfo(cppfile);
+    if(!cppinfo.exists())
+    {
+        QFile file(cppfile);
+        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QTextStream stream(&file);
+            stream<<QString("#include\"%1\"").arg(headerinfo.fileName())<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you need use extended node, please uncomment below and comment the using of default node")<<"\n";
+            stream<<QString("//USE_EXTENDED_NODE(ExtendedNodeClass[,...])")<<"\n";
+            stream<<QString("USE_DEFAULT_NODE")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Original node functions")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need initialize node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_FUNC_DEF_EXPORT(bool, initializeNode)")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need manually open node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_FUNC_DEF_EXPORT(bool, openNode)")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need manually close node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_FUNC_DEF_EXPORT(bool, closeNode)")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//This is original main function, you must keep it")<<"\n";
+            stream<<QString("NODE_FUNC_DEF_EXPORT(bool, main)")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+
+            if(exname.size()>0)
+            {
+                    stream<<QString("")<<"\n";
+                    stream<<QString("//=================================================")<<"\n";
+                    stream<<QString("//Extended node functions ( %1 )").arg(exname)<<"\n";
+                    stream<<QString("")<<"\n";
+                    stream<<QString("//If you don't need initialize node, you can delete this code segment")<<"\n";
+                    stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, initializeNode)").arg(exname)<<"\n";
+                    stream<<QString("{")<<"\n";
+                    stream<<QString("\treturn 1;")<<"\n";
+                    stream<<QString("}")<<"\n";
+                    stream<<QString("")<<"\n";
+                    stream<<QString("//If you don't need manually open node, you can delete this code segment")<<"\n";
+                    stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, openNode)").arg(exname)<<"\n";
+                    stream<<QString("{")<<"\n";
+                    stream<<QString("\treturn 1;")<<"\n";
+                    stream<<QString("}")<<"\n";
+                    stream<<QString("")<<"\n";
+                    stream<<QString("//If you don't need manually close node, you can delete this code segment")<<"\n";
+                    stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, closeNode)").arg(exname)<<"\n";
+                    stream<<QString("{")<<"\n";
+                    stream<<QString("\treturn 1;")<<"\n";
+                    stream<<QString("}")<<"\n";
+                    stream<<QString("")<<"\n";
+                    stream<<QString("//As an extended main function, if you delete this code segment, original main function will be used")<<"\n";
+                    stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, main)").arg(exname)<<"\n";
+                    stream<<QString("{")<<"\n";
+                    stream<<QString("\treturn 1;")<<"\n";
+                    stream<<QString("}")<<"\n";
+                    stream<<QString("")<<"\n";
+            }
+            file.close();
+        }
+    }
+    else if(exname.size()>0)
+    {
+        QFile file(cppfile);
+        if(file.open(QIODevice::Append | QIODevice::Text))
+        {
+            QTextStream stream(&file);
+            stream<<QString("//=================================================")<<"\n";
+            stream<<QString("//Extended node functions ( %1 )").arg(exname)<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need initialize node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, initializeNode)").arg(exname)<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need manually open node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, openNode)").arg(exname)<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//If you don't need manually close node, you can delete this code segment")<<"\n";
+            stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, closeNode)").arg(exname)<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//As an extended main function, if you delete this code segment, original main function will be used")<<"\n";
+            stream<<QString("NODE_EXFUNC_DEF_EXPORT(bool, %1, main)").arg(exname)<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("\treturn 1;")<<"\n";
+            stream<<QString("}")<<"\n";
+            stream<<QString("")<<"\n";
+            file.close();
+        }
+    }
 }
