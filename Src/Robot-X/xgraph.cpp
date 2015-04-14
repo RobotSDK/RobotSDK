@@ -7,9 +7,7 @@ XGraph::XGraph(QObject *parent)
 
     _context=gvContext();
     _graph=_agopen("Robot-X");
-    _agset(_graph, "overlap", "prism");
     _agset(_graph, "splines", "true");
-    _agset(_graph, "pad", "0.2");
     _agset(_graph, "nodesep", "0.4");
 }
 
@@ -59,8 +57,6 @@ void XGraph::slotAddNode(QString nodeFullName, QString libraryFileName, QString 
     _agset(tmpnode,"label",nodelabel);
 
     _nodes.insert(node,tmpnode);
-
-    slotApplyLayout();
 }
 
 void XGraph::slotResize(QString nodeFullName, QSizeF newSize)
@@ -135,12 +131,7 @@ void XGraph::slotUpdateNode(QString oldNodeFullName, QString newNodeFullName)
             XNode * target=nodes[candedgelist.at(i).first.second];
             QString outputport=QString("out_%1:e").arg(candedgelist.at(i).second->outputportid);
             QString inputport=QString("in_%1:w").arg(candedgelist.at(i).second->inputportid);
-            QString edgename=QString("%1~~%2~~%3~~%4")
-                    .arg(candedgelist.at(i).second->outputnodefullname)
-                    .arg(outputport)
-                    .arg(candedgelist.at(i).second->inputnodefullname)
-                    .arg(inputport);
-            Agedge_t * tmpedge=_agedge(_graph,_nodes[source],_nodes[target],edgename,1);
+            Agedge_t * tmpedge=_agedge(_graph,_nodes[source],_nodes[target],QString(),1);
             _agset(tmpedge,"headport",outputport);
             _agset(tmpedge,"tailport",inputport);
             _edges.insert(candedgelist.at(i).second,tmpedge);
@@ -217,11 +208,10 @@ void XGraph::slotAddEdge(QString outputNodeFullName, uint outputPortID, QString 
                 .arg(outputport)
                 .arg(edge->inputnodefullname)
                 .arg(inputport);
-        Agedge_t * tmpedge=_agedge(_graph,_nodes[source],_nodes[target],edgename,1);
+        Agedge_t * tmpedge=_agedge(_graph,_nodes[source],_nodes[target],QString(),1);
         _agset(tmpedge,"tailport",outputport);
         _agset(tmpedge,"headport",inputport);
         _edges.insert(edge,tmpedge);
-
         slotApplyLayout();
     }
 }
@@ -252,7 +242,6 @@ void XGraph::slotRemoveEdge(QString outputNodeFullName, uint outputPortID, QStri
 void XGraph::slotApplyLayout()
 {
     _gvLayout(_context,_graph,"dot");
-
     this->setSceneRect(boudingRect());
 
     uint i,n;
@@ -272,6 +261,7 @@ void XGraph::slotApplyLayout()
 
     gvRenderFilename(_context,_graph,"png","./out.png");
     gvRenderFilename(_context,_graph,"dot","./out.dot");
+    gvFreeLayout(_context,_graph);
 }
 
 QRectF XGraph::boudingRect()
@@ -352,7 +342,14 @@ Agnode_t * XGraph::_agnode(Agraph_t *object, QString name, int flag)
 
 Agedge_t * XGraph::_agedge(Agraph_t *object, Agnode_t *source, Agnode_t *target, QString name, int flag)
 {
-    return agedge(object,source, target, const_cast<char *>(qPrintable(name)),flag);
+    if(name.size()>0)
+    {
+        return agedge(object,source, target, const_cast<char *>(qPrintable(name)),flag);
+    }
+    else
+    {
+        return agedge(object,source, target, NULL,flag);
+    }
 }
 
 int XGraph::_gvLayout(GVC_t *context, Agraph_t *object, QString layout)

@@ -36,7 +36,7 @@ protected:
 public:
     bool resizeFlag=0;
     QWidget * widget=NULL;
-    QLineEdit * nodefullname=NULL;
+    QLabel * nodefullname=NULL;
     QPushButton * changeexname=NULL;
     QLineEdit * libraryfilename=NULL;
     QPushButton * changelibraryfilename=NULL;

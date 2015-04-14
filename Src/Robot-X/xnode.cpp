@@ -40,8 +40,7 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     QVBoxLayout * nodelayout=new QVBoxLayout;
     layout->addLayout(nodelayout);
 
-    nodefullname=new QLineEdit(nodeFullName);
-    nodefullname->setReadOnly(1);
+    nodefullname=new QLabel(nodeFullName);
     nodefullname->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(nodefullname,SIGNAL(customContextMenuRequested(const QPoint&)),this,SLOT(slotNodeFullNameMenu(const QPoint &)));
     nodelayout->addWidget(nodefullname);
