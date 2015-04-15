@@ -1,10 +1,19 @@
 #!/bin/sh
 TMPBASEDIR=$PWD;
+sudo apt-get -y install qt5-default graphviz-dev doxygen;
 qmake -makefile $TMPBASEDIR/Src/Kernel/Kernel.pro -r -o "Makefile.Release" "CONFIG+=release";
 make -f Makefile.Release;
 make -f Makefile.Release install;
 rm Makefile.Release;
 qmake -makefile $TMPBASEDIR/Src/Kernel/Kernel.pro -r -o "Makefile.Debug" "CONFIG+=debug";
+make -f Makefile.Debug;
+make -f Makefile.Debug install;
+rm Makefile.Debug;
+qmake -makefile $TMPBASEDIR/Src/Robot-X/Robot-X.pro -r -o "Makefile.Release" "CONFIG+=release";
+make -f Makefile.Release;
+make -f Makefile.Release install;
+rm Makefile.Release;
+qmake -makefile $TMPBASEDIR/Src/Robot-X/Robot-X.pro -r -o "Makefile.Debug" "CONFIG+=debug";
 make -f Makefile.Debug;
 make -f Makefile.Debug install;
 rm Makefile.Debug;

@@ -52,6 +52,7 @@ public:
     QWidget * const switcherpanel=new QWidget;
 protected:
     QVBoxLayout * nodeswitcher;
+    QMap< QString, QRect > widgetgeometry;
 public:
     const Node * getNode(QString nodeFullName);
     const QWidget * getNodeWidget(QString nodeFullName);

@@ -193,6 +193,10 @@ void XNode::slotResetPortNum(QString text, uint portNum)
         tmplayout=outputports;
         _outputportnum=portNum;
     }
+    else
+    {
+        return;
+    }
     uint count=tmplayout->count()-1;
     uint i;
     if(count>portNum)

@@ -414,7 +414,18 @@ void Graph::showWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(1);
+    if(!_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
+    {
+        _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(1);
+        if(widgetgeometry.contains(nodeFullName))
+        {
+            _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setGeometry(widgetgeometry[nodeFullName]);
+        }
+        else
+        {
+            widgetgeometry.insert(nodeFullName,_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry());
+        }
+    }
 }
 
 void Graph::hideWidget(QString nodeFullName)
@@ -424,24 +435,30 @@ void Graph::hideWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(0);
+    if(_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
+    {
+        _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(0);
+        widgetgeometry[nodeFullName]=_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry();
+    }
 }
 
 void Graph::showAllWidget()
 {
-    QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
-    for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
+    QStringList nodelist=_nodes.keys();
+    uint i,n=nodelist.size();
+    for(i=0;i<n;i++)
     {
-        nodeiter.value().second->NODE_VARS_ARG->getWidget()->setVisible(1);
+        showWidget(nodelist.at(i));
     }
 }
 
 void Graph::hideAllWidget()
 {
-    QMap< QString, QPair< std::shared_ptr< QThread >, Node * > >::const_iterator nodeiter;
-    for(nodeiter=_nodes.begin();nodeiter!=_nodes.end();nodeiter++)
+    QStringList nodelist=_nodes.keys();
+    uint i,n=nodelist.size();
+    for(i=0;i<n;i++)
     {
-        nodeiter.value().second->NODE_VARS_ARG->getWidget()->setVisible(0);
+        hideWidget(nodelist.at(i));
     }
 }
 

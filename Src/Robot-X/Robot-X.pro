@@ -25,6 +25,7 @@ unix {
 win32 {
     INCLUDEPATH += c:/SDK/RobotSDK_4.0/Kernel/include
     LIBS += -Lc:/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+
 }
 
 SOURCES += main.cpp\
@@ -42,4 +43,28 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+unix{
+    ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_4.0
+}
 
+win32{
+    ROBOTSDKDIR=C:/SDK/RobotSDK_4.0
+}
+
+MOC_DIR = $$ROBOTSDKDIR/Build/Robot-X/MOC
+UI_DIR = $$ROBOTSDKDIR/Build/Robot-X/UI
+
+CONFIG(debug, debug|release){
+        OBJECTS_DIR = $$ROBOTSDKDIR/Build/Robot-X/OBJ/Debug
+        DESTDIR = $$ROBOTSDKDIR/Build/Robot-X
+        TARGET = Robot-X_Debug
+        target.path = $$ROBOTSDKDIR
+}
+else {
+        OBJECTS_DIR = $$ROBOTSDKDIR/Build/Robot-X/OBJ/Release
+        DESTDIR = $$ROBOTSDKDIR/Build/Robot-X
+        TARGET = Robot-X
+        target.path = $$ROBOTSDKDIR
+}
+
+INSTALLS += target
