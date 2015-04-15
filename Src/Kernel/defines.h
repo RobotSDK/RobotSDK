@@ -25,6 +25,7 @@
 #include<QTabWidget>
 #include<QListWidget>
 #include<QEvent>
+#include<QFile>
 
 #include<memory>
 #include<functional>
@@ -98,7 +99,7 @@ enum ObtainBehavior
 
 //=================================================================================
 
-#define TRANSFER_NODE_PARAMS_TYPE XML_PARAMS_BASE_CONST_TYPE
+#define TRANSFER_NODE_PARAMS_TYPE XML_PARAMS_BASE_TYPE
 #define TRANSFER_NODE_VARS_TYPE XML_VARS_BASE_TYPE
 #define TRANSFER_NODE_DATA_TYPE XML_DATA_BASE_TYPE
 
@@ -192,14 +193,14 @@ enum ObtainBehavior
 //=================================================================================
 //for NODE_VARS_BASE_TYPE
 
-#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName, poolThreadFlag) \
+#define ADD_INTERNAL_QOBJECT_TRIGGER(triggerType, triggerName, poolThreadFlag, ...) \
     private: triggerType * _qobject_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; _qobjecttriggermap.insert(#triggerName, trigger); _qobjecttriggerpoolthreadflagmap.insert(#triggerName,poolThreadFlag); return trigger;}; \
+    {triggerType * trigger=new triggerType(__VA_ARGS__); _qobjecttriggermap.insert(#triggerName, trigger); _qobjecttriggerpoolthreadflagmap.insert(#triggerName,poolThreadFlag); return trigger;}; \
     public: triggerType * const triggerName=_qobject_##triggerType##_##triggerName##_Func();
 
-#define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName) \
+#define ADD_INTERNAL_QWIDGET_TRIGGER(triggerType, triggerName, ...) \
     private: triggerType * _qwidget_##triggerType##_##triggerName##_Func() \
-    {triggerType * trigger=new triggerType; trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
+    {triggerType * trigger=new triggerType(__VA_ARGS__); trigger->moveToThread(QApplication::instance()->thread()); _qwidgettriggermap.insert(#triggerName, trigger); _qwidgetmap.insert(#triggerName, trigger); return trigger;}; \
     public: triggerType * const triggerName=_qwidget_##triggerType##_##triggerName##_Func();
 
 #define ADD_INTERNAL_DEFAULT_CONNECTION(triggerName,signalName) \
@@ -213,14 +214,14 @@ enum ObtainBehavior
     _userconnectionmap.insert(triggerName,connection); return connection;}; \
     private: QPair< QString, QString > _user_connection_##triggerName##_##signalName##_##slotName=_user_connection_##triggerName##_##signalName##_##slotName##_Func();
 
-#define ADD_QWIDGET(widgetType, widgetName) \
+#define ADD_QWIDGET(widgetType, widgetName, ...) \
     private: widgetType * _qwidget_##widgetType##_##widgetName##_Func() \
-    {widgetType * widget=new widgetType; widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
+    {widgetType * widget=new widgetType(__VA_ARGS__); widget->moveToThread(QApplication::instance()->thread()); _qwidgetmap.insert(#widgetName, widget); return widget;}; \
     public: widgetType * const widgetName=_qwidget_##widgetType##_##widgetName##_Func();
 
-#define ADD_QLAYOUT(layoutType, layoutName) \
+#define ADD_QLAYOUT(layoutType, layoutName, ...) \
     private: layoutType * _qlayout_##layoutType##_##layoutName##_Func() \
-    {layoutType * layout=new layoutType; layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
+    {layoutType * layout=new layoutType(__VA_ARGS__); layout->moveToThread(QApplication::instance()->thread()); _qlayoutmap.insert(#layoutName, layout); return layout;}; \
     public: layoutType * const layoutName=_qlayout_##layoutType##_##layoutName##_Func();
 
 #define ADD_CONNECTION(emitterName,signalName,receiverName,slotName,...) \
@@ -269,7 +270,7 @@ enum ObtainBehavior
 #define NODE_PARAMS_TYPE _NODE_PARAMS_TYPE_1(NODE_CLASS, _PARAMS_TYPE)
 #define _NODE_PARAMS_TYPE_1(NODE_CLASS, _PARAMS_TYPE) _NODE_PARAMS_TYPE_2(NODE_CLASS, _PARAMS_TYPE)
 #define _NODE_PARAMS_TYPE_2(NODE_CLASS, _PARAMS_TYPE) NODE_CLASS##_##_PARAMS_TYPE
-#define NODE_PARAMS NODE_PARAMS_ARG ? std::static_pointer_cast< const NODE_PARAMS_TYPE >(NODE_PARAMS_ARG) : std::shared_ptr< const NODE_PARAMS_TYPE >()
+#define NODE_PARAMS NODE_PARAMS_ARG ? std::static_pointer_cast< NODE_PARAMS_TYPE >(NODE_PARAMS_ARG) : std::shared_ptr< NODE_PARAMS_TYPE >()
 
 #define NODE_VARS_TYPE _NODE_VARS_TYPE_1(NODE_CLASS, _VARS_TYPE)
 #define _NODE_VARS_TYPE_1(NODE_CLASS, _VARS_TYPE) _NODE_VARS_TYPE_2(NODE_CLASS, _VARS_TYPE)
@@ -281,17 +282,17 @@ enum ObtainBehavior
 #define _NODE_DATA_TYPE_2(NODE_CLASS, _DATA_TYPE) NODE_CLASS##_##_DATA_TYPE
 #define NODE_DATA NODE_DATA_ARG ? std::static_pointer_cast<NODE_DATA_TYPE>(NODE_DATA_ARG) : std::shared_ptr< NODE_DATA_TYPE >()
 
-#define NODE_PARAMS_TYPE_REF(nodeClass) _NODE_PARAMS_TYPE_REF_1(_PARAMS_TYPE)
-#define _NODE_PARAMS_TYPE_REF_1(_PARAMS_TYPE) _NODE_PARAMS_TYPE_REF_2(_PARAMS_TYPE)
-#define _NODE_PARAMS_TYPE_REF_2(_PARAMS_TYPE) typedef nodeClass##_##_PARAMS_TYPE NODE_PARAMS_TYPE
+#define NODE_PARAMS_TYPE_REF(nodeClass) _NODE_PARAMS_TYPE_REF_1(nodeClass,_PARAMS_TYPE)
+#define _NODE_PARAMS_TYPE_REF_1(nodeClass,_PARAMS_TYPE) _NODE_PARAMS_TYPE_REF_2(nodeClass,_PARAMS_TYPE)
+#define _NODE_PARAMS_TYPE_REF_2(nodeClass,_PARAMS_TYPE) typedef nodeClass##_##_PARAMS_TYPE NODE_PARAMS_TYPE;
 
-#define NODE_VARS_TYPE_REF(nodeClass) _NODE_VARS_TYPE_REF_1(_VARS_TYPE)
-#define _NODE_VARS_TYPE_REF_1(_VARS_TYPE) _NODE_VARS_TYPE_REF_2(_VARS_TYPE)
-#define _NODE_VARS_TYPE_REF_2(_VARS_TYPE) typedef nodeClass##_##_VARS_TYPE NODE_VARS_TYPE
+#define NODE_VARS_TYPE_REF(nodeClass) _NODE_VARS_TYPE_REF_1(nodeClass,_VARS_TYPE)
+#define _NODE_VARS_TYPE_REF_1(nodeClass,_VARS_TYPE) _NODE_VARS_TYPE_REF_2(nodeClass,_VARS_TYPE)
+#define _NODE_VARS_TYPE_REF_2(nodeClass,_VARS_TYPE) typedef nodeClass##_##_VARS_TYPE NODE_VARS_TYPE;
 
-#define NODE_DATA_TYPE_REF(nodeClass) _NODE_DATA_TYPE_REF_1(_DATA_TYPE)
-#define _NODE_DATA_TYPE_REF_1(_DATA_TYPE) _NODE_DATA_TYPE_REF_2(_DATA_TYPE)
-#define _NODE_DATA_TYPE_REF_2(_DATA_TYPE) typedef nodeClass##_##_DATA_TYPE NODE_DATA_TYPE
+#define NODE_DATA_TYPE_REF(nodeClass) _NODE_DATA_TYPE_REF_1(nodeClass,_DATA_TYPE)
+#define _NODE_DATA_TYPE_REF_1(nodeClass,_DATA_TYPE) _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE)
+#define _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE) typedef nodeClass##_##_DATA_TYPE NODE_DATA_TYPE;
 
 //=================================================================================
 //for Port access
@@ -312,7 +313,7 @@ enum ObtainBehavior
 #define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? INPUT_PARAMS_ARG[portID].size() : 0
 #define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && INPUT_PARAMS_ARG[portID].at(paramsID)) ? \
       std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(INPUT_PARAMS_ARG[portID].at(paramsID)) \
-    : std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >()
+    : std::shared_ptr< const PORT_PARAMS_TYPE(portID) >()
 
 #define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? INPUT_DATA_ARG[portID].size() : 0
 #define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && INPUT_DATA_ARG[portID].at(dataID)) ? \
@@ -320,6 +321,7 @@ enum ObtainBehavior
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
 #define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()==0||INPUT_DATA_ARG.size()==0
+#define CHECK_VALUE(value) if((value)==NULL){return 0;}
 
 //=================================================================================
 //for NODE_VALUE_BASE_TYPE
@@ -383,7 +385,7 @@ enum ObtainBehavior
 #define _NODE_EXFUNC_NAME_2(NODE_CLASS, funcName, exName) NODE_CLASS##__##funcName##__##exName
 
 #define NODE_EXFUNC(funcName, exName, ...) NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS, ##__VA_ARGS__)
-#define NODE_EXFUNC_DEF(returnType, funcName, exName, ...) returnType NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__))
+#define NODE_EXFUNC_DEF(returnType, funcName, exName, ...) returnType NODE_EXFUNC_NAME(funcName, exName)(ROBOTSDK_ARGS_DECL, ##__VA_ARGS__)
 #define NODE_EXFUNC_DEF_EXPORT(returnType, funcName, exName, ...) extern "C" RobotSDK_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, ##__VA_ARGS__)
 #define NODE_EXFUNC_DECL(returnType, funcName, exName, ...) extern "C" RobotSDK_EXPORT NODE_EXFUNC_DEF(returnType, funcName, exName, ##__VA_ARGS__);
 

@@ -55,14 +55,16 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
         exName=nodenamelist.at(2);
     }
     QString functionname=QString("%1__%2").arg(nodeClass).arg("generateNode");
-    generateNode=(generateNodePtr)(QLibrary::resolve(libraryFileName,functionname.toUtf8().data()));
+    QLibrary library(libraryFileName);
+    generateNode=(generateNodePtr)(library.resolve(functionname.toUtf8().data()));
     if(generateNode==NULL)
     {
         qDebug()<<QString("Can not resolve %1 from %2. May lack of USE_DEFAULT_NODE or USE_EXTENDED_NODE in module source code.").arg(functionname).arg(libraryFileName);
+        qDebug()<<library.errorString();
         emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
-    Node * node=generateNode(libraryFileName, configFileName, nodeFullName);
+    Node * node=static_cast<Node *>(generateNode(libraryFileName, configFileName, nodeFullName));
     if(node==NULL)
     {
         qDebug()<<QString("Can not build node. May the node's type is not extended from RobotSDK::Node");
@@ -75,11 +77,18 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
         emit addNodeResult(0,nodeFullName,NULL);
         return;
     }
-    std::shared_ptr<QThread> thread=std::shared_ptr<QThread>(new QThread);
-    connect(thread.get(),SIGNAL(finished()),node,SLOT(deleteLater()));
-    _nodes.insert(nodeFullName,QPair< std::shared_ptr< QThread >, Node * >(thread,node));
-    node->moveToThread(thread.get());
-    thread->start();
+    if(!node->NODE_VARS_ARG->_guithreadflag)
+    {
+        std::shared_ptr<QThread> thread=std::shared_ptr<QThread>(new QThread);
+        connect(thread.get(),SIGNAL(finished()),node,SLOT(deleteLater()));
+        _nodes.insert(nodeFullName,QPair< std::shared_ptr< QThread >, Node * >(thread,node));
+        node->moveToThread(thread.get());
+        thread->start();
+    }
+    else
+    {
+        _nodes.insert(nodeFullName,QPair< std::shared_ptr< QThread >, Node * >(std::shared_ptr< QThread >(),node));
+    }
 
     nodeswitcher->addWidget(node->NODE_VARS_ARG->getNodeSwitcher());
     emit addNodeResult(1,nodeFullName,_nodes[nodeFullName].second);
@@ -104,8 +113,15 @@ void Graph::removeNode(QString nodeFullName)
     }
 
     nodeswitcher->removeWidget(_nodes[nodeFullName].second->NODE_VARS_ARG->getNodeSwitcher());
-    _nodes[nodeFullName].first->quit();
-    _nodes[nodeFullName].first->wait();
+    if(_nodes[nodeFullName].first!=NULL)
+    {
+        _nodes[nodeFullName].first->quit();
+        _nodes[nodeFullName].first->wait();
+    }
+    else
+    {
+        delete _nodes[nodeFullName].second;
+    }
     _nodes.remove(nodeFullName);
     return;
 }

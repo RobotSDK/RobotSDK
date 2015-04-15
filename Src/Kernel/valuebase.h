@@ -57,6 +57,7 @@ protected:
     QVector< ObtainBehavior > _obtaindatabehavior;
     QVector< uint > _obtaindatasize;
     QVector< bool > _triggerflag;
+    bool _guithreadflag;
 public:
     void setInputPortBufferSize(uint portID, uint bufferSize);
     void setInputPortBufferSize(QList< uint > bufferSize);
@@ -66,6 +67,7 @@ public:
     void setInputPortObtainDataSize(QList< uint > obtainDataSize);
     void setInputPortTriggerFlag(uint portID, bool triggerFlag);
     void setInputPortTriggerFlag(QList< bool > triggerFlag);
+    void setNodeGUIThreadFlag(bool guiThreadFlag);
 protected:
     QMap< QString, QObject * > _qobjecttriggermap;
     QMap< QString, bool > _qobjecttriggerpoolthreadflagmap;
@@ -78,8 +80,6 @@ protected:
 public:
     ADD_QWIDGET(QWidget, widget)
     ADD_QWIDGET(NodeSwitcher, nodeSwitcher)
-private:
-    void moveTriggerToPoolThread(QObject * node, QThread *poolThread);
 public:
     QWidget * getWidget();
     NodeSwitcher * getNodeSwitcher();

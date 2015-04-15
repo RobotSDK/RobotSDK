@@ -15,7 +15,7 @@ public:
 protected:
     void registerTransferData();
 private:
-    typedef Node *(*generateNodePtr)(QString libraryFileName, QString configFileName, QString nodeFullName);
+    typedef void *(*generateNodePtr)(QString libraryFileName, QString configFileName, QString nodeFullName);
     generateNodePtr generateNode;
 private:
     QMap< QString, QPair< std::shared_ptr< QThread >, Node * > > _nodes;

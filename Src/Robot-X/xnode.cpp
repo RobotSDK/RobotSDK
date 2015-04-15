@@ -11,7 +11,6 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     connect(this,SIGNAL(signalShowWidget(QString)),_graph,SLOT(showWidget(QString)));
     connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
 
-    connect(this,SIGNAL(signalAddNode(QString,QString,QString)),_graph,SLOT(addNode(QString,QString,QString)));
     connect(this,SIGNAL(signalChangeNodeExName(QString,QString)),_graph,SLOT(changeNodeExName(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeConfigFile(QString,QString)),_graph,SLOT(changeNodeConfigFile(QString,QString)));
@@ -424,6 +423,10 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("//Please add headers here:")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("#include<RobotSDK_Global.h>")<<"\n";
+            stream<<QString("")<<"\n";
+            stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Port configuration")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("#undef NODE_CLASS")<<"\n";
@@ -441,7 +444,7 @@ void XNode::slotGenerateCode(QString dir)
                 uint i;
                 for(i=0;i<_inputportnum;i++)
                 {
-                    stream<<QString("//PORT_DECL(%1, InputNodeClassName)")<<"\n";
+                    stream<<QString("//PORT_DECL(%1, InputNodeClassName)").arg(i)<<"\n";
                 }
                 stream<<QString("")<<"\n";
             }

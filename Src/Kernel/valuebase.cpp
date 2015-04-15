@@ -78,7 +78,7 @@ NODE_VARS_BASE_TYPE::~NODE_VARS_BASE_TYPE()
     for(objectiter=_qobjecttriggermap.begin();objectiter!=_qobjecttriggermap.end();objectiter++)
     {
         QObject * objectptr=objectiter.value();
-        if(objectptr->parent()==NULL)
+        if(objectptr->parent()==NULL&&!_qobjecttriggerpoolthreadflagmap[objectiter.key()])
         {
             delete objectptr;
         }
@@ -198,23 +198,9 @@ void NODE_VARS_BASE_TYPE::setInputPortTriggerFlag(QList<bool> triggerFlag)
     }
 }
 
-void NODE_VARS_BASE_TYPE::moveTriggerToPoolThread(QObject * node, QThread * poolThread)
+void XMLVarsBase::setNodeGUIThreadFlag(bool guiThreadFlag)
 {
-    QMap< QString, QObject * >::const_iterator triggeriter;
-    for(triggeriter=_qobjecttriggermap.begin();triggeriter!=_qobjecttriggermap.end();triggeriter++)
-    {
-        if(triggeriter.value()->thread()==node->thread())
-        {
-            if(_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
-            {
-                triggeriter.value()->moveToThread(poolThread);
-            }
-            else
-            {
-                triggeriter.value()->setParent(node);
-            }
-        }
-    }
+    _guithreadflag=guiThreadFlag;
 }
 
 QWidget *XMLVarsBase::getWidget()

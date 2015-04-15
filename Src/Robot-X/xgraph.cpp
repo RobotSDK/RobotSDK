@@ -32,33 +32,49 @@ XGraph::~XGraph()
 
 void XGraph::slotAddNode(QString nodeFullName, QString libraryFileName, QString configFileName)
 {
-    if(nodes.contains(nodeFullName))
-    {
-        return;
+    if(!nodes.contains(nodeFullName))
+    {        
+        QStringList checkname=nodeFullName.split("::",QString::SkipEmptyParts);
+        if(checkname.size()<2||checkname.size()>3)
+        {
+            return;
+        }
+        if(libraryFileName.size()>0)
+        {
+            graph->addNode(nodeFullName,libraryFileName,configFileName);
+        }
+        XNode * node=new XNode(graph,nodeFullName);
+        connect(node,SIGNAL(signalAddNode(QString,QString,QString)),this,SLOT(slotAddNode(QString,QString,QString)));
+        connect(node,SIGNAL(signalResize(QString,QSizeF)),this,SLOT(slotResize(QString,QSizeF)));
+        connect(node,SIGNAL(signalUpdateNode(QString,QString)),this,SLOT(slotUpdateNode(QString,QString)),Qt::QueuedConnection);
+        connect(node,SIGNAL(signalRemoveNode(QString)),this,SLOT(slotRemoveNode(QString)),Qt::QueuedConnection);
+        connect(node,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
+        connect(node,SIGNAL(signalRemovePort(XPort::PORTTYPE,QString,uint)),this,SLOT(slotRemovePort(XPort::PORTTYPE,QString,uint)),Qt::QueuedConnection);
+        connect(node,SIGNAL(signalResetPortNum(QString)),this,SLOT(slotResetPortNum(QString)));
+        this->addItem(node);
+        nodes.insert(nodeFullName,node);
+
+        Agnode_t * tmpnode=_agnode(_graph, nodeFullName,1);
+        _nodes.insert(node,tmpnode);
+        _agset(tmpnode,"shape","record");
+        slotResetPortNum(nodeFullName);
     }
-    QStringList checkname=nodeFullName.split("::",QString::SkipEmptyParts);
-    if(checkname.size()<2||checkname.size()>3)
-    {
-        return;
-    }
-    if(libraryFileName.size()>0)
+    else if(!graph->contains(nodeFullName))
     {
         graph->addNode(nodeFullName,libraryFileName,configFileName);
+        if(graph->contains(nodeFullName))
+        {
+            QMultiMap< QPair< QString, QString >, XEdge * >::const_iterator edgeiter;
+            for(edgeiter=edges.begin();edgeiter!=edges.end();edgeiter++)
+            {
+                if(edgeiter.key().first==nodeFullName||edgeiter.key().second==nodeFullName)
+                {
+                    XEdge * edge=edgeiter.value();
+                    slotAddEdge(edge->outputnodefullname,edge->outputportid,edge->inputnodefullname,edge->inputportid);
+                }
+            }
+        }
     }
-    XNode * node=new XNode(graph,nodeFullName);
-    connect(node,SIGNAL(signalResize(QString,QSizeF)),this,SLOT(slotResize(QString,QSizeF)));
-    connect(node,SIGNAL(signalUpdateNode(QString,QString)),this,SLOT(slotUpdateNode(QString,QString)),Qt::QueuedConnection);
-    connect(node,SIGNAL(signalRemoveNode(QString)),this,SLOT(slotRemoveNode(QString)),Qt::QueuedConnection);
-    connect(node,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
-    connect(node,SIGNAL(signalRemovePort(XPort::PORTTYPE,QString,uint)),this,SLOT(slotRemovePort(XPort::PORTTYPE,QString,uint)),Qt::QueuedConnection);
-    connect(node,SIGNAL(signalResetPortNum(QString)),this,SLOT(slotResetPortNum(QString)));
-    this->addItem(node);
-    nodes.insert(nodeFullName,node);
-
-    Agnode_t * tmpnode=_agnode(_graph, nodeFullName,1);
-    _nodes.insert(node,tmpnode);
-    _agset(tmpnode,"shape","record");
-    slotResetPortNum(nodeFullName);
 }
 
 void XGraph::slotResize(QString nodeFullName, QSizeF newSize)

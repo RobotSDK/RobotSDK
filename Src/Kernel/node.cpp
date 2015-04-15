@@ -85,6 +85,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
             NODE_VARS_ARG->_obtaindatabehavior.fill(GrabLatest,_inputportnum);
             NODE_VARS_ARG->_obtaindatasize.fill(1,_inputportnum);
             NODE_VARS_ARG->_triggerflag.fill(1,_inputportnum);
+            NODE_VARS_ARG->_guithreadflag=0;
             NODE_VARS_ARG->loadXMLValues(_configfilename,_nodefullname);
 
             NODE_VARS_ARG->nodeSwitcher->_node=this;
@@ -109,20 +110,35 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
 
             if(_initializeflag)
             {
-                _inputports=new InputPorts(_inputportnum, NODE_VARS_ARG);
-                _inputthread=std::shared_ptr<QThread>(new QThread);
-                connect(_inputthread.get(),SIGNAL(finished()), _inputports, SLOT(deleteLater()));
-                connect(_inputports,INPUTPORTS_SIGNAL,this,NODE_SLOT,Qt::QueuedConnection);
-                _inputports->moveToThread(_inputthread.get());
-                _inputthread->start();
+                if(_inputportnum>0)
+                {
+                    _inputports=new InputPorts(_inputportnum, NODE_VARS_ARG);
+                    _inputthread=std::shared_ptr<QThread>(new QThread);
+                    connect(_inputthread.get(),SIGNAL(finished()), _inputports, SLOT(deleteLater()));
+                    connect(_inputports,INPUTPORTS_SIGNAL,this,NODE_SLOT,Qt::QueuedConnection);
+                    _inputports->moveToThread(_inputthread.get());
+                    _inputthread->start();
+                }
+                else
+                {
+                    _inputports=NULL;
+                    _inputthread=std::shared_ptr<QThread>();
+                }
 
-
-                _outputports=new OutputPorts(_outputportnum);
-                _outputthread=std::shared_ptr<QThread>(new QThread);
-                connect(_outputthread.get(),SIGNAL(finished()),_outputports,SLOT(deleteLater()));
-                connect(this,NODE_SIGNAL, _outputports,OUTPUTPORTS_SLOT,Qt::QueuedConnection);
-                _outputports->moveToThread(_outputthread.get());
-                _outputthread->start();
+                if(_outputportnum>0)
+                {
+                    _outputports=new OutputPorts(_outputportnum);
+                    _outputthread=std::shared_ptr<QThread>(new QThread);
+                    connect(_outputthread.get(),SIGNAL(finished()),_outputports,SLOT(deleteLater()));
+                    connect(this,NODE_SIGNAL, _outputports,OUTPUTPORTS_SLOT,Qt::QueuedConnection);
+                    _outputports->moveToThread(_outputthread.get());
+                    _outputthread->start();
+                }
+                else
+                {
+                    _outputports=NULL;
+                    _outputthread=std::shared_ptr<QThread>();
+                }
 
 
                 QMap< QString, QObject * >::const_iterator triggeriter;
@@ -155,8 +171,38 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
                     connect(connection.key().first, connection.value().first.toUtf8().data(), connection.key().second, connection.value().second.toUtf8().data());
                 }
                 _poolthread=std::shared_ptr<QThread>(new QThread);
-                NODE_VARS_ARG->moveTriggerToPoolThread(this, _poolthread.get());
-                _poolthread->start();
+                {
+                    QMap< QString, QObject * >::const_iterator triggeriter;
+                    bool openpoolflag=0;
+                    for(triggeriter=NODE_VARS_ARG->_qobjecttriggermap.begin();triggeriter!=NODE_VARS_ARG->_qobjecttriggermap.end();triggeriter++)
+                    {
+                        if(triggeriter.value()->thread()==this->thread())
+                        {
+                            if(NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
+                            {
+                                openpoolflag=1;
+                                triggeriter.value()->moveToThread(_poolthread.get());
+                                connect(_poolthread.get(),SIGNAL(finished()),triggeriter.value(),SLOT(deleteLater()));
+                            }
+                            else
+                            {
+                                triggeriter.value()->setParent(this);
+                            }
+                        }
+                        else
+                        {
+                            NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()]=0;
+                        }
+                    }
+                    if(openpoolflag)
+                    {
+                        _poolthread->start();
+                    }
+                    else
+                    {
+                        _poolthread=std::shared_ptr<QThread>();
+                    }
+                }
             }
             else
             {
@@ -187,13 +233,32 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
 
 Node::~Node()
 {    
-    _inputthread->quit();
-    _poolthread->quit();
-    _outputthread->quit();
+    if(_inputthread!=NULL)
+    {
+        _inputthread->quit();
+    }
+    if(_poolthread!=NULL)
+    {
+        _poolthread->quit();
+    }
+    if(_outputthread!=NULL)
+    {
+        _outputthread->quit();
+    }
 
-    _inputthread->wait();
-    _poolthread->wait();
-    _outputthread->wait();
+
+    if(_inputthread!=NULL)
+    {
+        _inputthread->wait();
+    }
+    if(_poolthread!=NULL)
+    {
+        _poolthread->wait();
+    }
+    if(_outputthread!=NULL)
+    {
+        _outputthread->wait();
+    }
 }
 
 bool Node::eventFilter(QObject *obj, QEvent *ev)
@@ -291,7 +356,7 @@ void Node::slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSU
 
 const InputPort *Node::getInputPort(uint portID)
 {
-    if(portID<_inputports->portnum)
+    if(_inputports!=NULL&&portID<_inputports->portnum)
     {
         return _inputports->inputports[portID];
     }
@@ -303,7 +368,7 @@ const InputPort *Node::getInputPort(uint portID)
 
 const OutputPort *Node::getOutputPort(uint portID)
 {
-    if(portID<_outputports->portnum)
+    if(_outputports!=NULL&&portID<_outputports->portnum)
     {
         return _outputports->outputports[portID];
     }

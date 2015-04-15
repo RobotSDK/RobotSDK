@@ -58,13 +58,16 @@ CONFIG(debug, debug|release){
         OBJECTS_DIR = $$ROBOTSDKDIR/Build/Robot-X/OBJ/Debug
         DESTDIR = $$ROBOTSDKDIR/Build/Robot-X
         TARGET = Robot-X_Debug
-        target.path = $$ROBOTSDKDIR
+        target.path = $$ROBOTSDKDIR/Robot-X
 }
 else {
         OBJECTS_DIR = $$ROBOTSDKDIR/Build/Robot-X/OBJ/Release
         DESTDIR = $$ROBOTSDKDIR/Build/Robot-X
         TARGET = Robot-X
-        target.path = $$ROBOTSDKDIR
+        target.path = $$ROBOTSDKDIR/Robot-X
 }
 
 INSTALLS += target
+
+
+
