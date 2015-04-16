@@ -430,16 +430,19 @@ void Graph::showWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    if(!_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
+    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag)
     {
-        _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(1);
-        if(widgetgeometry.contains(nodeFullName))
+        if(!_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
         {
-            _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setGeometry(widgetgeometry[nodeFullName]);
-        }
-        else
-        {
-            widgetgeometry.insert(nodeFullName,_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry());
+            _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(1);
+            if(widgetgeometry.contains(nodeFullName))
+            {
+                _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setGeometry(widgetgeometry[nodeFullName]);
+            }
+            else
+            {
+                widgetgeometry.insert(nodeFullName,_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry());
+            }
         }
     }
 }
@@ -451,10 +454,13 @@ void Graph::hideWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    if(_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
+    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag)
     {
-        _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(0);
-        widgetgeometry[nodeFullName]=_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry();
+        if(_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
+        {
+            _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->setVisible(0);
+            widgetgeometry[nodeFullName]=_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry();
+        }
     }
 }
 

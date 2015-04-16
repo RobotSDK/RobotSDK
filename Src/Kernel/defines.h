@@ -99,7 +99,7 @@ enum ObtainBehavior
 
 //=================================================================================
 
-#define TRANSFER_NODE_PARAMS_TYPE XML_PARAMS_BASE_TYPE
+#define TRANSFER_NODE_PARAMS_TYPE XML_PARAMS_BASE_CONST_TYPE
 #define TRANSFER_NODE_VARS_TYPE XML_VARS_BASE_TYPE
 #define TRANSFER_NODE_DATA_TYPE XML_DATA_BASE_TYPE
 
@@ -234,8 +234,8 @@ enum ObtainBehavior
 //for Node extendion
 
 #define LOAD_NODE_FUNC_PTR(libraryFileName, nodeClass, funcName) QLibrary::resolve(libraryFileName, QString("%1__%2").arg(nodeClass).arg(#funcName).toUtf8().constData())
-#define LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName) QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData())!=NULL ? \
-      QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(#exName).toUtf8().constData()) \
+#define LOAD_NODE_EXFUNC_PTR(libraryFileName, nodeClass, funcName, exName) QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(exName).toUtf8().constData())!=NULL ? \
+      QLibrary::resolve(libraryFileName, QString("%1__%2__%3").arg(nodeClass).arg(#funcName).arg(exName).toUtf8().constData()) \
     : LOAD_NODE_FUNC_PTR(libraryFileName,nodeClass,funcName)
 
 #define ADD_NODE_FUNC_PTR(returnType, funcName, mandatoryFlag, ...) \
@@ -270,7 +270,7 @@ enum ObtainBehavior
 #define NODE_PARAMS_TYPE _NODE_PARAMS_TYPE_1(NODE_CLASS, _PARAMS_TYPE)
 #define _NODE_PARAMS_TYPE_1(NODE_CLASS, _PARAMS_TYPE) _NODE_PARAMS_TYPE_2(NODE_CLASS, _PARAMS_TYPE)
 #define _NODE_PARAMS_TYPE_2(NODE_CLASS, _PARAMS_TYPE) NODE_CLASS##_##_PARAMS_TYPE
-#define NODE_PARAMS NODE_PARAMS_ARG ? std::static_pointer_cast< NODE_PARAMS_TYPE >(NODE_PARAMS_ARG) : std::shared_ptr< NODE_PARAMS_TYPE >()
+#define NODE_PARAMS NODE_PARAMS_ARG ? std::static_pointer_cast< const NODE_PARAMS_TYPE >(NODE_PARAMS_ARG) : std::shared_ptr< const NODE_PARAMS_TYPE >()
 
 #define NODE_VARS_TYPE _NODE_VARS_TYPE_1(NODE_CLASS, _VARS_TYPE)
 #define _NODE_VARS_TYPE_1(NODE_CLASS, _VARS_TYPE) _NODE_VARS_TYPE_2(NODE_CLASS, _VARS_TYPE)
@@ -298,13 +298,13 @@ enum ObtainBehavior
 //for Port access
 //portID must be a const number not a variable
 
-#define PORT_PARAMS_TYPE(portID) _PORT_PARAMS_TYPE_1(portID, _PARAMS_TYPE)
-#define _PORT_PARAMS_TYPE_1(portID, _PARAMS_TYPE) _PORT_PARAMS_TYPE_2(portID, _PARAMS_TYPE)
-#define _PORT_PARAMS_TYPE_2(portID, _PARAMS_TYPE) NODE_CLASS##_INPUT_NODE_##portID##_##_PARAMS_TYPE
+#define PORT_PARAMS_TYPE(portID) _PORT_PARAMS_TYPE_1(portID, _PARAMS_TYPE,NODE_CLASS)
+#define _PORT_PARAMS_TYPE_1(portID, _PARAMS_TYPE,NODE_CLASS) _PORT_PARAMS_TYPE_2(portID, _PARAMS_TYPE,NODE_CLASS)
+#define _PORT_PARAMS_TYPE_2(portID, _PARAMS_TYPE,NODE_CLASS) NODE_CLASS##_INPUT_NODE_##portID##_##_PARAMS_TYPE
 
-#define PORT_DATA_TYPE(portID) _PORT_DATA_TYPE_1(portID, _DATA_TYPE)
-#define _PORT_DATA_TYPE_1(portID, _DATA_TYPE) _PORT_DATA_TYPE_2(portID, _DATA_TYPE)
-#define _PORT_DATA_TYPE_2(portID, _DATA_TYPE) NODE_CLASS##_INPUT_NODE_##portID##_##_DATA_TYPE
+#define PORT_DATA_TYPE(portID) _PORT_DATA_TYPE_1(portID, _DATA_TYPE,NODE_CLASS)
+#define _PORT_DATA_TYPE_1(portID, _DATA_TYPE,NODE_CLASS) _PORT_DATA_TYPE_2(portID, _DATA_TYPE,NODE_CLASS)
+#define _PORT_DATA_TYPE_2(portID, _DATA_TYPE,NODE_CLASS) NODE_CLASS##_INPUT_NODE_##portID##_##_DATA_TYPE
 
 #define PORT_DECL(portID, inputNodeClass) _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)
 #define _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)

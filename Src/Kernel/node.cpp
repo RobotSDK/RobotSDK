@@ -297,7 +297,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             emit signalNodeState(_openflag,_nodefullname);
             return 1;
         }
-        else if(type==OpenNodeEventType)
+        else if(type==OpenNodeEventType&&_openflag==0)
         {
             NODE_PARAMS_ARG->loadXMLValues(_configfilename,_nodefullname);
             NODE_VARS_ARG->loadXMLValues(_configfilename,_nodefullname);
@@ -312,7 +312,7 @@ bool Node::eventFilter(QObject *obj, QEvent *ev)
             emit signalNodeState(_openflag,_nodefullname);
             return 1;
         }
-        else if(type==CloseNodeEventType)
+        else if(type==CloseNodeEventType&&_openflag==1)
         {
             if(CHECK_NODE_FUNC_PTR(closeNode))
             {
