@@ -4,7 +4,7 @@
 #include<QTimer>
 #include<QLabel>
 
-#include<RobotSDK_Global.h>
+#include<RobotSDK.h>
 
 #undef NODE_CLASS
 #define NODE_CLASS RandomGenerator

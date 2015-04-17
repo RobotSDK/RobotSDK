@@ -4,25 +4,25 @@
 #
 #-------------------------------------------------
 
-QT       += widgets xml
+QT       += widgets
 
 QT       -= gui
 
 TARGET = TestModule
 TEMPLATE = lib
 
-CONFIG += c++11
 
-DEFINES += RobotSDK_Module
 
 unix {
     INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
     LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+    include($$(HOME)/SDK/RobotSDK_4.0/RobotSDK.pri)
 }
 
 win32 {
     INCLUDEPATH += c:/SDK/RobotSDK_4.0/Kernel/include
     LIBS += -Lc:/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+    include(c:/SDK/RobotSDK_4.0/RobotSDK.pri)
 }
 
 SOURCES += \
