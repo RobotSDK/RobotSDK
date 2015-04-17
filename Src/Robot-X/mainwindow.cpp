@@ -40,13 +40,46 @@ void GraphView::mousePressEvent(QMouseEvent *event)
 
 void GraphView::wheelEvent(QWheelEvent *event)
 {
-    if(event->delta()>0)
+    if(ctrlflag)
     {
-        ratio=0.9;
+        if(event->delta()>0)
+        {
+            ratio=0.9;
+        }
+        else
+        {
+            ratio=1.1;
+        }
+        this->scale(ratio,ratio);
     }
     else
     {
-        ratio=1.1;
+        QGraphicsView::wheelEvent(event);
     }
-    this->scale(ratio,ratio);
+}
+
+void GraphView::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Control:
+        ctrlflag=1;
+        break;
+    default:
+        break;
+    }
+    QGraphicsView::keyPressEvent(event);
+}
+
+void GraphView::keyReleaseEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Control:
+        ctrlflag=0;
+        break;
+    default:
+        break;
+    }
+    QGraphicsView::keyReleaseEvent(event);
 }

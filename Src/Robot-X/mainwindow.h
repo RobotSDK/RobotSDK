@@ -19,9 +19,12 @@ signals:
     void signalHandleMenu();
 protected:
     double ratio=1;
+    bool ctrlflag=0;
 protected:
     void mousePressEvent(QMouseEvent * event);
     void wheelEvent(QWheelEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 };
 
 class MainWindow : public QMainWindow

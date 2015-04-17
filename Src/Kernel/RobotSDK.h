@@ -3,6 +3,7 @@
 
 #ifdef RobotSDK_Module
 #include<node.h>
+#include<sync.h>
 using namespace RobotSDK;
 #else
 #include<graph.h>

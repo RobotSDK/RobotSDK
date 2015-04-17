@@ -1,5 +1,103 @@
 #include "xnode.h"
 
+XConfigPanel::XConfigPanel(QString nodeFullName, QString configFilaName, XNode *nodeParent, QWidget *parent)
+    : QDialog(parent)
+{
+    nodefullname=nodeFullName;
+    configfilename=configFilaName;
+    node=nodeParent;
+
+    QVBoxLayout * layout=new QVBoxLayout;
+    table=new QTableWidget;
+    layout->addWidget(table);
+    QHBoxLayout * buttonlayout=new QHBoxLayout;
+    layout->addLayout(buttonlayout);
+    QPushButton * applybutton=new QPushButton("Apply");
+    QPushButton * okbutton=new QPushButton("OK");
+    QPushButton * cancelbutton=new QPushButton("Cancel");
+    buttonlayout->addStretch();
+    buttonlayout->addWidget(okbutton);
+    buttonlayout->addWidget(applybutton);
+    buttonlayout->addWidget(cancelbutton);
+    this->setLayout(layout);
+
+    connect(okbutton,SIGNAL(clicked()),this,SLOT(accept()));
+    connect(applybutton,SIGNAL(clicked()),this,SLOT(apply()));
+    connect(cancelbutton,SIGNAL(clicked()),this,SLOT(reject()));
+
+    load();
+}
+
+void XConfigPanel::load()
+{
+    RobotSDK::XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
+    auto paramvalues=xmlloader.getAllParamValues();
+    auto params=paramvalues.keys();
+    uint i,n=params.size();
+    table->setRowCount(n);
+    table->setColumnCount(2);
+    table->setHorizontalHeaderLabels(QStringList()<<"Name"<<"Value");
+    table->setSortingEnabled(0);
+    optionflag.resize(n);
+    for(i=0;i<n;i++)
+    {
+        table->setCellWidget(i,0,new QLabel(params.at(i)));
+        QStringList values=paramvalues[params.at(i)];
+        uint m=values.size();
+        if(m==1)
+        {
+            optionflag[i]=0;
+            table->setCellWidget(i,1,new QLineEdit(values.at(0)));
+        }
+        else
+        {
+            optionflag[i]=1;
+            QComboBox * option=new QComboBox;
+            option->addItems(values.mid(1));
+            option->setCurrentIndex(values.mid(1).indexOf(values.at(0)));
+            option->setEditable(0);
+            table->setCellWidget(i,1,option);
+        }
+    }
+    setWindowTitle(QString("Config Panel of %1").arg(nodefullname));
+}
+
+void XConfigPanel::accept()
+{
+    apply();
+    node->configpanel=NULL;
+    QDialog::accept();
+}
+
+void XConfigPanel::apply()
+{
+    QMap<QString, QString> paramvalues;
+    uint i,n=optionflag.size();
+    for(i=0;i<n;i++)
+    {
+        if(optionflag.at(i))
+        {
+            QString param=((QLabel *)(table->cellWidget(i,0)))->text();
+            QString value=((QComboBox *)(table->cellWidget(i,1)))->currentText();
+            paramvalues.insert(param,value);
+        }
+        else
+        {
+            QString param=((QLabel *)(table->cellWidget(i,0)))->text();
+            QString value=((QLineEdit *)(table->cellWidget(i,1)))->text();
+            paramvalues.insert(param,value);
+        }
+    }
+    RobotSDK::XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
+    xmlloader.setAllParamValues(paramvalues);
+}
+
+void XConfigPanel::reject()
+{
+    node->configpanel=NULL;
+    QDialog::reject();
+}
+
 XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     : QGraphicsProxyWidget(NULL)
 {
@@ -237,6 +335,10 @@ void XNode::slotChangeNodeExName()
     QString newnodefullname=QInputDialog::getText(NULL,"Input Node Full Name with New ExName","New Node Full Name",QLineEdit::Normal,nodefullname->text());
     if(newnodefullname.size()>0)
     {
+        if(configpanel!=NULL)
+        {
+            configpanel->accept();
+        }
         if(_graph->contains(nodefullname->text()))
         {
             tmpnewnodefullname=newnodefullname;
@@ -268,6 +370,10 @@ void XNode::slotChangeNodeLibrary()
 #endif
     if(newlibrary.size()>0)
     {
+        if(configpanel!=NULL)
+        {
+            configpanel->accept();
+        }
         if(_graph->contains(nodefullname->text()))
         {
             emit signalChangeNodeLibrary(nodefullname->text(),newlibrary);
@@ -284,6 +390,10 @@ void XNode::slotChangeNodeConfigFile()
     QString newconfigfile=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("XML File (*.xml)"));
     if(newconfigfile.size()>0)
     {
+        if(configpanel!=NULL)
+        {
+            configpanel->accept();
+        }
         if(_graph->contains(nodefullname->text()))
         {
             emit signalChangeNodeConfigFile(nodefullname->text(),newconfigfile);
@@ -353,7 +463,9 @@ void XNode::slotNodeFullNameMenu(const QPoint &pos)
     QMenu menu;
     menu.addAction("Change ExName");
     menu.addAction("Change Library");
+    menu.addSeparator();
     menu.addAction("Change Config File");
+    menu.addAction("Change Config Values");
     menu.addSeparator();
     menu.addAction("Generate Code");
     menu.addSeparator();
@@ -372,6 +484,18 @@ void XNode::slotNodeFullNameMenu(const QPoint &pos)
         else if(selecteditem->text()==QString("Change Config File"))
         {
             slotChangeNodeConfigFile();
+        }
+        else if(selecteditem->text()==QString("Change Config Values"))
+        {
+            if(configpanel==NULL)
+            {
+                configpanel=new XConfigPanel(nodefullname->text(),configfilename->text(),this);
+                configpanel->show();
+            }
+            else
+            {
+                configpanel->raise();
+            }
         }
         else if(selecteditem->text()==QString("Generate Code"))
         {
@@ -422,10 +546,9 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Please add headers here:")<<"\n";
             stream<<QString("")<<"\n";
+            stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
-            stream<<QString("")<<"\n";
-            stream<<QString("#include<RobotSDK_Global.h>")<<"\n";
-            stream<<QString("")<<"\n";
+            stream<<QString("#include<RobotSDK.h>")<<"\n";
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Port configuration")<<"\n";
             stream<<QString("")<<"\n";
@@ -480,6 +603,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//You can declare functions here")<<"\n";
+            stream<<QString("")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("")<<"\n";

@@ -10,12 +10,14 @@
 */
 
 #include<qdom.h>
-#include<qstring.h>
-#include<qvector.h>
+#include<QString>
+#include<QVector>
+#include<QFile>
+#include<QTextStream>
+#include<QDateTime>
 #include<string>
-#include<qfile.h>
-#include<qtextstream.h>
-#include<qdatetime.h>
+#include<QMap>
+#include<QPair>
 
 namespace RobotSDK
 {
@@ -137,6 +139,9 @@ public:
 		\brief Check whether the current \ref root has value.
 	*/
 	bool isNull();
+public:
+        QMap< QString, QList<QString> > getAllParamValues();
+        void setAllParamValues(QMap< QString, QString > paramValues);
 public:
 	/*! \fn bool exist(QString paramName)
 		\brief Whether the parameter paramName exist.

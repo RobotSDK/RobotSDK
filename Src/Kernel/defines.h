@@ -310,17 +310,19 @@ enum ObtainBehavior
 #define _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)
 #define _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID);
 
-#define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? INPUT_PARAMS_ARG[portID].size() : 0
-#define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && INPUT_PARAMS_ARG[portID].at(paramsID)) ? \
-      std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(INPUT_PARAMS_ARG[portID].at(paramsID)) \
+#define PORT_PARAMS_LIST(portID) INPUT_PARAMS_ARG[portID]
+#define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? PORT_PARAMS_LIST(portID).size() : 0
+#define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && PORT_PARAMS_LIST(portID).at(paramsID)) ? \
+      std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(PORT_PARAMS_LIST(portID).at(paramsID)) \
     : std::shared_ptr< const PORT_PARAMS_TYPE(portID) >()
 
-#define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? INPUT_DATA_ARG[portID].size() : 0
-#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && INPUT_DATA_ARG[portID].at(dataID)) ? \
-      std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(INPUT_DATA_ARG[portID].at(dataID)) \
+#define PORT_DATA_LIST(portID) INPUT_DATA_ARG[portID]
+#define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? PORT_DATA_LIST(portID).size() : 0
+#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && PORT_DATA_LIST(portID).at(dataID)) ? \
+      std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(PORT_DATA_LIST(portID).at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
-#define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()==0||INPUT_DATA_ARG.size()==0
+#define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()!=INPUT_PORT_NUM||INPUT_DATA_ARG.size()!=INPUT_PORT_NUM
 #define CHECK_VALUE(value) if((value)==NULL){return 0;}
 
 //=================================================================================
@@ -366,6 +368,58 @@ enum ObtainBehavior
     {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);}});return valueDefault;}; \
+    public: valueType valueName=_vars_##valueType##_##valueName##_Func();
+
+#define ADD_OPTIONS(xmlloader, valueName, valueOptions) \
+    auto options=valueOptions; uint i,n=options.size(); for(i=0;i<n;i++){ \
+    xmlloader.appendParamValue(QString(#valueName),QString("Option_%1").arg(i),options.at(i));}
+
+#define ADD_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _params_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
+    {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
+    public: valueType valueName=_params_##valueType##_##valueName##_Func();
+
+#define ADD_ENUM_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _params_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
+    {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
+    public: valueType valueName=_params_##valueType##_##valueName##_Func();
+
+#define ADD_UENUM_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _params_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
+    {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
+    public: valueType valueName=_params_##valueType##_##valueName##_Func();
+
+#define ADD_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _vars_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
+    {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
+    public: valueType valueName=_vars_##valueType##_##valueName##_Func();
+
+#define ADD_ENUM_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _vars_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
+    {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
+    public: valueType valueName=_vars_##valueType##_##valueName##_Func();
+
+#define ADD_UENUM_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
+    private: valueType _vars_##valueType##_##valueName##_Func() \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
+    {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
+    {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
+    ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
     public: valueType valueName=_vars_##valueType##_##valueName##_Func();
 
 //=================================================================================

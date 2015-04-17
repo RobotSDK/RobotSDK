@@ -152,7 +152,41 @@ void XMLDomInterface::replacePreDef(QString & value)
 
 bool XMLDomInterface::isNull()
 {
-	return nullflag;
+    return nullflag;
+}
+
+QMap<QString, QList<QString> > XMLDomInterface::getAllParamValues()
+{
+    QMap<QString, QList<QString> >  result;
+    if(!isNull())
+    {
+        QDomElement paramnode=root.firstChildElement();
+        while(!paramnode.isNull())
+        {
+            if(!result.contains(paramnode.nodeName()))
+            {
+                result.insert(paramnode.nodeName(),QList<QString>());
+            }
+            QDomElement valuenode=paramnode.firstChildElement(DEFAULTVALUENAME);
+            while(!valuenode.isNull())
+            {
+                result[paramnode.nodeName()].push_back(valuenode.text());
+                valuenode=valuenode.nextSiblingElement();
+            }
+            paramnode=paramnode.nextSiblingElement();
+        }
+    }
+    return result;
+}
+
+void XMLDomInterface::setAllParamValues(QMap<QString, QString> paramValues)
+{
+    QMap< QString, QString>::const_iterator paramvalueiter;
+    for(paramvalueiter=paramValues.begin();paramvalueiter!=paramValues.end();paramvalueiter++)
+    {
+        setParamDefault(paramvalueiter.key(),paramvalueiter.value());
+    }
+    editflag=1;
 }
 
 bool XMLDomInterface::exist(QString paramName)

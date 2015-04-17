@@ -17,12 +17,37 @@
 #include<QTextStream>
 #include<QDir>
 #include<QFileInfo>
+#include<QTableWidget>
+#include<QDialog>
+#include<QComboBox>
 
+#include<xmldominterface.h>
 #include<assert.h>
 
 #include"xport.h"
 
-#include<RobotSDK_Global.h>
+class XNode;
+
+class XConfigPanel : public QDialog
+{
+    Q_OBJECT
+public:
+    XConfigPanel(QString nodeFullName, QString configFilaName, XNode * nodeParent, QWidget * parent=0);
+public:
+    QString nodefullname;
+    QString configfilename;
+    QTableWidget * table;
+    QVector<bool> optionflag;
+    XNode * node;
+protected:
+    void load();
+public slots:
+    void accept();
+    void apply();
+    void reject();
+public:
+    void showPanel();
+};
 
 class XNode : public QGraphicsProxyWidget
 {
@@ -48,6 +73,7 @@ public:
     QLineEdit * configfilename=NULL;
     QPushButton * opennode=NULL;
     QPushButton * showwidget=NULL;
+    XConfigPanel * configpanel=NULL;
 protected:
     QList<XPort *> inputportslist;
     QList<XPort *> outputportslist;

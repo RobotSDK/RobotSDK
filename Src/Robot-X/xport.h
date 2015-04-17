@@ -16,7 +16,7 @@
 #include<QAction>
 #include<QBitmap>
 
-#include<RobotSDK_Global.h>
+#include<RobotSDK.h>
 
 class XPortHead : public QLabel
 {
