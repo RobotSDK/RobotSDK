@@ -8,6 +8,7 @@ Sync::Sync(uint portNum, uint basePortID)
     databuffer.resize(portNum);
     syncparams.resize(portNum);
     syncdata.resize(portNum);
+    deltatime.resize(portNum);
     baseportid=basePortID;
     if(baseportid>=portNum)
     {
@@ -29,6 +30,10 @@ bool Sync::addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & 
 
 bool Sync::generateSyncData()
 {
+    if(databuffer[baseportid].size()==0)
+    {
+        return 0;
+    }
     uint i,n=databuffer.size();
     QTime basetimestamp=databuffer[baseportid].back()->timestamp;
     if(basetimestamp.isNull())
@@ -39,16 +44,23 @@ bool Sync::generateSyncData()
     {
         if(i==baseportid)
         {
+            syncparams[i]=paramsbuffer[i].back();
+            syncdata[i]=databuffer[i].back();
+            deltatime[i]=0;
             syncrecordid=i+1;
             continue;
         }
-        uint j,m=databuffer[i].size();
+        int j,m=databuffer[i].size();
         for(j=m-1;j>0;j--)
         {
             QTime targettimestamp=databuffer[i].at(j)->timestamp;
             int delta=basetimestamp.msecsTo(targettimestamp);
             if(delta>=0)
             {
+                syncparams[i]=paramsbuffer[i].back();
+                syncdata[i]=databuffer[i].back();
+                deltatime[i]=delta;
+                syncrecordid=i+1;
                 break;
             }
             else
@@ -62,22 +74,27 @@ bool Sync::generateSyncData()
                 }
                 else
                 {
+                    syncparams[i]=paramsbuffer[i].back();
+                    syncdata[i]=databuffer[i].back();
+                    deltatime[i]=delta;
+                    syncrecordid=i+1;
                     break;
                 }
             }
         }
-        if(j==0)
+        if(j<=0)
         {
             return 0;
         }
-        syncparams[i]=paramsbuffer[i].back();
-        syncdata[i]=databuffer[i].back();
-        syncrecordid=i+1;
+
     }
     for(i=0;i<n;i++)
     {
-        paramsbuffer[i].pop_back();
-        databuffer[i].pop_back();
+        if(deltatime[i]<=0)
+        {
+            paramsbuffer[i].pop_back();
+            databuffer[i].pop_back();
+        }
     }
     syncrecordid=0;
     return 1;

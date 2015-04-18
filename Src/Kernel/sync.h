@@ -17,6 +17,7 @@ protected:
     QVector< QList < TRANSFER_PORT_DATA_TYPE > > databuffer;
     QVector< TRANSFER_PORT_PARAMS_TYPE > syncparams;
     QVector< TRANSFER_PORT_DATA_TYPE > syncdata;
+    QVector< int > deltatime;
 protected:
     bool generateSyncData();
 public:
@@ -30,7 +31,7 @@ public:
 #define ADD_SYNC(syncName, basePortID) public: Sync syncName=Sync(INPUT_PORT_NUM, basePortID);
 
 #define SYNC_PARAMS_DATA(sync) IS_INTERNAL_TRIGGER? \
-    sync.addParamsData(INPUT_PARAMS_ARG, INPUT_DATA_ARG) : 0
+    false : sync.addParamsData(INPUT_PARAMS_ARG, INPUT_DATA_ARG)
 
 #define SYNC_PARAMS(sync, portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? \
     std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(sync.getParams(portID)) \

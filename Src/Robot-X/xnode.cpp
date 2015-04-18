@@ -294,8 +294,8 @@ void XNode::slotResetPortNum(QString text, uint portNum)
     {
         return;
     }
-    uint count=tmplayout->count()-1;
-    uint i;
+    int count=tmplayout->count()-1;
+    int i;
     if(count>portNum)
     {
         for(i=count;i>portNum;i--)
