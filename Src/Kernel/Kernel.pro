@@ -39,8 +39,6 @@ unix{
 
     INCLUDEPATH += /usr/include/eigen3
 
-    TMPROS=indigo
-
     ROS = $$(ROS_DISTRO)
     isEmpty(ROS){
         isEmpty(TMPROS){
