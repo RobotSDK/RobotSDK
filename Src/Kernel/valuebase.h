@@ -58,6 +58,7 @@ protected:
     QVector< uint > _obtaindatasize;
     QVector< bool > _triggerflag;
     bool _guithreadflag;
+    bool _showwidgetflag;
 public:
     void setInputPortBufferSize(uint portID, uint bufferSize);
     void setInputPortBufferSize(QList< uint > bufferSize);
@@ -68,6 +69,7 @@ public:
     void setInputPortTriggerFlag(uint portID, bool triggerFlag);
     void setInputPortTriggerFlag(QList< bool > triggerFlag);
     void setNodeGUIThreadFlag(bool guiThreadFlag);
+    void setNodeShowWidgetFlag(bool showWidgetFlag);
 protected:
     QMap< QString, QObject * > _qobjecttriggermap;
     QMap< QString, bool > _qobjecttriggerpoolthreadflagmap;

@@ -550,7 +550,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("#include<RobotSDK.h>")<<"\n";
             stream<<QString("//=================================================")<<"\n";
-            stream<<QString("//Port configuration")<<"\n";
+            stream<<QString("//Node configuration")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("#undef NODE_CLASS")<<"\n";
             stream<<QString("#define NODE_CLASS %1").arg(nodeclass)<<"\n";

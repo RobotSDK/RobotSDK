@@ -60,7 +60,7 @@ void InputPorts::slotReceiveParamsData(TRANSFER_PORT_PARAMS_TYPE inputParams, TR
     QVector< bool > _triggerflag=nodevars->_triggerflag;
     locker.unlock();
 
-    if(_buffersize.at(inputPortID)>0&&buffercount[inputPortID]>_buffersize.at(inputPortID))
+    while(_buffersize.at(inputPortID)>0&&buffercount[inputPortID]>_buffersize.at(inputPortID))
     {
         portparamsbuffer[inputPortID].pop_back();
         portdatabuffer[inputPortID].pop_back();

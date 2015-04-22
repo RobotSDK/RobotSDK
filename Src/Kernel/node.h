@@ -46,8 +46,8 @@ protected:
 protected:
     bool eventFilter(QObject * obj, QEvent * ev);
 protected slots:
-    void slotDefaultTrigger();
-    void slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
+    virtual void slotDefaultTrigger();
+    virtual void slotObtainParamsData(PORT_PARAMS_CAPSULE inputParams, PORT_DATA_CAPSULE inputData);
 signals:
     void signalSendParamsData(TRANSFER_NODE_PARAMS_TYPE outputParams, TRANSFER_NODE_DATA_TYPE outputData);
     void signalNodeState(bool openFlag, QString nodeFullName);

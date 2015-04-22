@@ -203,6 +203,11 @@ void XMLVarsBase::setNodeGUIThreadFlag(bool guiThreadFlag)
     _guithreadflag=guiThreadFlag;
 }
 
+void XMLVarsBase::setNodeShowWidgetFlag(bool showWidgetFlag)
+{
+    _showwidgetflag=showWidgetFlag;
+}
+
 QWidget *XMLVarsBase::getWidget()
 {
     return widget;

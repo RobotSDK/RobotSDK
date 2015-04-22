@@ -86,6 +86,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
             NODE_VARS_ARG->_obtaindatasize.fill(1,_inputportnum);
             NODE_VARS_ARG->_triggerflag.fill(1,_inputportnum);
             NODE_VARS_ARG->_guithreadflag=0;
+            NODE_VARS_ARG->_showwidgetflag=0;
             NODE_VARS_ARG->loadXMLValues(_configfilename,_nodefullname);
 
             NODE_VARS_ARG->nodeSwitcher->_node=this;
@@ -140,17 +141,51 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
                     _outputthread=std::shared_ptr<QThread>();
                 }
 
-
+                _poolthread=std::shared_ptr<QThread>(new QThread);
                 QMap< QString, QObject * >::const_iterator triggeriter;
+                bool openpoolflag=0;
                 for(triggeriter=NODE_VARS_ARG->_qobjecttriggermap.begin();triggeriter!=NODE_VARS_ARG->_qobjecttriggermap.end();triggeriter++)
                 {
+                    if(triggeriter.value()->thread()==this->thread())
+                    {
+                        if(NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
+                        {
+                            openpoolflag=1;
+                            triggeriter.value()->moveToThread(_poolthread.get());
+                            connect(_poolthread.get(),SIGNAL(finished()),triggeriter.value(),SLOT(deleteLater()));
+                        }
+                        else
+                        {
+                            triggeriter.value()->setParent(this);
+                        }
+                    }
+                    else
+                    {
+                        NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()]=0;
+                    }
                     QList< QString > triggersignals=NODE_VARS_ARG->_defaultconnectionmap.values(triggeriter.value());
                     n=triggersignals.size();
                     for(i=0;i<n;i++)
                     {
-                        connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()), Qt::QueuedConnection);
+                        if(NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
+                        {
+                            connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()), Qt::QueuedConnection);
+                        }
+                        else
+                        {
+                            connect(triggeriter.value(), triggersignals.at(i).toUtf8().data(), this, SLOT(slotDefaultTrigger()), Qt::DirectConnection);
+                        }
                     }
                 }
+                if(openpoolflag)
+                {
+                    _poolthread->start();
+                }
+                else
+                {
+                    _poolthread=std::shared_ptr<QThread>();
+                }
+
                 for(triggeriter=NODE_VARS_ARG->_qwidgettriggermap.begin();triggeriter!=NODE_VARS_ARG->_qwidgettriggermap.end();triggeriter++)
                 {
                     QList< QString > triggersignals=NODE_VARS_ARG->_defaultconnectionmap.values(triggeriter.value());
@@ -170,39 +205,7 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
                 {
                     connect(connection.key().first, connection.value().first.toUtf8().data(), connection.key().second, connection.value().second.toUtf8().data());
                 }
-                _poolthread=std::shared_ptr<QThread>(new QThread);
-                {
-                    QMap< QString, QObject * >::const_iterator triggeriter;
-                    bool openpoolflag=0;
-                    for(triggeriter=NODE_VARS_ARG->_qobjecttriggermap.begin();triggeriter!=NODE_VARS_ARG->_qobjecttriggermap.end();triggeriter++)
-                    {
-                        if(triggeriter.value()->thread()==this->thread())
-                        {
-                            if(NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()])
-                            {
-                                openpoolflag=1;
-                                triggeriter.value()->moveToThread(_poolthread.get());
-                                connect(_poolthread.get(),SIGNAL(finished()),triggeriter.value(),SLOT(deleteLater()));
-                            }
-                            else
-                            {
-                                triggeriter.value()->setParent(this);
-                            }
-                        }
-                        else
-                        {
-                            NODE_VARS_ARG->_qobjecttriggerpoolthreadflagmap[triggeriter.key()]=0;
-                        }
-                    }
-                    if(openpoolflag)
-                    {
-                        _poolthread->start();
-                    }
-                    else
-                    {
-                        _poolthread=std::shared_ptr<QThread>();
-                    }
-                }
+
             }
             else
             {

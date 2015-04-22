@@ -430,7 +430,8 @@ void Graph::showWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag)
+    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag
+            ||_nodes[nodeFullName].second->NODE_VARS_ARG->_showwidgetflag)
     {
         if(!_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
         {
@@ -454,7 +455,8 @@ void Graph::hideWidget(QString nodeFullName)
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
         return;
     }
-    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag)
+    if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag
+            ||_nodes[nodeFullName].second->NODE_VARS_ARG->_showwidgetflag)
     {
         if(_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->isVisible())
         {

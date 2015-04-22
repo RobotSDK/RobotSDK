@@ -107,7 +107,7 @@ robotsdkheader.path = $$ROBOTSDKDIR/Kernel/include
 INSTALLS += robotsdkheader
 
 robotsdkhelper.files = $$DISTFILES
-robotsdkhelper.path = $$ROBOTSDKDIR
+robotsdkhelper.path = $$ROBOTSDKDIR/Kernel
 
 INSTALLS += robotsdkhelper
 
