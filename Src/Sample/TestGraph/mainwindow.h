@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 
-#include<RobotSDK_Global.h>
+#include<RobotSDK.h>
 
 namespace Ui {
 class MainWindow;

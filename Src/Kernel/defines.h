@@ -32,6 +32,8 @@
 
 #include<xmldominterface.h>
 
+#define Q_OS_LINUX
+
 namespace RobotSDK
 {
 
@@ -43,6 +45,8 @@ class XMLDataBase;
 //=================================================================================
 //Common Area
 //=================================================================================
+
+
 
 #ifdef Q_OS_LINUX
 #define NUM_0 0b000
