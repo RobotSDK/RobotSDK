@@ -1,9 +1,13 @@
 RobotSDK_4.0 in Jetson TK1 embeded PC
 ========
 Requirements
+
 1. L4T ubuntu14.04 for jetson tk1, I am using r21.3.
+
 2. Compile qt5.3+ yourself, directly install qt5-default wont work.
-3. ```
+
+3. 
+```
 ln -s <ur qmake> /usr/bin/qmake-5
 ```
 4. Examples contain bugs, someone may fix it later...(maybe)
