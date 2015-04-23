@@ -2,6 +2,8 @@ QT += widgets xml opengl
 TEMPLATE = lib
 CONFIG += staticlib qt
 CONFIG += c++11
+CONFIG -= c++0x
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -pedantic
 
 HEADERS += \
    defines.h \

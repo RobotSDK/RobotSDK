@@ -18,9 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     graph.addEdge("RandomGenerator::random",1,"NumberViewer::even",0);
 
     ui->graph->setWidget(graph.switcherpanel);
-    ui->source->setWidget(graph.getNodeWidget("RandomGenerator::random"));
-    ui->drain0->setWidget(graph.getNodeWidget("NumberViewer::odd"));
-    ui->drain1->setWidget(graph.getNodeWidget("NumberViewer::even"));
+
 }
 
 MainWindow::~MainWindow()

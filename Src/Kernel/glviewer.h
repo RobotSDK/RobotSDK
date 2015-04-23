@@ -4,8 +4,8 @@
 #include <qwidget.h>
 #include <qobject.h>
 #include <Eigen/Dense>
-#include <qopengl.h>
 #include <GL/gl.h>
+#include <qopengl.h>
 #include <GL/glu.h>
 #include <QGLWidget>
 #include <qqueue.h>
