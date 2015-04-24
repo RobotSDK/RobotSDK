@@ -30,7 +30,7 @@ public:
 
 #define ADD_SYNC(syncName, basePortID) public: Sync syncName=Sync(INPUT_PORT_NUM, basePortID);
 
-#define SYNC_PARAMS_DATA(sync) IS_INTERNAL_TRIGGER? \
+#define SYNC_START(sync) IS_INTERNAL_TRIGGER? \
     false : sync.addParamsData(INPUT_PARAMS_ARG, INPUT_DATA_ARG)
 
 #define SYNC_PARAMS(sync, portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? \
