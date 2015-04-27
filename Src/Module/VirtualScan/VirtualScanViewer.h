@@ -1,28 +1,28 @@
-#ifndef DPMMODIFIER
-#define DPMMODIFIER
+#ifndef VIRTUALSCANVIEWER
+#define VIRTUALSCANVIEWER
 
 //=================================================
 //Please add headers here:
-#include"CameraSensor.h"
-#include"DPMModifier.h"
-#include"DPMModifierWidgets.h"
+#include<VirtualScanGenerator.h>
+#include<QRgb>
+#include<QScrollArea>
+#include<QTabWidget>
+#include<QLabel>
+#include<QPainter>
+
 //=================================================
 #include<RobotSDK.h>
 //=================================================
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS DPMModifier
+#define NODE_CLASS VirtualScanViewer
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 2
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
-#define OUTPUT_PORT_NUM 1
-
-//Uncomment below PORT_DECL and set input node class name
-PORT_DECL(0, CameraSensor)
-PORT_DECL(1, DPMDetector)
+#define OUTPUT_PORT_NUM 0
 
 //=================================================
 //Params types configuration
@@ -31,7 +31,10 @@ PORT_DECL(1, DPMDetector)
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-
+public:
+    ADD_PARAM(int, maxrange, 80)
+    ADD_PARAM(int, gridsize, 10)
+    ADD_PARAM(int, imagesize, 600)
 };
 
 //=================================================
@@ -42,18 +45,10 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    cv::Mat image;
-    QGraphicsPixmapItem * pixmap;
-public:
-    ADD_QLAYOUT(QVBoxLayout, layout)
+    ADD_QLAYOUT(QHBoxLayout, layout)
     ADD_QWIDGET(QTabWidget, tabwidget)
-    ADD_QWIDGET(DPMViewer, viewer)
-public:
-    ADD_INTERNAL_QWIDGET_TRIGGER(QPushButton, apply, "Output Change")
-    ADD_INTERNAL_DEFAULT_CONNECTION(apply, clicked)
-    ADD_QLAYOUT(QHBoxLayout, buttonlayout)
-public:
-      ADD_SYNC(dpmsync, 1)
+    ADD_QWIDGET(QScrollArea, scrollarea)
+    ADD_QWIDGET(QLabel, viewer, "Virtual Scan Viewer")
 };
 
 //=================================================
@@ -63,9 +58,7 @@ public:
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-public:
-    cv::Mat cvimage;
-    QVector<cv::Rect> detection;
+
 };
 
 //=================================================

@@ -20,6 +20,14 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
     vars->tabwidget->addTab(vars->scrollarea,"TimeStamp");
     vars->layout->addWidget(vars->tabwidget);
     vars->widget->setLayout(vars->layout);
+
+    vars->colortable.clear();
+    uint i;
+    for(i=0;i<256;i++)
+    {
+        vars->colortable.push_back(qRgb(i,i,i));
+    }
+
     vars->setNodeGUIThreadFlag(1);
     return 1;
 }

@@ -1,8 +1,12 @@
-#include"ImageViewer.h"
+#include"VirtualScanViewer.h"
 
 //If you need use extended node, please uncomment below and comment the using of default node
 //USE_EXTENDED_NODE(ExtendedNodeClass[,...])
 USE_DEFAULT_NODE
+
+//=================================================
+//Uncomment below PORT_DECL and set input node class name
+PORT_DECL(0, VirtualScanGenerator)
 
 //=================================================
 //Original node functions
@@ -32,7 +36,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
     auto vars=NODE_VARS;
-    vars->viewer->setText("Close");
+    vars->viewer->setText("Closed");
     return 1;
 }
 
@@ -45,39 +49,34 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
     vars->tabwidget->setTabText(0,data->timestamp.toString("HH:mm:ss:zzz"));
 
-    cv::Mat image=data->cvimage.clone();
+    QImage image(params->imagesize,params->imagesize,QImage::Format_RGB888);
+    image.fill(QColor(255,255,255));
+    QPainter painter;
+    painter.begin(&image);
 
-    if(params->angle!=0||params->ratio!=1)
-    {
-        cv::Point2f center(image.cols/2,image.rows/2);
-        cv::Mat rotmat=cv::getRotationMatrix2D(center,params->angle,params->ratio);
-        cv::warpAffine(data->cvimage,image,rotmat,data->cvimage.size());
-        cv::getRectSubPix(image,cv::Size(image.cols*params->ratio,image.rows*params->ratio),cv::Point2f(image.cols/2,image.rows/2),image);
-    }
+    double ratio=double(params->imagesize)/double(2*params->maxrange+1);
+    double PI=3.141592654;
+    int i,beamnum=data->virtualscan.size();
+    double density=2*PI/beamnum;
 
-    if(params->convert)
+    painter.setPen(QColor(0,0,0));
+    QPoint center(params->imagesize/2,params->imagesize/2);
+    for(i=params->gridsize;i<=params->maxrange;i+=params->gridsize)
     {
-        image.convertTo(image,-1,params->alpha,params->beta);
+        painter.drawEllipse(center,i*ratio,i*ratio);
     }
+    painter.setPen(QColor(255,0,0));
+    for(i=0;i<beamnum;i++)
+    {
+        double theta=i*density+PI/2;
+        int x=int((params->maxrange+data->virtualscan[i]*cos(theta))*ratio+0.5);
+        int y=int((params->maxrange+data->virtualscan[i]*sin(theta))*ratio+0.5);
+        x=params->imagesize-x;
+        painter.drawEllipse(QPoint(x,y),1,1);
+    }
+    painter.end();
 
-    if(image.type()==CV_8UC3)
-    {
-        QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_RGB888);
-        vars->viewer->setPixmap(QPixmap::fromImage(img));
-        vars->viewer->resize(img.size());
-    }
-    else if(image.type()==CV_8UC1)
-    {
-        QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_Indexed8);
-        img.setColorTable(vars->colortable);
-        vars->viewer->setPixmap(QPixmap::fromImage(img));
-        vars->viewer->resize(img.size());
-    }
-    else
-    {
-        vars->viewer->setText("Not Support");
-        return 0;
-    }
-
+    vars->viewer->setPixmap(QPixmap::fromImage(image));
+    vars->viewer->resize(image.size());
     return 1;
 }

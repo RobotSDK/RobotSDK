@@ -30,7 +30,6 @@
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-
 public:
     ADD_PARAM(QString, calibfilename, "#(VelodyneCalibFileName)")
 };

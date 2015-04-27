@@ -468,7 +468,7 @@ void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, 
                 int i,n=inputports->count()-1;
                 for(i=0;i<n;i++)
                 {
-                    XPort * port=(XPort *)(inputports->takeAt(i+1)->widget());
+                    XPort * port=(XPort *)(inputports->itemAt(i+1)->widget());
                     if(i<inputportclass.size())
                     {
                         port->setToolTip(inputportclass[i]);

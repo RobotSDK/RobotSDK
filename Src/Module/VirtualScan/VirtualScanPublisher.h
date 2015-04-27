@@ -1,31 +1,23 @@
-#ifndef IMAGEVIEWER
-#define IMAGEVIEWER
+#ifndef VIRTUALSCANPUBLISHER
+#define VIRTUALSCANPUBLISHER
 
 //=================================================
 //Please add headers here:
-#include"CameraSensor.h"
-#include<QRgb>
-#include<QScrollArea>
-#include<QTabWidget>
-#include<QLabel>
-//=================================================
+#include<VirtualScanGenerator.h>
 
+//=================================================
 #include<RobotSDK.h>
-
 //=================================================
-//Port configuration
+//Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS ImageViewer
+#define NODE_CLASS VirtualScanPublisher
 
 #undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 0
-
-//Uncomment below PORT_DECL and set input node class name
-PORT_DECL(0, CameraSensor)
 
 //=================================================
 //Params types configuration
@@ -34,12 +26,7 @@ PORT_DECL(0, CameraSensor)
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(double, angle, 0)
-    ADD_PARAM(double, ratio, 1)
-    ADD_PARAM(bool, convert, 0)
-    ADD_PARAM(double, alpha, 1)
-    ADD_PARAM(double, beta, 0)
+
 };
 
 //=================================================
@@ -50,12 +37,11 @@ public:
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    QVector<QRgb> colortable;
+    ADD_VAR(QString, topic, "/virtualscan")
+    ADD_VAR(u_int32_t, queuesize, 1000)
 public:
-    ADD_QLAYOUT(QHBoxLayout, layout)
-    ADD_QWIDGET(QTabWidget, tabwidget)
-    ADD_QWIDGET(QScrollArea, scrollarea)
-    ADD_QWIDGET(QLabel, viewer, "Image Viewer")
+    typedef ROSPub<sensor_msgs::PointCloud2> rospub;
+    ADD_INTERNAL_QOBJECT_TRIGGER(rospub, virtualscanpub, 0, topic, queuesize)
 };
 
 //=================================================
@@ -70,6 +56,7 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 
 //=================================================
 //You can declare functions here
+
 
 //=================================================
 

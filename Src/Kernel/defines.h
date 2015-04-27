@@ -294,6 +294,10 @@ enum ObtainBehavior
 #define _NODE_DATA_TYPE_REF_1(nodeClass,_DATA_TYPE) _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE)
 #define _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE) typedef nodeClass##_##_DATA_TYPE NODE_DATA_TYPE;
 
+#define INHERIT_NODE_PARAMS_TYPE(nodeClass) public _NODE_PARAMS_TYPE_1(nodeClass, _PARAMS_TYPE)
+#define INHERIT_NODE_VARS_TYPE(nodeClass) public _NODE_VARS_TYPE_1(nodeClass, _VARS_TYPE)
+#define INHERIT_NODE_DATA_TYPE(nodeClass) public _NODE_DATA_TYPE_1(nodeClass, _DATA_TYPE)
+
 //=================================================================================
 //for Port access
 //portID must be a const number not a variable

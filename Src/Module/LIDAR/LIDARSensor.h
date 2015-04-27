@@ -1,18 +1,17 @@
-#ifndef DPMDETECTOR
-#define DPMDETECTOR
+#ifndef LIDARSENSOR
+#define LIDARSENSOR
 
 //=================================================
 //Please add headers here:
-#include<dpm/ImageObjects.h>
-#include<rosinterface.h>
-#include<opencv2/opencv.hpp>
+#include<sensor_msgs/LaserScan.h>
+
 //=================================================
 #include<RobotSDK.h>
 //=================================================
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS DPMDetector
+#define NODE_CLASS LIDARSensor
 
 #undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 0
@@ -37,14 +36,7 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-public:
-    ADD_VAR(QString, topic, "car_pos_xy")
-    ADD_VAR(u_int32_t, queuesize, 1000)
-    ADD_VAR(int, queryinterval, 10)
-public:
-    typedef ROSSub<dpm::ImageObjectsConstPtr> rossub;
-    ADD_INTERNAL_QOBJECT_TRIGGER(rossub, dpmsub, 1, topic, queuesize, queryinterval)
-    ADD_INTERNAL_DEFAULT_CONNECTION(dpmsub, receiveMessageSignal)
+
 };
 
 //=================================================
@@ -54,9 +46,7 @@ public:
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-public:
-    dpm::ImageObjectsConstPtr rosdetection;
-    QVector<cv::Rect> detection;
+
 };
 
 //=================================================

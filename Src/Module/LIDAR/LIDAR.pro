@@ -1,36 +1,19 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-04-22T19:37:12
+# Project created by QtCreator 2015-04-27T18:19:52
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = DPMSampleCollector
+TARGET = LIDAR
 TEMPLATE = lib
 
-DEFINES += DPMSAMPLECOLLECTOR_LIBRARY
-
 SOURCES += \
-    CameraSensor.cpp \
-    ImageProcessor.cpp \
-    ImageViewer.cpp \
-    DPMDetector.cpp \
-    DPMModifier.cpp \
-    DPMModifierWidgets.cpp
+    LIDARSensor.cpp
 
 HEADERS += \
-    CameraSensor.h \
-    ImageProcessor.h \
-    ImageViewer.h \
-    DPMDetector.h \
-    DPMModifier.h \
-    DPMModifierWidgets.h
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+    LIDARSensor.h
 
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)
 
@@ -41,6 +24,4 @@ unix{
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_objdetect
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_contrib
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_imgproc
-
-    INCLUDEPATH += $$(HOME)/Git/Autoware/ros/devel/include
 }
