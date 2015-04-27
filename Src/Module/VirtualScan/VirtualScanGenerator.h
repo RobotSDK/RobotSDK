@@ -39,6 +39,7 @@ public:
     ADD_PARAM(double, minceiling, -0.5)
     ADD_PARAM(double, passheight, 2)
     ADD_PARAM(double, rotation, 3)
+    ADD_PARAM(double, minrange, 0.5)
 };
 
 //=================================================
