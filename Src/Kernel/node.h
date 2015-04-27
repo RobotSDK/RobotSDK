@@ -19,6 +19,7 @@ public:
     QString _nodeclass;
     QString _nodename;
     QString _exname;
+    QVector< QString > _inputnodeclass;
     uint _inputportnum;
     uint _outputportnum;
     bool _loadflag;

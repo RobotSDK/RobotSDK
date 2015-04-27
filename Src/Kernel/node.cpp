@@ -73,6 +73,14 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
             _inputportnum=getInputPortNum();
             _outputportnum=getOutputPortNum();
 
+            _inputnodeclass.resize(_inputportnum);
+            for(i=0;i<_inputportnum;i++)
+            {
+                QString inputnodesymbol=QString("%1_INPUT_NODE_%2_ClassName").arg(_nodeclass).arg(i);
+                QString * inputnodeclass=(QString *)(QLibrary::resolve(_libraryfilename,inputnodesymbol.toUtf8().data()));
+                _inputnodeclass[i]=*inputnodeclass;
+            }
+
             NODE_PARAMS_ARG=generateNodeParams();
             NODE_PARAMS_ARG->nodeclass=_nodeclass;
             NODE_PARAMS_ARG->nodename=_nodename;

@@ -158,8 +158,6 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     nodelayout->addWidget(showwidget);
     showwidget->setStyleSheet("QPushButton {background-color: red; color: black;}");
 
-
-
     if(graph->contains(nodeFullName))
     {
         _node=_graph->getNode(nodeFullName);
@@ -172,6 +170,8 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
         libraryfilename->setToolTip(_node->_libraryfilename);
         configfilename->setText(_node->_configfilename);
         configfilename->setToolTip(_node->_configfilename);
+
+        inputportclass=QList<QString>::fromVector(_node->_inputnodeclass);
     }
     else
     {
@@ -184,6 +184,8 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
         libraryfilename->setToolTip("Virtual Node");
         configfilename->setText("Config.xml");
         configfilename->setText("Config.xml");
+
+        inputportclass.clear();
     }
 
 
@@ -197,7 +199,7 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     label->portnum=_inputportnum;
     inputports->addWidget(label);
     inputportslist.clear();
-    slotResetPortNum("Input",_inputportnum);
+    slotResetPortNum("Input",_inputportnum);    
 
     label=new XPortHead(QString("Output"));
     connect(label,SIGNAL(signalResetPortNum(QString,uint)),this,SLOT(slotResetPortNum(QString,uint)));
@@ -279,6 +281,7 @@ void XNode::slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName, uint 
 
 void XNode::slotResetPortNum(QString text, uint portNum)
 {
+    QString nodeclass=nodefullname->text().split("::",QString::SkipEmptyParts)[0];
     QVBoxLayout * tmplayout;
     if(text=="Input")
     {
@@ -295,17 +298,17 @@ void XNode::slotResetPortNum(QString text, uint portNum)
         return;
     }
     int count=tmplayout->count()-1;
-    int i;
-    if(count>portNum)
+    int i, portnum=portNum;
+    if(count>portnum)
     {
-        for(i=count;i>portNum;i--)
+        for(i=count;i>portnum;i--)
         {
             delete(tmplayout->takeAt(i)->widget());
         }
     }
-    else if(count<portNum)
+    else if(count<portnum)
     {
-        for(i=count;i<portNum;i++)
+        for(i=count;i<portnum;i++)
         {
             XPort * port=new XPort;
             connect(port,SIGNAL(signalAddEdge(QString,uint,QString,uint)),this,SLOT(slotAddEdge(QString,uint,QString,uint)),Qt::QueuedConnection);
@@ -318,12 +321,21 @@ void XNode::slotResetPortNum(QString text, uint portNum)
                 port->porttype=XPort::InputPort;
                 inputports->addWidget(port);
                 inputportslist.push_back(port);
+                if(i<inputportclass.size())
+                {
+                    port->setToolTip(inputportclass[i]);
+                }
+                else
+                {
+                    port->setToolTip("Undefined");
+                }
             }
             else if(text=="Output")
             {
                 port->porttype=XPort::OutputPort;
                 outputports->addWidget(port);
                 outputportslist.push_back(port);
+                port->setToolTip(nodeclass);
             }
         }
     }
@@ -450,8 +462,22 @@ void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, 
             connect(_node,SIGNAL(signalNodeState(bool,QString)),this,SLOT(slotNodeState(bool,QString)),Qt::QueuedConnection);
             if(successFlag)
             {
-                libraryfilename->setText(node->_libraryfilename);
-                libraryfilename->setToolTip(node->_libraryfilename);
+                libraryfilename->setText(_node->_libraryfilename);
+                libraryfilename->setToolTip(_node->_libraryfilename);
+                inputportclass=QList<QString>::fromVector(_node->_inputnodeclass);
+                int i,n=inputports->count()-1;
+                for(i=0;i<n;i++)
+                {
+                    XPort * port=(XPort *)(inputports->takeAt(i+1)->widget());
+                    if(i<inputportclass.size())
+                    {
+                        port->setToolTip(inputportclass[i]);
+                    }
+                    else
+                    {
+                        port->setToolTip("Undefined");
+                    }
+                }
             }
         }
     }
@@ -561,16 +587,6 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("#undef OUTPUT_PORT_NUM")<<"\n";
             stream<<QString("#define OUTPUT_PORT_NUM %1").arg(_outputportnum)<<"\n";
             stream<<QString("")<<"\n";
-            if(_inputportnum>0)
-            {
-                stream<<QString("//Uncomment below PORT_DECL and set input node class name")<<"\n";
-                uint i;
-                for(i=0;i<_inputportnum;i++)
-                {
-                    stream<<QString("//PORT_DECL(%1, InputNodeClassName)").arg(i)<<"\n";
-                }
-                stream<<QString("")<<"\n";
-            }
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Params types configuration")<<"\n";
             stream<<QString("")<<"\n";
@@ -625,6 +641,17 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("//USE_EXTENDED_NODE(ExtendedNodeClass[,...])")<<"\n";
             stream<<QString("USE_DEFAULT_NODE")<<"\n";
             stream<<QString("")<<"\n";
+            if(_inputportnum>0)
+            {
+                stream<<QString("//=================================================")<<"\n";
+                stream<<QString("//Uncomment below PORT_DECL and set input node class name")<<"\n";
+                uint i;
+                for(i=0;i<_inputportnum;i++)
+                {
+                    stream<<QString("//PORT_DECL(%1, InputNodeClassName)").arg(i)<<"\n";
+                }
+                stream<<QString("")<<"\n";
+            }
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Original node functions")<<"\n";
             stream<<QString("")<<"\n";

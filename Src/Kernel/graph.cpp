@@ -314,11 +314,16 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
     }
     QString libraryfilenameback=_nodes[oldNodeFullName].second->_libraryfilename;
     QString configfilenameback=_nodes[oldNodeFullName].second->_configfilename;
+    bool openflagback=_nodes[oldNodeFullName].second->_openflag;
     removeNode(oldNodeFullName);
     addNode(newNodeFullName,libraryfilenameback,configfilenameback);
     if(_nodes.contains(newNodeFullName))
-    {        
+    {
         emit changeNodeExNameResult(1,oldNodeFullName,_nodes[oldNodeFullName].second);
+        if(openflagback)
+        {
+            openNode(newNodeFullName);
+        }
         for(edgeiter=newedgesback.begin();edgeiter!=newedgesback.end();edgeiter++)
         {
             addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
@@ -328,6 +333,10 @@ void Graph::changeNodeExName(QString oldNodeFullName, QString newNodeFullName)
     {
         addNode(oldNodeFullName,libraryfilenameback,configfilenameback);
         emit changeNodeExNameResult(0,oldNodeFullName,_nodes[oldNodeFullName].second);
+        if(openflagback)
+        {
+            openNode(oldNodeFullName);
+        }
         for(edgeiter=oldedgesback.begin();edgeiter!=oldedgesback.end();edgeiter++)
         {
             addEdge(edgeiter.key().first,edgeiter.value().first,edgeiter.key().second,edgeiter.value().second);
@@ -354,16 +363,25 @@ void Graph::changeNodeLibrary(QString nodeFullName, QString libraryFileName)
     }
     QString libraryfilenameback=_nodes[nodeFullName].second->_libraryfilename;
     QString configfilenameback=_nodes[nodeFullName].second->_configfilename;
+    bool openflagback=_nodes[nodeFullName].second->_openflag;
     removeNode(nodeFullName);
     addNode(nodeFullName,libraryFileName,configfilenameback);
     if(_nodes.contains(nodeFullName))
     {
         emit changeNodeLibraryResult(1,nodeFullName,_nodes[nodeFullName].second);
+        if(openflagback)
+        {
+            openNode(nodeFullName);
+        }
     }
     else
     {
         addNode(nodeFullName,libraryfilenameback,configfilenameback);
         emit changeNodeLibraryResult(0,nodeFullName,_nodes[nodeFullName].second);
+        if(openflagback)
+        {
+            openNode(nodeFullName);
+        }
     }
     for(edgeiter=edgesback.begin();edgeiter!=edgesback.end();edgeiter++)
     {

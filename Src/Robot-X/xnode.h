@@ -76,6 +76,7 @@ public:
     XConfigPanel * configpanel=NULL;
 protected:
     QList<XPort *> inputportslist;
+    QList<QString> inputportclass;
     QList<XPort *> outputportslist;
 protected:
     void resizeEvent(QGraphicsSceneResizeEvent * event);

@@ -57,7 +57,7 @@ unix{
            rosinterface.h
         SOURCES += \
            rosinterface.cpp
-        INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
+        INCLUDEPATH += /opt/ros/$$ROS/include
     }
 }
 
@@ -74,7 +74,7 @@ win32{
         SOURCES += \
             glviewer.cpp
 
-        INCLUDEPATH += $$(EIGEN_PATH)
+        INCLUDEPATH += $$EIGEN
     }
 }
 

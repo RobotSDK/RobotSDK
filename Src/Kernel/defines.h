@@ -306,9 +306,12 @@ enum ObtainBehavior
 #define _PORT_DATA_TYPE_1(portID, _DATA_TYPE,NODE_CLASS) _PORT_DATA_TYPE_2(portID, _DATA_TYPE,NODE_CLASS)
 #define _PORT_DATA_TYPE_2(portID, _DATA_TYPE,NODE_CLASS) NODE_CLASS##_INPUT_NODE_##portID##_##_DATA_TYPE
 
-#define PORT_DECL(portID, inputNodeClass) _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)
-#define _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE)
-#define _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE) typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID);
+#define PORT_DECL(portID, inputNodeClass) _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE, NODE_CLASS)
+#define _PORT_DECL_1(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE, NODE_CLASS) _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE, NODE_CLASS)
+#define _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE, NODE_CLASS) \
+    typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); \
+    typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID); \
+    extern "C" QString RobotSDK_EXPORT NODE_CLASS##_INPUT_NODE_##portID##_ClassName=QString(#inputNodeClass);
 
 #define PORT_PARAMS_LIST(portID) INPUT_PARAMS_ARG[portID]
 #define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? PORT_PARAMS_LIST(portID).size() : 0
