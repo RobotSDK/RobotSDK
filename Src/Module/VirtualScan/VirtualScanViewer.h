@@ -35,6 +35,7 @@ public:
     ADD_PARAM(int, maxrange, 80)
     ADD_PARAM(int, gridsize, 10)
     ADD_PARAM(int, imagesize, 600)
+    ADD_PARAM_WITH_OPTIONS(uint, colormapsegments, 1, QList<int>()<<1<<2<<4<<8)
 };
 
 //=================================================
@@ -44,6 +45,8 @@ public:
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
+public:
+    cv::Mat colortable;
 public:
     ADD_QLAYOUT(QHBoxLayout, layout)
     ADD_QWIDGET(QTabWidget, tabwidget)

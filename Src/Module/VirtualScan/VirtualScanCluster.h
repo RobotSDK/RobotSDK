@@ -4,6 +4,7 @@
 //=================================================
 //Please add headers here:
 #include<VirtualScanGenerator.h>
+#include<QQueue>
 
 //=================================================
 #include<RobotSDK.h>
@@ -24,7 +25,7 @@
 
 //If you need refer params type of other node class, please uncomment below and comment its own params type.
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
-class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
+class NODE_PARAMS_TYPE : public INHERIT_NODE_PARAMS_TYPE(VirtualScanGenerator)
 {
 public:
     ADD_PARAM(double, neighbordis, 0.3)

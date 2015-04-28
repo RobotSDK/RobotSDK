@@ -382,7 +382,7 @@ enum ObtainBehavior
     xmlloader.appendParamValue(QString(#valueName),QString("Option_%1").arg(i),options.at(i));}
 
 #define ADD_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
-    private: valueType _NODE_PARAMS_BASE_TYPEparams_##valueType##_##valueName##_Func() \
+    private: valueType _params_##valueType##_##valueName##_Func() \
     {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \

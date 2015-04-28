@@ -77,8 +77,15 @@ Node::Node(QString libraryFileName, QString configFileName, QString nodeFullName
             for(i=0;i<_inputportnum;i++)
             {
                 QString inputnodesymbol=QString("%1_INPUT_NODE_%2_ClassName").arg(_nodeclass).arg(i);
-                QString * inputnodeclass=(QString *)(QLibrary::resolve(_libraryfilename,inputnodesymbol.toUtf8().data()));
-                _inputnodeclass[i]=*inputnodeclass;
+                QFunctionPointer inputnodeclass=QLibrary::resolve(_libraryfilename,inputnodesymbol.toUtf8().data());
+                if(inputnodeclass!=NULL)
+                {
+                    _inputnodeclass[i]=*((QString *)inputnodeclass);
+                }
+                else
+                {
+                    _inputnodeclass[i]="Undefined";
+                }
             }
 
             NODE_PARAMS_ARG=generateNodeParams();
