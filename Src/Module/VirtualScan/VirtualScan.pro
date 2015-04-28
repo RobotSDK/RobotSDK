@@ -12,12 +12,14 @@ TEMPLATE = lib
 SOURCES += \
     VirtualScanGenerator.cpp \
     VirtualScanViewer.cpp \
-    VirtualScanPublisher.cpp
+    VirtualScanPublisher.cpp \
+    VirtualScanCluster.cpp
 
 HEADERS += \
     VirtualScanGenerator.h \
     VirtualScanViewer.h \
-    VirtualScanPublisher.h
+    VirtualScanPublisher.h \
+    VirtualScanCluster.h
 
 MODULES += Velodyne
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)

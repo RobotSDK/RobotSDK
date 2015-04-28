@@ -28,5 +28,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     vars->virtualscan.getVirtualScan(params->slope*PI/180.0,params->maxfloor,params->minceiling,params->passheight,data->virtualscan);
     data->minheights=vars->virtualscan.minheights;
     data->maxheights=vars->virtualscan.maxheights;
+    data->labels.fill(0,params->beamnum);
+    data->clusternum=0;
+    data->clusters.clear();
     return 1;
 }

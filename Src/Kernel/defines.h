@@ -294,9 +294,9 @@ enum ObtainBehavior
 #define _NODE_DATA_TYPE_REF_1(nodeClass,_DATA_TYPE) _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE)
 #define _NODE_DATA_TYPE_REF_2(nodeClass,_DATA_TYPE) typedef nodeClass##_##_DATA_TYPE NODE_DATA_TYPE;
 
-#define INHERIT_NODE_PARAMS_TYPE(nodeClass) public _NODE_PARAMS_TYPE_1(nodeClass, _PARAMS_TYPE)
-#define INHERIT_NODE_VARS_TYPE(nodeClass) public _NODE_VARS_TYPE_1(nodeClass, _VARS_TYPE)
-#define INHERIT_NODE_DATA_TYPE(nodeClass) public _NODE_DATA_TYPE_1(nodeClass, _DATA_TYPE)
+#define INHERIT_NODE_PARAMS_TYPE(nodeClass) _NODE_PARAMS_TYPE_1(nodeClass, _PARAMS_TYPE)
+#define INHERIT_NODE_VARS_TYPE(nodeClass) _NODE_VARS_TYPE_1(nodeClass, _VARS_TYPE)
+#define INHERIT_NODE_DATA_TYPE(nodeClass) _NODE_DATA_TYPE_1(nodeClass, _DATA_TYPE)
 
 //=================================================================================
 //for Port access
@@ -382,7 +382,7 @@ enum ObtainBehavior
     xmlloader.appendParamValue(QString(#valueName),QString("Option_%1").arg(i),options.at(i));}
 
 #define ADD_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
-    private: valueType _params_##valueType##_##valueName##_Func() \
+    private: valueType _NODE_PARAMS_BASE_TYPEparams_##valueType##_##valueName##_Func() \
     {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
