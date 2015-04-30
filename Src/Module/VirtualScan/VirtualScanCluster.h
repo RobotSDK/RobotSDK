@@ -28,8 +28,13 @@
 class NODE_PARAMS_TYPE : public INHERIT_NODE_PARAMS_TYPE(VirtualScanGenerator)
 {
 public:
-    ADD_PARAM(double, neighbordis, 0.3)
+    ADD_PARAM(uint, neighbornum, 5)
     ADD_PARAM(uint, minpointsnum, 10)
+    ADD_PARAM(double, xsigma, 0.005)
+    ADD_PARAM(double, xminsigma, 0.1)
+    ADD_PARAM(double, ysigma, 0.05)
+    ADD_PARAM(double, yminsigma, 0.1)
+    ADD_PARAM(double, threshold, 0.08)
 };
 
 //=================================================

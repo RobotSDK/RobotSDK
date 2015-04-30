@@ -46,9 +46,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 uint id=queue.front();
                 queue.pop_front();
                 records.push_back(id);
-                double theta=asin(params->neighbordis/outputdata->virtualscan[id]);
-                int neighbornum=int(theta/density+0.5);
-                int j;
+
+                int j,neighbornum=params->neighbornum;
                 for(j=-neighbornum;j<=neighbornum;j++)
                 {
                     if(j==0)
@@ -56,15 +55,31 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                         continue;
                     }
                     int nid=int(id)+j;
-                    nid>=0?nid:nid+n;
-                    nid<n?nid:nid-n;
+                    if(nid<0)
+                    {
+                        nid+=n;
+                    }
+                    if(nid>=n)
+                    {
+                        nid-=n;
+                    }
                     if(outputdata->virtualscan[nid]>0&&outputdata->labels[nid]==0)
                     {
                         double angle=fabs(j*density);
-                        double distance=outputdata->virtualscan[nid]*outputdata->virtualscan[nid]
-                                +outputdata->virtualscan[id]*outputdata->virtualscan[id]
-                                -2*cos(angle)*outputdata->virtualscan[nid]*outputdata->virtualscan[id];
-                        if(distance<=params->neighbordis)
+                        double xsigma=params->xsigma*outputdata->virtualscan[id];
+                        if(xsigma<params->xminsigma)
+                        {
+                            xsigma=params->xminsigma;
+                        }
+                        double xdis=exp(-pow(outputdata->virtualscan[nid]*sin(angle),2)/(2*pow(xsigma,2)));
+                        double ysigma=params->ysigma*outputdata->virtualscan[id];
+                        if(ysigma<params->yminsigma)
+                        {
+                            ysigma=params->yminsigma;
+                        }
+                        double ydis=exp(-pow(outputdata->virtualscan[nid]*cos(angle)-outputdata->virtualscan[id],2)/(2*pow(ysigma,2)));
+                        double dis=xdis*ydis;
+                        if(dis>params->threshold)
                         {
                             outputdata->labels[nid]=outputdata->clusternum;
                             queue.push_back(nid);
