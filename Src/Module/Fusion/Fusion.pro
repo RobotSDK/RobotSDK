@@ -11,13 +11,17 @@ TEMPLATE = lib
 
 SOURCES += \
     CameraVelodyneFusion.cpp \
-    ImagePointCloudFusionViewer.cpp
+    ImagePointCloudFusionViewer.cpp \
+    CameraVirtualScanFusion.cpp \
+    ImageVirtualScanFusionViewer.cpp
 
 HEADERS += \
     CameraVelodyneFusion.h \
-    ImagePointCloudFusionViewer.h
+    ImagePointCloudFusionViewer.h \
+    CameraVirtualScanFusion.h \
+    ImageVirtualScanFusionViewer.h
 
-MODULES += Camera Velodyne
+MODULES += Camera Velodyne VirtualScan
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)
 
 unix{
@@ -37,4 +41,12 @@ unix{
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_objdetect
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_contrib
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_imgproc
+
+    INCLUDEPATH += $$(HOME)/SDK/FastVirtualScan/include
+
+    CONFIG(debug, debug|release){
+        LIBS += -L$$(HOME)/SDK/FastVirtualScan/lib/ -lFastVirtualScan_Debug
+    }else{
+        LIBS += -L$$(HOME)/SDK/FastVirtualScan/lib/ -lFastVirtualScan_Release
+    }
 }

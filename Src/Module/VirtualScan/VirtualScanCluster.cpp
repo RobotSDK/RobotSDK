@@ -23,6 +23,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     double density=2*PI/inputparams->beamnum;
 
     outputdata->timestamp=data->timestamp;
+    outputdata->extrinsicmat=data->extrinsicmat.clone();
     outputdata->virtualscan=data->virtualscan;
     outputdata->minheights=data->minheights;
     outputdata->maxheights=data->maxheights;

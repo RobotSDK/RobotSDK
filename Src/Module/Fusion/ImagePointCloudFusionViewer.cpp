@@ -28,7 +28,6 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
     {
         vars->colortable[i]=qRgb(i,i,i);
     }
-
     return 1;
 }
 
@@ -82,7 +81,6 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                     cv::Vec3b color=vars->colormap.at<cv::Vec3b>(colorid);
                     cv::circle(image,cv::Point2i(rangeiter.key().first,rangeiter.key().second),1,cv::Scalar(color.val[0],color.val[1],color.val[2]));
                 }
-
                 else if(vars->colormap.type()==CV_8UC1)
                 {
                     uchar color=vars->colormap.at<uchar>(colorid);
