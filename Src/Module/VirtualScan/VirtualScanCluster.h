@@ -25,7 +25,7 @@
 
 //If you need refer params type of other node class, please uncomment below and comment its own params type.
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
-class NODE_PARAMS_TYPE : public INHERIT_NODE_PARAMS_TYPE(VirtualScanGenerator)
+class NODE_PARAMS_TYPE : INHERIT_NODE_PARAMS_TYPE(VirtualScanGenerator)
 {
 public:
     ADD_PARAM(uint, neighbornum, 5)
