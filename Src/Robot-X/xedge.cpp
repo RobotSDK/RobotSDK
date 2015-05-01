@@ -1,5 +1,7 @@
 #include "xedge.h"
 
+using namespace RobotX;
+
 XEdge::XEdge(QGraphicsItem *parent)
     : QGraphicsPathItem(parent)
 {

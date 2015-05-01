@@ -26,6 +26,9 @@
 
 #include"xport.h"
 
+namespace RobotX
+{
+
 class XNode;
 
 class XConfigPanel : public QDialog
@@ -121,5 +124,7 @@ signals:
 protected slots:
     void slotGenerateCode(QString dir);
 };
+
+}
 
 #endif // XNODE_H

@@ -1,4 +1,5 @@
 #include"VelodyneSensor.h"
+using namespace RobotSDK_Module;
 
 //If you need use extended node, please uncomment below and comment the using of default node
 //USE_EXTENDED_NODE(ExtendedNodeClass[,...])

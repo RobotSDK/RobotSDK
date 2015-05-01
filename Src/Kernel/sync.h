@@ -28,7 +28,7 @@ public:
 };
 
 
-#define ADD_SYNC(syncName, basePortID) public: Sync syncName=Sync(INPUT_PORT_NUM, basePortID);
+#define ADD_SYNC(syncName, basePortID) public: RobotSDK::Sync syncName=RobotSDK::Sync(INPUT_PORT_NUM, basePortID);
 
 #define SYNC_START(sync) IS_INTERNAL_TRIGGER? \
     false : sync.addParamsData(INPUT_PARAMS_ARG, INPUT_DATA_ARG)

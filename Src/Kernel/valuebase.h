@@ -1,7 +1,7 @@
 #ifndef VALUEBASE
 #define VALUEBASE
 
-#include<defines.h>
+#include<syntax.h>
 
 namespace RobotSDK
 {

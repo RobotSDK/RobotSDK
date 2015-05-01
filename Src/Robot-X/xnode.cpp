@@ -1,5 +1,7 @@
 #include "xnode.h"
 
+using namespace RobotX;
+
 XConfigPanel::XConfigPanel(QString nodeFullName, QString configFilaName, XNode *nodeParent, QWidget *parent)
     : QDialog(parent)
 {
@@ -575,6 +577,9 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("#include<RobotSDK.h>")<<"\n";
+            stream<<QString("namespace RobotSDK_Module")<<"\n";
+            stream<<QString("{")<<"\n";
+            stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
             stream<<QString("//Node configuration")<<"\n";
             stream<<QString("")<<"\n";
@@ -592,7 +597,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer params type of other node class, please uncomment below and comment its own params type.")<<"\n";
             stream<<QString("//NODE_PARAMS_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_PARAMS_TYPE : public RobotSDK::NODE_PARAMS_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";
@@ -602,7 +607,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer vars type of other node class, please uncomment below and comment its own vars type.")<<"\n";
             stream<<QString("//NODE_VARS_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_VARS_TYPE : public RobotSDK::NODE_VARS_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";
@@ -612,7 +617,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer data type of other node class, please uncomment below and comment its own data type.")<<"\n";
             stream<<QString("//NODE_DATA_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_DATA_TYPE : public RobotSDK::NODE_DATA_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";
@@ -622,6 +627,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("//=================================================")<<"\n";
+            stream<<QString("}")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("#endif")<<"\n";
             file.close();
@@ -636,6 +642,7 @@ void XNode::slotGenerateCode(QString dir)
         {
             QTextStream stream(&file);
             stream<<QString("#include\"%1\"").arg(headerinfo.fileName())<<"\n";
+            stream<<QString("using namespace RobotSDK_Module;")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("//If you need use extended node, please uncomment below and comment the using of default node")<<"\n";
             stream<<QString("//USE_EXTENDED_NODE(ExtendedNodeClass[,...])")<<"\n";
@@ -708,6 +715,7 @@ void XNode::slotGenerateCode(QString dir)
                     stream<<QString("{")<<"\n";
                     stream<<QString("\treturn 1;")<<"\n";
                     stream<<QString("}")<<"\n";
+                    stream<<QString("")<<"\n";
                     stream<<QString("")<<"\n";
             }
             file.close();

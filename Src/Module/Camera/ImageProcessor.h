@@ -7,6 +7,9 @@
 
 //=================================================
 #include<RobotSDK.h>
+namespace RobotSDK_Module
+{
+
 //=================================================
 //Node configuration
 
@@ -30,7 +33,7 @@ NODE_PARAMS_TYPE_REF(CameraSensor)
 
 //If you need refer vars type of other node class, please uncomment below and comment its own vars type.
 //NODE_VARS_TYPE_REF(RefNodeClassName)
-class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
+class NODE_VARS_TYPE : public RobotSDK::NODE_VARS_BASE_TYPE
 {
 public:
     ADD_VAR_WITH_OPTIONS(double, angle, 0, QList<double>()<<0<<90<<180<<270)
@@ -49,5 +52,6 @@ NODE_DATA_TYPE_REF(CameraSensor)
 //You can declare functions here
 
 //=================================================
+}
 
 #endif

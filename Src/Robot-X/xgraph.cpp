@@ -1,5 +1,7 @@
 #include "xgraph.h"
 
+using namespace RobotX;
+
 XGraph::XGraph(QObject *parent)
     : QGraphicsScene(parent)
 {

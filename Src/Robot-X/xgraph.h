@@ -13,6 +13,9 @@
 #include"xnode.h"
 #include"xedge.h"
 
+namespace RobotX
+{
+
 #define DotDefaultDPI 72.0
 
 class XGraph : public QGraphicsScene
@@ -65,5 +68,7 @@ public slots:
     void slotLoadGraph(QString xFileName);
     void slotSaveGraph(QString xFileName);
 };
+
+}
 
 #endif // XGRAPH_H

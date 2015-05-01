@@ -1,9 +1,11 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "xrobot.h"
+#include "ui_xrobot.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+using namespace RobotX;
+
+XRobot::XRobot(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::XRobot)
 {
     ui->setupUi(this);
 
@@ -14,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(view,SIGNAL(signalHandleMenu()), graph, SLOT(slotHandleMenu()));
 }
 
-MainWindow::~MainWindow()
+XRobot::~XRobot()
 {
     delete ui;
 }

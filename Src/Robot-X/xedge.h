@@ -8,6 +8,9 @@
 #include<QObject>
 #include<QPen>
 
+namespace RobotX
+{
+
 class XEdge : public QObject, public QGraphicsPathItem
 {
     Q_OBJECT
@@ -26,5 +29,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
 };
+
+}
 
 #endif // XEDGE_H

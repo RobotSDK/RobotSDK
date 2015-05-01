@@ -2,16 +2,21 @@
 
 set "TMPCURPATH=%cd%"
 set "TMPBATPATH=%~dp0"
+set "ROBOTSDKDIR=C:\SDK\RobotSDK_4.0"
 
-set "TMPDISKDRIVER=c"
+echo Start Generating Documentation!
 
-:ConfigRobotSDK
+cd /D "%TMPBATPATH%\Src\Doc"
 
-set "ROBOTSDKDIR=%TMPDISKDRIVER%:\SDK\RobotSDK_4.0"
+doxygen RobotSDK_Windows.doc
+
+if not exist %ROBOTSDKDIR%\Doc\html\NUL echo Documentation is not compiled! & goto InstallRobotSDK
+
+echo Documentation Generation Completed!
 
 :InstallRobotSDK
 
-echo Start Building Kernel!
+echo Start Building RobotSDK!
 
 if not exist %ROBOTSDKDIR%\Build\Kernel\VS\NUL mkdir %ROBOTSDKDIR%\Build\Kernel\VS
 cd /D "%ROBOTSDKDIR%\Build\Kernel\VS"
@@ -23,26 +28,7 @@ nmake -f Makefile.Release install
 nmake -f Makefile.Debug
 nmake -f Makefile.Debug install
 
-echo Kernel Building Completed!
-
-echo Start Generating Documentation!
-
-cd /D "%TMPBATPATH%\Doc\Doxygen"
-
-doxygen RobotSDK
-
-if not exist %TMPBATPATH%\Doc\html\NUL echo Documentation is not compiled! & goto Finish
-if not exist %ROBOTSDKDIR%\Doc\NUL mkdir %ROBOTSDKDIR%\Doc
-xcopy %TMPBATPATH%\Doc\html\* %ROBOTSDKDIR%\Doc /s /e /y
-RMDIR /S /Q %TMPBATPATH%\Doc\html
-
-echo Documentation Generation Completed!
-
-:Finish
-
 echo Installation Completed!
-
-:ExitBat
 
 cd /D %TMPCURPATH%
 

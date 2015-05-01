@@ -4,13 +4,13 @@ CONFIG += staticlib qt
 CONFIG += c++11
 
 HEADERS += \
-   defines.h \
     graph.h \
     node.h \
     port.h \
     valuebase.h \
     xmldominterface.h \
-    sync.h
+    sync.h \
+    syntax.h
 
 SOURCES += \
     graph.cpp \

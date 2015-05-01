@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef XROBOT_H
+#define XROBOT_H
 
 #include <QMainWindow>
 #include <QGraphicsView>
@@ -7,8 +7,11 @@
 #include<xgraph.h>
 
 namespace Ui {
-class MainWindow;
+class XRobot;
 }
+
+namespace RobotX
+{
 
 class GraphView : public QGraphicsView
 {
@@ -27,20 +30,21 @@ protected:
     void keyReleaseEvent(QKeyEvent *event);
 };
 
-class MainWindow : public QMainWindow
+class XRobot : public QMainWindow
 {
     Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit XRobot(QWidget *parent = 0);
+    ~XRobot();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::XRobot *ui;
 
 protected:
     GraphView * view;
     XGraph * graph;
 };
 
-#endif // MAINWINDOW_H
+}
+
+#endif // XROBOT_H

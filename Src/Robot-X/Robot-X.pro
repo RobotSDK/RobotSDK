@@ -54,19 +54,21 @@ win32 {
 }
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     xnode.cpp \
     xedge.cpp \
     xport.cpp \
-    xgraph.cpp
+    xgraph.cpp \
+    xrobot.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     xnode.h \
     xedge.h \
     xport.h \
-    xgraph.h
+    xgraph.h \
+    xrobot.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    xrobot.ui
 
 unix{
     ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_4.0

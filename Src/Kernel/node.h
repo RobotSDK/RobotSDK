@@ -75,7 +75,7 @@ protected:
 #define USE_DEFAULT_NODE \
     extern "C" RobotSDK_EXPORT void * NODE_FUNC_NAME(generateNode) \
     (QString libraryFileName, QString configFileName, QString nodeFullName){ \
-    return static_cast<void *>(new Node(libraryFileName, configFileName, nodeFullName));} NODE_DEFAULT_FUNC
+    return static_cast<void *>(new RobotSDK::Node(libraryFileName, configFileName, nodeFullName));} NODE_DEFAULT_FUNC
 
 #define USE_EXTENDED_NODE(nodeType, ...) \
     extern "C" RobotSDK_EXPORT void * NODE_FUNC_NAME(generateNode) \

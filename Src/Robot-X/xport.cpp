@@ -1,5 +1,7 @@
 #include "xport.h"
 
+using namespace RobotX;
+
 XPort::XPort(QWidget * parent)
     :QLabel(parent)
 {

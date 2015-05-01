@@ -18,6 +18,9 @@
 
 #include<RobotSDK.h>
 
+namespace RobotX
+{
+
 class XPortHead : public QLabel
 {
     Q_OBJECT
@@ -59,5 +62,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event);
     void dropEvent(QDropEvent * event);
 };
+
+}
 
 #endif // XPORT_H
