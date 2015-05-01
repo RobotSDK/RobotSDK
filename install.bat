@@ -6,6 +6,8 @@ set "ROBOTSDKDIR=C:\SDK\RobotSDK_4.0"
 
 echo Start Generating Documentation!
 
+if not exist %ROBOTSDKDIR%\Doc\NUL mkdir %ROBOTSDKDIR%\Doc
+
 cd /D "%TMPBATPATH%\Src\Doc"
 
 doxygen RobotSDK_Windows.doc
@@ -26,6 +28,16 @@ qmake -makefile "%TMPBATPATH:\=/%/Src/Kernel/Kernel.pro" -r "CONFIG+=build_all"
 nmake -f Makefile.Release
 nmake -f Makefile.Release install
 nmake -f Makefile.Debug
+nmake -f Makefile.Debug install
+
+if not exist %ROBOTSDKDIR%\Build\Robot-X\VS\NUL mkdir %ROBOTSDKDIR%\Build\Robot-X\VS
+cd /D "%ROBOTSDKDIR%\Build\Robot-X\VS"
+
+qmake -tp vc "%TMPBATPATH:\=/%/Src/Robot-X/Robot-X.pro" "CONFIG+=build_all"
+qmake -makefile "%TMPBATPATH:\=/%/Src/Robot-X/Robot-X.pro" -r "CONFIG+=build_all"
+nmake -f Makefile.Release -B
+nmake -f Makefile.Release install
+nmake -f Makefile.Debug -B
 nmake -f Makefile.Debug install
 
 echo Installation Completed!
