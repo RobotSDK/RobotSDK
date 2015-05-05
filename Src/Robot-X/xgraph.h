@@ -25,7 +25,7 @@ public:
     XGraph(QObject * parent=0);
     ~XGraph();
 protected:
-    RobotSDK::Graph * graph;
+    Graph * graph;
     QMap< QString, XNode * > nodes;
     QMultiMap< QPair< QString, QString >, XEdge * > edges;
 protected:

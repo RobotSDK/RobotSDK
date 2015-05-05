@@ -26,6 +26,8 @@
 
 #include"xport.h"
 
+using namespace RobotSDK;
+
 namespace RobotX
 {
 
@@ -57,11 +59,11 @@ class XNode : public QGraphicsProxyWidget
     Q_OBJECT
     friend class XGraph;
 public:
-    XNode(RobotSDK::Graph * graph, QString nodeFullName);
+    XNode(Graph * graph, QString nodeFullName);
     ~XNode();
 public:
-    RobotSDK::Graph * _graph;
-    const RobotSDK::Node * _node;
+    Graph * _graph;
+    const Node * _node;
     uint _inputportnum;
     uint _outputportnum;
     QString tmpnewnodefullname;
@@ -112,9 +114,9 @@ signals:
     void signalAddNode(QString nodeFullName, QString libraryFileName, QString configFileName);
     void signalChangeNodeConfigFile(QString nodeFullName, QString configFileName);
 protected slots:
-    void slotAddNodeResult(bool successFlag, QString nodeFullName, const RobotSDK::Node * node);
-    void slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName, const RobotSDK::Node * node);
-    void slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, const RobotSDK::Node * node);
+    void slotAddNodeResult(bool successFlag, QString nodeFullName, const Node * node);
+    void slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName, const Node * node);
+    void slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, const Node * node);
 signals:
     void signalUpdateNode(QString oldNodeFullName, QString newNodeFullName);
 protected slots:

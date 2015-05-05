@@ -28,7 +28,7 @@ namespace RobotSDK_Module
 
 //If you need refer params type of other node class, please uncomment below and comment its own params type.
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
-class NODE_PARAMS_TYPE : public RobotSDK::NODE_PARAMS_BASE_TYPE
+class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
 public:
     ADD_PARAM(double, minrange,0)
@@ -40,7 +40,7 @@ public:
 
 //If you need refer vars type of other node class, please uncomment below and comment its own vars type.
 //NODE_VARS_TYPE_REF(RefNodeClassName)
-class NODE_VARS_TYPE : public RobotSDK::NODE_VARS_BASE_TYPE
+class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
     bool initialcamera;
@@ -58,7 +58,7 @@ public:
 
 //If you need refer data type of other node class, please uncomment below and comment its own data type.
 //NODE_DATA_TYPE_REF(RefNodeClassName)
-class NODE_DATA_TYPE : public RobotSDK::NODE_DATA_BASE_TYPE
+class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
     QTime virtualscantimestamp;

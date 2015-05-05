@@ -32,7 +32,7 @@ XConfigPanel::XConfigPanel(QString nodeFullName, QString configFilaName, XNode *
 
 void XConfigPanel::load()
 {
-    RobotSDK::XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
+    XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
     auto paramvalues=xmlloader.getAllParamValues();
     auto params=paramvalues.keys();
     uint i,n=params.size();
@@ -90,7 +90,7 @@ void XConfigPanel::apply()
             paramvalues.insert(param,value);
         }
     }
-    RobotSDK::XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
+    XMLDomInterface xmlloader(configfilename,nodefullname.split(QString("::"),QString::SkipEmptyParts));
     xmlloader.setAllParamValues(paramvalues);
 }
 
@@ -100,7 +100,7 @@ void XConfigPanel::reject()
     QDialog::reject();
 }
 
-XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
+XNode::XNode(Graph *graph, QString nodeFullName)
     : QGraphicsProxyWidget(NULL)
 {
     assert(graph!=NULL);
@@ -115,9 +115,9 @@ XNode::XNode(RobotSDK::Graph *graph, QString nodeFullName)
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeConfigFile(QString,QString)),_graph,SLOT(changeNodeConfigFile(QString,QString)));
 
-    connect(_graph,SIGNAL(addNodeResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotAddNodeResult(bool,QString,const RobotSDK::Node*)));
-    connect(_graph,SIGNAL(changeNodeExNameResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeExNameResult(bool,QString,const RobotSDK::Node*)));
-    connect(_graph,SIGNAL(changeNodeLibraryResult(bool,QString,const RobotSDK::Node*)),this,SLOT(slotChangeNodeLibraryResult(bool,QString,const RobotSDK::Node*)));
+    connect(_graph,SIGNAL(addNodeResult(bool,QString,const Node*)),this,SLOT(slotAddNodeResult(bool,QString,const Node*)));
+    connect(_graph,SIGNAL(changeNodeExNameResult(bool,QString,const Node*)),this,SLOT(slotChangeNodeExNameResult(bool,QString,const Node*)));
+    connect(_graph,SIGNAL(changeNodeLibraryResult(bool,QString,const Node*)),this,SLOT(slotChangeNodeLibraryResult(bool,QString,const Node*)));
 
     widget=new QWidget;
     widget->setStyleSheet(QString("QWidget {border: 1px solid black}"));
@@ -417,7 +417,7 @@ void XNode::slotChangeNodeConfigFile()
     }
 }
 
-void XNode::slotAddNodeResult(bool successFlag, QString nodeFullName, const RobotSDK::Node *node)
+void XNode::slotAddNodeResult(bool successFlag, QString nodeFullName, const Node *node)
 {
     if(successFlag&&nodeFullName==nodefullname->text())
     {
@@ -428,7 +428,7 @@ void XNode::slotAddNodeResult(bool successFlag, QString nodeFullName, const Robo
     }
 }
 
-void XNode::slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName, const RobotSDK::Node *node)
+void XNode::slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName, const Node *node)
 {
     if(oldNodeFullName==nodefullname->text())
     {
@@ -454,7 +454,7 @@ void XNode::slotChangeNodeExNameResult(bool successFlag, QString oldNodeFullName
     }
 }
 
-void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, const RobotSDK::Node *node)
+void XNode::slotChangeNodeLibraryResult(bool successFlag, QString nodeFullName, const Node *node)
 {
     if(nodeFullName==nodefullname->text())
     {
@@ -597,7 +597,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer params type of other node class, please uncomment below and comment its own params type.")<<"\n";
             stream<<QString("//NODE_PARAMS_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_PARAMS_TYPE : public RobotSDK::NODE_PARAMS_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";
@@ -607,7 +607,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer vars type of other node class, please uncomment below and comment its own vars type.")<<"\n";
             stream<<QString("//NODE_VARS_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_VARS_TYPE : public RobotSDK::NODE_VARS_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";
@@ -617,7 +617,7 @@ void XNode::slotGenerateCode(QString dir)
             stream<<QString("")<<"\n";
             stream<<QString("//If you need refer data type of other node class, please uncomment below and comment its own data type.")<<"\n";
             stream<<QString("//NODE_DATA_TYPE_REF(RefNodeClassName)")<<"\n";
-            stream<<QString("class NODE_DATA_TYPE : public RobotSDK::NODE_DATA_BASE_TYPE")<<"\n";
+            stream<<QString("class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE")<<"\n";
             stream<<QString("{")<<"\n";
             stream<<QString("")<<"\n";
             stream<<QString("};")<<"\n";

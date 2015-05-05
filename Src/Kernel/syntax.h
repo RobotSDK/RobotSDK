@@ -85,17 +85,17 @@ enum ObtainBehavior
 #define NODE_VARS_BASE_TYPE XMLVarsBase
 #define NODE_DATA_BASE_TYPE XMLDataBase
 
-#define XML_VALUE_BASE_TYPE std::shared_ptr< RobotSDK::NODE_VALUE_BASE_TYPE >
-#define XML_VALUE_BASE_CONST_TYPE std::shared_ptr< const RobotSDK::NODE_VALUE_BASE_TYPE >
+#define XML_VALUE_BASE_TYPE std::shared_ptr< NODE_VALUE_BASE_TYPE >
+#define XML_VALUE_BASE_CONST_TYPE std::shared_ptr< const NODE_VALUE_BASE_TYPE >
 
-#define XML_PARAMS_BASE_TYPE std::shared_ptr< RobotSDK::NODE_PARAMS_BASE_TYPE >
-#define XML_PARAMS_BASE_CONST_TYPE std::shared_ptr< const RobotSDK::NODE_PARAMS_BASE_TYPE >
+#define XML_PARAMS_BASE_TYPE std::shared_ptr< NODE_PARAMS_BASE_TYPE >
+#define XML_PARAMS_BASE_CONST_TYPE std::shared_ptr< const NODE_PARAMS_BASE_TYPE >
 
-#define XML_VARS_BASE_TYPE std::shared_ptr< RobotSDK::NODE_VARS_BASE_TYPE >
-#define XML_VARS_BASE_CONST_TYPE std::shared_ptr< const RobotSDK::NODE_VARS_BASE_TYPE >
+#define XML_VARS_BASE_TYPE std::shared_ptr< NODE_VARS_BASE_TYPE >
+#define XML_VARS_BASE_CONST_TYPE std::shared_ptr< const NODE_VARS_BASE_TYPE >
 
-#define XML_DATA_BASE_TYPE std::shared_ptr< RobotSDK::NODE_DATA_BASE_TYPE >
-#define XML_DATA_BASE_CONST_TYPE std::shared_ptr< const RobotSDK::NODE_DATA_BASE_TYPE >
+#define XML_DATA_BASE_TYPE std::shared_ptr< NODE_DATA_BASE_TYPE >
+#define XML_DATA_BASE_CONST_TYPE std::shared_ptr< const NODE_DATA_BASE_TYPE >
 
 //=================================================================================
 
@@ -112,8 +112,8 @@ enum ObtainBehavior
 #define PORT_PARAMS_CAPSULE QVector< PORT_PARAMS_BUFFER >
 #define PORT_DATA_CAPSULE QVector< PORT_DATA_BUFFER >
 
-#define REGISTER_TRANSFER_VALUE_TYPE(valueType) _REGISTER_TRANSFER_VALUE_TYPE_1(valueType)
-#define _REGISTER_TRANSFER_VALUE_TYPE_1(valueType) qRegisterMetaType< valueType >(#valueType);
+#define REGISTER_TRANSFER_VALUE_TYPE(valueType) _REGISTER_TRANSFER_VALUE_TYPE(valueType)
+#define _REGISTER_TRANSFER_VALUE_TYPE(valueType) qRegisterMetaType< valueType >(#valueType)
 
 #define INPUTPORT_SLOT _INPUTPORT_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
 #define _INPUTPORT_SLOT_1(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE) _INPUTPORT_SLOT_2(TRANSFER_PORT_PARAMS_TYPE, TRANSFER_PORT_DATA_TYPE)
@@ -330,42 +330,42 @@ enum ObtainBehavior
 
 #define ADD_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueName##_Func();
 
 #define ADD_ENUM_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueName##_Func();
 
 #define ADD_UENUM_PARAM(valueType, valueName, valueDefault) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_params_##valueName##_Func();
 
 #define ADD_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueName##_Func();
 
 #define ADD_ENUM_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueName##_Func();
 
 #define ADD_UENUM_VAR(valueType, valueName, valueDefault) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);}});return valueDefault;}; \
     public: valueType valueName=_vars_##valueName##_Func();
@@ -376,7 +376,7 @@ enum ObtainBehavior
 
 #define ADD_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
@@ -384,7 +384,7 @@ enum ObtainBehavior
 
 #define ADD_ENUM_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
@@ -392,7 +392,7 @@ enum ObtainBehavior
 
 #define ADD_UENUM_PARAM_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _params_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * params) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * params) \
     {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_PARAMS_TYPE *>(params))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
@@ -400,7 +400,7 @@ enum ObtainBehavior
 
 #define ADD_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
@@ -408,7 +408,7 @@ enum ObtainBehavior
 
 #define ADD_ENUM_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \
@@ -416,7 +416,7 @@ enum ObtainBehavior
 
 #define ADD_UENUM_VAR_WITH_OPTIONS(valueType, valueName, valueDefault, valueOptions) \
     private: valueType _vars_##valueName##_Func() \
-    {_xmlloadfunclist.push_back([](RobotSDK::XMLDomInterface & xmlloader, RobotSDK::NODE_VALUE_BASE_TYPE * vars) \
+    {_xmlloadfunclist.push_back([](XMLDomInterface & xmlloader, NODE_VALUE_BASE_TYPE * vars) \
     {if(!(xmlloader.getUEnumParamValue(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName))) \
     {xmlloader.setParamDefault(QString(#valueName),(static_cast<NODE_VARS_TYPE *>(vars))->valueName);} \
     ADD_OPTIONS(xmlloader, valueName, valueOptions)});return valueDefault;}; \

@@ -5,7 +5,7 @@ using namespace RobotX;
 XGraph::XGraph(QObject *parent)
     : QGraphicsScene(parent)
 {
-    graph=new RobotSDK::Graph;
+    graph=new Graph;
 
     connect(this,SIGNAL(signalAddEdge(QString,uint,QString,uint)),graph,SLOT(addEdge(QString,uint,QString,uint)));
     connect(this,SIGNAL(signalRemoveNode(QString)),graph,SLOT(removeNode(QString)));

@@ -1,5 +1,6 @@
 QT *= widgets xml opengl
 CONFIG *= c++11 qt
+DEFINES *= RobotSDK_ModDev
 
 INCLUDEPATH += .
 

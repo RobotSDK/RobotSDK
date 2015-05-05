@@ -67,7 +67,7 @@ void Graph::addNode(QString nodeFullName, QString libraryFileName, QString confi
     Node * node=static_cast<Node *>(generateNode(libraryFileName, configFileName, nodeFullName));
     if(node==NULL)
     {
-        qDebug()<<QString("Can not build node. May the node's type is not extended from RobotSDK::Node");
+        qDebug()<<QString("Can not build node. May the node's type is not extended from Node");
         emit addNodeResult(0,nodeFullName,NULL);
         return;
     }

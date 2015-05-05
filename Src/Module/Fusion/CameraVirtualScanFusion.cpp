@@ -77,6 +77,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     imagesize.width=outputdata->cvimage.cols;
     imagesize.height=outputdata->cvimage.rows;
     QPair< QPoint, QPoint > points;
+    bool flag=0;
     for(i=0;i<2*pointsnum;i++)
     {
         if(virtualscanpoints.at<double>(i,2)>=params->minrange&&virtualscanpoints.at<double>(i,2)<=params->maxrange)
@@ -96,10 +97,12 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 int py=int(y+0.5);
                 if(i%2==0)
                 {
+                    flag=1;
                     points.first=QPoint(px,py);
                 }
-                else if(i%2==1)
+                else if(i%2==1&&flag)
                 {
+                    flag=0;
                     points.second=QPoint(px,py);
                     outputdata->stixel.insert(outputdata->labels[i/2],points);
                 }
