@@ -1,6 +1,8 @@
 #ifndef XEDGE_H
 #define XEDGE_H
 
+#include<QGraphicsScene>
+#include<QGraphicsView>
 #include<QGraphicsPathItem>
 #include<QGraphicsSceneMouseEvent>
 #include<QMenu>

@@ -21,9 +21,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
     outputdata->timestamp=data->timestamp;
 
-    outputdata->extrinsicmat=data->extrinsicmat;
-    outputdata->cameramat=data->cameramat;
-    outputdata->distcoeff=data->distcoeff;
+    outputdata->extrinsicmat=data->extrinsicmat.clone();
+    outputdata->cameramat=data->cameramat.clone();
+    outputdata->distcoeff=data->distcoeff.clone();
 
     outputdata->rosimage=data->rosimage;
 
@@ -62,9 +62,9 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
 
     outputdata->timestamp=data->timestamp;
 
-    outputdata->extrinsicmat=data->extrinsicmat;
-    outputdata->cameramat=data->cameramat;
-    outputdata->distcoeff=data->distcoeff;
+    outputdata->extrinsicmat=data->extrinsicmat.clone();
+    outputdata->cameramat=data->cameramat.clone();
+    outputdata->distcoeff=data->distcoeff.clone();
 
     outputdata->rosimage=data->rosimage;
 
@@ -97,9 +97,9 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
 
     outputdata->timestamp=data->timestamp;
 
-    outputdata->extrinsicmat=data->extrinsicmat;
-    outputdata->cameramat=data->cameramat;
-    outputdata->distcoeff=data->distcoeff;
+    outputdata->extrinsicmat=data->extrinsicmat.clone();
+    outputdata->cameramat=data->cameramat.clone();
+    outputdata->distcoeff=data->distcoeff.clone();
 
     outputdata->rosimage=data->rosimage;
 
@@ -128,9 +128,9 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, enhance)
 
     outputdata->timestamp=data->timestamp;
 
-    outputdata->extrinsicmat=data->extrinsicmat;
-    outputdata->cameramat=data->cameramat;
-    outputdata->distcoeff=data->distcoeff;
+    outputdata->extrinsicmat=data->extrinsicmat.clone();
+    outputdata->cameramat=data->cameramat.clone();
+    outputdata->distcoeff=data->distcoeff.clone();
 
     outputdata->rosimage=data->rosimage;
 

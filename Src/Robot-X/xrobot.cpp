@@ -46,11 +46,11 @@ void GraphView::wheelEvent(QWheelEvent *event)
     {
         if(event->delta()>0)
         {
-            ratio=0.9;
+            ratio=1.1;
         }
         else
         {
-            ratio=1.1;
+            ratio=0.9;
         }
         this->scale(ratio,ratio);
     }

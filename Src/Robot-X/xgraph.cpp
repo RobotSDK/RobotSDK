@@ -84,7 +84,6 @@ void XGraph::slotResize(QString nodeFullName, QSizeF newSize)
     Agnode_t * node=_nodes[nodes[nodeFullName]];
     _agset(node,"height",QString("%1").arg(newSize.height()/DotDefaultDPI));
     _agset(node,"width",QString("%1").arg(newSize.width()/DotDefaultDPI));
-
     slotApplyLayout();
 }
 

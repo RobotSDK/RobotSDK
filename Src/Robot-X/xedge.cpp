@@ -17,21 +17,24 @@ XEdge::~XEdge()
 
 void XEdge::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setCursor(Qt::ClosedHandCursor);
-    this->setPen(QColor(Qt::red));
-    this->setZValue(1);
-    this->update();
-
-    if(event->button()==Qt::RightButton)
+    if(this->scene()->itemAt(event->scenePos(),this->scene()->views().front()->transform())==this)
     {
-        QMenu menu;
-        menu.addAction("Delete Edge");
-        QAction * selecteditem=menu.exec(QCursor::pos());
-        if(selecteditem)
+        setCursor(Qt::ClosedHandCursor);
+        this->setPen(QColor(Qt::red));
+        this->setZValue(1);
+        this->update();
+
+        if(event->button()==Qt::RightButton)
         {
-            if(selecteditem->text()==QString("Delete Edge"))
+            QMenu menu;
+            menu.addAction("Delete Edge");
+            QAction * selecteditem=menu.exec(QCursor::pos());
+            if(selecteditem)
             {
-                emit signalRemoveEdge(outputnodefullname,outputportid,inputnodefullname,inputportid);
+                if(selecteditem->text()==QString("Delete Edge"))
+                {
+                    emit signalRemoveEdge(outputnodefullname,outputportid,inputnodefullname,inputportid);
+                }
             }
         }
     }
