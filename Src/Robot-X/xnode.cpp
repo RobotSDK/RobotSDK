@@ -109,7 +109,7 @@ XNode::XNode(Graph *graph, QString nodeFullName)
     connect(this,SIGNAL(signalOpenNode(QString)),_graph,SLOT(openNode(QString)));
     connect(this,SIGNAL(signalCloseNode(QString)),_graph,SLOT(closeNode(QString)));
     connect(this,SIGNAL(signalShowWidget(QString)),_graph,SLOT(showWidget(QString)));
-    connect(this,SIGNAL(signalHideWidget(QString)),_graDatasetph,SLOT(hideWidget(QString)));
+    connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
 
     connect(this,SIGNAL(signalChangeNodeExName(QString,QString)),_graph,SLOT(changeNodeExName(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
