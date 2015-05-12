@@ -15,38 +15,37 @@ PORT_DECL(0, CameraSensor)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
-    auto data=PORT_DATA(0,0);
     auto outputdata=NODE_DATA;
+    auto data=PORT_DATA(0,0);
 
     outputdata->timestamp=data->timestamp;
+
+    outputdata->cvimage=data->cvimage.clone();
+    cv::Point2f center(outputdata->cvimage.cols/2, outputdata->cvimage.rows/2);
+    cv::Mat rotmat=cv::getRotationMatrix2D(center,vars->rotation,vars->scale);
+    cv::warpAffine(outputdata->cvimage,outputdata->cvimage,rotmat,outputdata->cvimage.size());
+    cv::getRectSubPix(outputdata->cvimage,cv::Size(outputdata->cvimage.cols*vars->scale,outputdata->cvimage.rows*vars->scale)
+                      ,cv::Point2f(outputdata->cvimage.cols/2,outputdata->cvimage.rows/2),outputdata->cvimage);
+    outputdata->cvimage.convertTo(outputdata->cvimage,-1,vars->alpha,vars->beta);
 
     outputdata->extrinsicmat=data->extrinsicmat.clone();
     outputdata->cameramat=data->cameramat.clone();
     outputdata->distcoeff=data->distcoeff.clone();
-
-    outputdata->rosimage=data->rosimage;
-
-    cv::Mat image;
-    cv::Point2f center(data->cvimage.cols/2, data->cvimage.rows/2);
-    cv::Mat rotmat=cv::getRotationMatrix2D(center,vars->angle,vars->ratio);
-    cv::warpAffine(data->cvimage,image,rotmat,data->cvimage.size());
-    cv::getRectSubPix(image,cv::Size(image.cols*vars->ratio,image.rows*vars->ratio),cv::Point2f(image.cols/2,image.rows/2),image);
-
     double pi=3.141592654;
-    double c=cos(vars->angle*pi/180.0);
-    double s=sin(vars->angle*pi/180.0);
+    double c=cos(vars->rotation*pi/180.0);
+    double s=sin(vars->rotation*pi/180.0);
     cv::Mat exrotmat=cv::Mat::eye(4,4,CV_64F);
     exrotmat.at<double>(0,0)=c;exrotmat.at<double>(0,1)=-s;
     exrotmat.at<double>(1,0)=s;exrotmat.at<double>(1,1)=c;
     outputdata->extrinsicmat=outputdata->extrinsicmat*exrotmat;
+    outputdata->cameramat.at<double>(0,0)*=vars->scale;outputdata->cameramat.at<double>(0,2)*=vars->scale;
+    outputdata->cameramat.at<double>(1,1)*=vars->scale;outputdata->cameramat.at<double>(1,2)*=vars->scale;
 
-    outputdata->cameramat.at<double>(0,0)*=vars->ratio;outputdata->cameramat.at<double>(0,2)*=vars->ratio;
-    outputdata->cameramat.at<double>(1,1)*=vars->ratio;outputdata->cameramat.at<double>(1,2)*=vars->ratio;
+    outputdata->rotation=data->rotation+vars->rotation;
+    outputdata->scale=data->scale*vars->scale;
 
-    image.convertTo(image,-1,vars->alpha,vars->beta);
-
-    outputdata->cvimage=image;
     return 1;
 }
 
@@ -56,32 +55,34 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
-    auto data=PORT_DATA(0,0);
     auto outputdata=NODE_DATA;
+    auto data=PORT_DATA(0,0);
 
     outputdata->timestamp=data->timestamp;
+
+    outputdata->cvimage=data->cvimage.clone();
+    cv::Point2f center(outputdata->cvimage.cols/2, outputdata->cvimage.rows/2);
+    cv::Mat rotmat=cv::getRotationMatrix2D(center,vars->rotation,1);
+    cv::warpAffine(outputdata->cvimage,outputdata->cvimage,rotmat,outputdata->cvimage.size());
+    cv::getRectSubPix(outputdata->cvimage,cv::Size(outputdata->cvimage.cols*vars->scale,outputdata->cvimage.rows*vars->scale)
+                      ,cv::Point2f(outputdata->cvimage.cols/2,outputdata->cvimage.rows/2),outputdata->cvimage);
 
     outputdata->extrinsicmat=data->extrinsicmat.clone();
     outputdata->cameramat=data->cameramat.clone();
     outputdata->distcoeff=data->distcoeff.clone();
-
-    outputdata->rosimage=data->rosimage;
-
-    cv::Mat image;
-    cv::Point2f center(data->cvimage.cols/2, data->cvimage.rows/2);
-    cv::Mat rotmat=cv::getRotationMatrix2D(center,vars->angle,1.0);
-    cv::warpAffine(data->cvimage,image,rotmat,data->cvimage.size());
-
     double pi=3.141592654;
-    double c=cos(vars->angle*pi/180.0);
-    double s=sin(vars->angle*pi/180.0);
+    double c=cos(vars->rotation*pi/180.0);
+    double s=sin(vars->rotation*pi/180.0);
     cv::Mat exrotmat=cv::Mat::eye(4,4,CV_64F);
     exrotmat.at<double>(0,0)=c;exrotmat.at<double>(0,1)=-s;
     exrotmat.at<double>(1,0)=s;exrotmat.at<double>(1,1)=c;
     outputdata->extrinsicmat=outputdata->extrinsicmat*exrotmat;
 
-    outputdata->cvimage=image;
+    outputdata->rotation=data->rotation+vars->rotation;
+    outputdata->scale=data->scale;
+
     return 1;
 }
 
@@ -91,28 +92,29 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
-    auto data=PORT_DATA(0,0);
     auto outputdata=NODE_DATA;
+    auto data=PORT_DATA(0,0);
 
     outputdata->timestamp=data->timestamp;
+
+    outputdata->cvimage=data->cvimage.clone();
+    cv::Point2f center(outputdata->cvimage.cols/2, outputdata->cvimage.rows/2);
+    cv::Mat rotmat=cv::getRotationMatrix2D(center,0,vars->scale);
+    cv::warpAffine(outputdata->cvimage,outputdata->cvimage,rotmat,outputdata->cvimage.size());
+    cv::getRectSubPix(outputdata->cvimage,cv::Size(outputdata->cvimage.cols*vars->scale,outputdata->cvimage.rows*vars->scale)
+                      ,cv::Point2f(outputdata->cvimage.cols/2,outputdata->cvimage.rows/2),outputdata->cvimage);
 
     outputdata->extrinsicmat=data->extrinsicmat.clone();
     outputdata->cameramat=data->cameramat.clone();
     outputdata->distcoeff=data->distcoeff.clone();
+    outputdata->cameramat.at<double>(0,0)*=vars->scale;outputdata->cameramat.at<double>(0,2)*=vars->scale;
+    outputdata->cameramat.at<double>(1,1)*=vars->scale;outputdata->cameramat.at<double>(1,2)*=vars->scale;
 
-    outputdata->rosimage=data->rosimage;
+    outputdata->rotation=data->rotation;
+    outputdata->scale=data->scale*vars->scale;
 
-    cv::Mat image;
-    cv::Point2f center(data->cvimage.cols/2, data->cvimage.rows/2);
-    cv::Mat rotmat=cv::getRotationMatrix2D(center,0,vars->ratio);
-    cv::warpAffine(data->cvimage,image,rotmat,data->cvimage.size());
-    cv::getRectSubPix(image,cv::Size(image.cols*vars->ratio,image.rows*vars->ratio),cv::Point2f(image.cols/2,image.rows/2),image);
-
-    outputdata->cameramat.at<double>(0,0)*=vars->ratio;outputdata->cameramat.at<double>(0,2)*=vars->ratio;
-    outputdata->cameramat.at<double>(1,1)*=vars->ratio;outputdata->cameramat.at<double>(1,2)*=vars->ratio;
-
-    outputdata->cvimage=image;
     return 1;
 }
 
@@ -122,22 +124,23 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, enhance)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
-    auto data=PORT_DATA(0,0);
     auto outputdata=NODE_DATA;
+    auto data=PORT_DATA(0,0);
 
     outputdata->timestamp=data->timestamp;
+
+    outputdata->cvimage=data->cvimage.clone();
+    outputdata->cvimage.convertTo(outputdata->cvimage,-1,vars->alpha,vars->beta);
 
     outputdata->extrinsicmat=data->extrinsicmat.clone();
     outputdata->cameramat=data->cameramat.clone();
     outputdata->distcoeff=data->distcoeff.clone();
 
-    outputdata->rosimage=data->rosimage;
+    outputdata->rotation=data->rotation;
+    outputdata->scale=data->scale;
 
-    cv::Mat image=data->cvimage.clone();
-    image.convertTo(image,-1,vars->alpha,vars->beta);
-
-    outputdata->cvimage=image;
     return 1;
 }
 

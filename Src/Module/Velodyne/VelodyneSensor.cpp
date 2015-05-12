@@ -11,6 +11,7 @@ USE_DEFAULT_NODE
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
 
     if(vars->velodynesub==NULL)
@@ -23,6 +24,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //If you don't need manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
+    NOUNUSEDWARNING
     auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
 
@@ -58,6 +60,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
 
     vars->velodynesub->stopReceiveSlot();
@@ -67,6 +70,7 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
 
@@ -88,7 +92,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     int pointnum=outputdata->pclpoints->height*outputdata->pclpoints->width;
     outputdata->pclpoints->resize(pointnum);
     char * data=(char *)(outputdata->rospoints->data.data());
-    int i,j;
+    uint i,j;
     for(i=0;i<outputdata->rospoints->height;i++)
     {
         for(j=0;j<outputdata->rospoints->width;j++)

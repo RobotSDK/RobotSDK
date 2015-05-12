@@ -10,4 +10,4 @@ SUBDIRS += \
 
 DPM.depends += Camera
 VirtualScan.depends += Velodyne
-Fusion.depends += Camera Velodyne VirtualScan
+Fusion.depends += Camera Velodyne VirtualScan DPM

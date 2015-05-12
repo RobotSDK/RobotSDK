@@ -44,6 +44,7 @@ unix{
             LIBS *= -L/opt/ros/indigo/lib -lpcl_ros_tf
             LIBS *= -L/opt/ros/indigo/lib -ltf_conversions
             LIBS *= -L/opt/ros/indigo/lib -lactionlib
+            LIBS *= -L/opt/ros/indigo/lib -lcv_bridge
             LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
             INCLUDEPATH += /opt/ros/$$TMPROS/include
         }
@@ -63,6 +64,7 @@ unix{
         LIBS *= -L/opt/ros/indigo/lib -lpcl_ros_tf
         LIBS *= -L/opt/ros/indigo/lib -ltf_conversions
         LIBS *= -L/opt/ros/indigo/lib -lactionlib
+        LIBS *= -L/opt/ros/indigo/lib -lcv_bridge
         LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
         INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
     }

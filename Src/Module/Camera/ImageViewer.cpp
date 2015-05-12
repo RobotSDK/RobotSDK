@@ -15,6 +15,7 @@ PORT_DECL(0, CameraSensor)
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->viewer->setAlignment(Qt::AlignCenter);
     vars->scrollarea->setWidget(vars->viewer);
@@ -36,6 +37,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //If you don't need manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->viewer->setText("Open");
     return 1;
@@ -44,6 +46,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->viewer->setText("Close");
     return 1;
@@ -52,26 +55,13 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    auto params=NODE_PARAMS;
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     auto data=PORT_DATA(0,0);
 
     vars->tabwidget->setTabText(0,data->timestamp.toString("HH:mm:ss:zzz"));
 
-    cv::Mat image=data->cvimage.clone();
-
-    if(params->angle!=0||params->ratio!=1)
-    {
-        cv::Point2f center(image.cols/2,image.rows/2);
-        cv::Mat rotmat=cv::getRotationMatrix2D(center,params->angle,params->ratio);
-        cv::warpAffine(data->cvimage,image,rotmat,data->cvimage.size());
-        cv::getRectSubPix(image,cv::Size(image.cols*params->ratio,image.rows*params->ratio),cv::Point2f(image.cols/2,image.rows/2),image);
-    }
-
-    if(params->convert)
-    {
-        image.convertTo(image,-1,params->alpha,params->beta);
-    }
+    cv::Mat image=data->cvimage;
 
     if(image.type()==CV_8UC3)
     {

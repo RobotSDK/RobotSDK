@@ -11,6 +11,7 @@ USE_DEFAULT_NODE
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
 
     if(vars->camerasub==NULL)
@@ -23,13 +24,13 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //If you don't need manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
-    auto params=NODE_PARAMS;
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
 
-    if(!params->calibfilename.isEmpty())
+    if(!vars->calibfilename.isEmpty())
     {
         cv::FileStorage fs;
-        fs.open(params->calibfilename.toStdString(),cv::FileStorage::READ);
+        fs.open(vars->calibfilename.toStdString(),cv::FileStorage::READ);
         if(fs.isOpened())
         {
             fs["CameraExtrinsicMat"]>>vars->extrinsicmat;
@@ -63,6 +64,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
 
     vars->camerasub->stopReceiveSlot();
@@ -72,38 +74,27 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
 
-    outputdata->rosimage=vars->camerasub->getMessage();
-    if(outputdata->rosimage==NULL)
+    auto rosimage=vars->camerasub->getMessage();
+    if(rosimage==NULL)
     {
         return 0;
-    }
-    int msec=(outputdata->rosimage->header.stamp.sec)%(24*60*60)*1000+(outputdata->rosimage->header.stamp.nsec)/1000000;
+    }    
+
+    int msec=(rosimage->header.stamp.sec)%(24*60*60)*1000+(rosimage->header.stamp.nsec)/1000000;
     outputdata->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
 
+    outputdata->cvimage=cv_bridge::toCvShare(rosimage)->image.clone();
     outputdata->extrinsicmat=vars->extrinsicmat.clone();
     outputdata->cameramat=vars->cameramat.clone();
     outputdata->distcoeff=vars->distcoeff.clone();
 
-    void * data=(void *)(outputdata->rosimage->data.data());
-    if(QString::fromStdString(outputdata->rosimage->encoding)=="rgb8")
+    if(rosimage->encoding=="bgr8")
     {
-        outputdata->cvimage=cv::Mat(outputdata->rosimage->height,outputdata->rosimage->width,CV_8UC3,data);
-    }
-    else if(QString::fromStdString(outputdata->rosimage->encoding)=="bgr8")
-    {
-        cv::Mat tmpimage=cv::Mat(outputdata->rosimage->height,outputdata->rosimage->width,CV_8UC3,data);
-        cv::cvtColor(tmpimage,outputdata->cvimage,CV_BGR2RGB);
-    }
-    else if(QString::fromStdString(outputdata->rosimage->encoding)=="mono8")
-    {
-        outputdata->cvimage=cv::Mat(outputdata->rosimage->height,outputdata->rosimage->width,CV_8UC1,data);
-    }
-    else
-    {
-        return 0;
+        cv::cvtColor(outputdata->cvimage,outputdata->cvimage,CV_BGR2RGB);
     }
 
     return 1;

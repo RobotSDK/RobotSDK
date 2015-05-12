@@ -308,7 +308,7 @@ enum ObtainBehavior
 #define _PORT_DECL_2(portID, inputNodeClass, _PARAMS_TYPE, _DATA_TYPE, NODE_CLASS) \
     typedef inputNodeClass##_##_PARAMS_TYPE PORT_PARAMS_TYPE(portID); \
     typedef inputNodeClass##_##_DATA_TYPE PORT_DATA_TYPE(portID); \
-    extern "C" QString RobotSDK_EXPORT NODE_CLASS##_INPUT_NODE_##portID##_ClassName=QString(#inputNodeClass);
+    extern "C" const QString RobotSDK_EXPORT NODE_CLASS##_INPUT_NODE_##portID##_ClassName(QString(#inputNodeClass));
 
 #define PORT_PARAMS_LIST(portID) INPUT_PARAMS_ARG[portID]
 #define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? PORT_PARAMS_LIST(portID).size() : 0
@@ -459,6 +459,8 @@ enum ObtainBehavior
     return XML_DATA_BASE_TYPE(new NODE_DATA_TYPE);}
 
 //=================================================================================
+
+#define NOUNUSEDWARNING Q_UNUSED(INPUT_PARAMS_ARG);Q_UNUSED(INPUT_DATA_ARG);Q_UNUSED(NODE_PARAMS_ARG);Q_UNUSED(NODE_VARS_ARG);Q_UNUSED(NODE_DATA_ARG);
 
 }
 

@@ -35,10 +35,10 @@ namespace RobotSDK_Module
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
 public:
-    ADD_PARAM(int, maxrange, 80)
-    ADD_PARAM(int, gridsize, 10)
-    ADD_PARAM(int, imagesize, 600)
-    ADD_PARAM_WITH_OPTIONS(uint, colormapsegments, 1, QList<int>()<<1<<2<<4<<8)
+    ADD_PARAM(uint, maxrange, 80)
+    ADD_PARAM(uint, gridsize, 10)
+    ADD_PARAM(uint, imagesize, 600)
+    ADD_PARAM_WITH_OPTIONS(uint, colormapsegments, 1, QList<uint>()<<1<<2<<4<<8)
 };
 
 //=================================================

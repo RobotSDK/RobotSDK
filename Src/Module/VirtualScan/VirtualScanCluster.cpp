@@ -15,6 +15,7 @@ PORT_DECL(0, VirtualScanGenerator)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
+    NOUNUSEDWARNING
     auto params=NODE_PARAMS;
     auto outputdata=NODE_DATA;
     auto inputparams=PORT_PARAMS(0,0);
@@ -61,7 +62,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                     {
                         nid+=n;
                     }
-                    if(nid>=n)
+                    if(nid>=int(n))
                     {
                         nid-=n;
                     }
@@ -89,7 +90,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                     }
                 }
             }
-            if(records.size()<params->minpointsnum)
+            if(records.size()<int(params->minpointsnum))
             {
                 int j,m=records.size();
                 for(j=0;j<m;j++)

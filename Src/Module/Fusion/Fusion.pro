@@ -13,15 +13,17 @@ SOURCES += \
     CameraVelodyneFusion.cpp \
     ImagePointCloudFusionViewer.cpp \
     CameraVirtualScanFusion.cpp \
-    ImageVirtualScanFusionViewer.cpp
+    ImageVirtualScanFusionViewer.cpp \
+    CameraDPMFusion.cpp
 
 HEADERS += \
     CameraVelodyneFusion.h \
     ImagePointCloudFusionViewer.h \
     CameraVirtualScanFusion.h \
-    ImageVirtualScanFusionViewer.h
+    ImageVirtualScanFusionViewer.h \
+    CameraDPMFusion.h
 
-MODULES += Camera Velodyne VirtualScan
+MODULES += Camera Velodyne VirtualScan DPM
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)
 
 unix{
@@ -41,4 +43,6 @@ unix{
     LIBS += -L/usr/local/lib -lopencv_objdetect
     LIBS += -L/usr/local/lib -lopencv_contrib
     LIBS += -L/usr/local/lib -lopencv_imgproc
+
+    INCLUDEPATH += $$(HOME)/Git/Autoware/ros/devel/include
 }

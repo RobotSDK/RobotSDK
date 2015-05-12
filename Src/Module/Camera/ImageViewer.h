@@ -33,12 +33,7 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(double, angle, 0)
-    ADD_PARAM(double, ratio, 1)
-    ADD_PARAM(bool, convert, 0)
-    ADD_PARAM(double, alpha, 1)
-    ADD_PARAM(double, beta, 0)
+
 };
 
 //=================================================

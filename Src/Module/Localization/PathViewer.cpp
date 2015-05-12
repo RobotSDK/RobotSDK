@@ -15,6 +15,7 @@ PORT_DECL(0, NDTLocalizer)
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->tabwidget->addTab(vars->viewer,"TimeStamp");
     vars->layout->addWidget(vars->tabwidget);
@@ -26,6 +27,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //If you don't need manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->viewer->makeCurrent();
     vars->ndtlist=glGenLists(1);
@@ -41,6 +43,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     vars->viewer->makeCurrent();
     vars->viewer->deleteDisplayList(vars->ndtlist);
@@ -56,6 +59,7 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
+    NOUNUSEDWARNING
     auto vars=NODE_VARS;
     auto data=PORT_DATA(0,0);
 

@@ -36,8 +36,8 @@ NODE_PARAMS_TYPE_REF(CameraSensor)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    ADD_VAR_WITH_OPTIONS(double, angle, 0, QList<double>()<<0<<90<<180<<270)
-    ADD_VAR(double, ratio, 1.0)
+    ADD_VAR_WITH_OPTIONS(double, rotation, 0, QList<double>()<<0<<90<<180<<270)
+    ADD_VAR(double, scale, 1.0)
     ADD_VAR(double, alpha, 1)
     ADD_VAR(double, beta, 0)
 };
