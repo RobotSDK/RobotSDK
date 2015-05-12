@@ -24,13 +24,12 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
     NOUNUSEDWARNING
-    auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
 
-    if(!params->calibfilename.isEmpty())
+    if(!vars->calibfilename.isEmpty())
     {
         cv::FileStorage fs;
-        fs.open(params->calibfilename.toStdString(),cv::FileStorage::READ);
+        fs.open(vars->calibfilename.toStdString(),cv::FileStorage::READ);
         if(fs.isOpened())
         {
             fs["VelodyneExtrinsicMat"]>>vars->extrinsicmat;
@@ -72,14 +71,15 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto data=NODE_DATA;
 
-    if(!(vars->ndtsub->getTF(data->rostransform)))
+    tf::StampedTransform rostransform;
+    if(!(vars->ndtsub->getTF(rostransform)))
     {
         return 0;
     }
-    int msec=(data->rostransform.stamp_.sec)%(24*60*60)*1000+(data->rostransform.stamp_.nsec)/1000000;
+    int msec=(rostransform.stamp_.sec)%(24*60*60)*1000+(rostransform.stamp_.nsec)/1000000;
     data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
-    tf::Matrix3x3 rotation(data->rostransform.getRotation());
-    tf::Vector3 translation=data->rostransform.getOrigin();
+    tf::Matrix3x3 rotation(rostransform.getRotation());
+    tf::Vector3 translation=rostransform.getOrigin();
     uint i;
     data->cvtransform=cv::Mat::eye(4,4,CV_64F);
     for(i=0;i<3;i++)

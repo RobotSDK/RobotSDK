@@ -23,9 +23,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
     data->timestamp=inputdata->timestamp;
     data->extrinsicmat=inputdata->extrinsicmat.clone();
-    data->rospoints=inputdata->rospoints;
     double PI=3.141592654;
-    vars->virtualscan.velodyne=data->rospoints;
+    vars->virtualscan.velodyne=inputdata->rospoints;
     vars->virtualscan.calculateVirtualScans(params->beamnum,params->heightstep,params->minfloor,params->maxceiling,params->rotation*PI/180.0,params->minrange);
     vars->virtualscan.getVirtualScan(params->slope*PI/180.0,params->maxfloor,params->minceiling,params->passheight,data->virtualscan);
     data->minheights=vars->virtualscan.minheights;

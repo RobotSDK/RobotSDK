@@ -30,8 +30,7 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(QString, calibfilename, "#(NDT3DCalibFilename)")
+
 };
 
 //=================================================
@@ -41,6 +40,8 @@ public:
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
+public:
+    ADD_VAR(QString, calibfilename, "#(NDT3DCalibFilename)")
 public:
     cv::Mat extrinsicmat;
 public:
@@ -60,7 +61,6 @@ public:
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
-    tf::StampedTransform rostransform;
     cv::Mat cvtransform;
 public:
     cv::Mat extrinsicmat;

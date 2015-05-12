@@ -33,8 +33,7 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(QString, calibfilename, "#(VelodyneCalibFileName)")
+
 };
 
 //=================================================
@@ -44,6 +43,8 @@ public:
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
+public:
+    ADD_VAR(QString, calibfilename, "#(VelodyneCalibFileName)")
 public:
     cv::Mat extrinsicmat;
 public:

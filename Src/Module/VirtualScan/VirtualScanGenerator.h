@@ -67,8 +67,6 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 public:
     cv::Mat extrinsicmat;
 public:
-    sensor_msgs::PointCloud2ConstPtr rospoints;
-public:
     QVector<double> virtualscan;
     QVector<double> minheights;
     QVector<double> maxheights;

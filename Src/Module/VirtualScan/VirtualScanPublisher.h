@@ -45,6 +45,8 @@ public:
 public:
     typedef ROSPub<sensor_msgs::PointCloud2> rospub;
     ADD_INTERNAL_QOBJECT_TRIGGER(rospub, virtualscanpub, 0, topic, queuesize)
+public:
+    uint seq=0;
 };
 
 //=================================================

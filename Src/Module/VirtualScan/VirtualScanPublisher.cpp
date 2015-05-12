@@ -34,8 +34,10 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     int beamnum=inputdata->virtualscan.size();
 
     sensor_msgs::PointCloud2 msg;
-    msg.header=inputdata->rospoints->header;
-    msg.fields=inputdata->rospoints->fields;
+    msg.header.frame_id="VirtualScan";
+    msg.header.seq=vars->seq++;
+    msg.header.stamp.sec=inputdata->timestamp.second();
+    msg.header.stamp.nsec=inputdata->timestamp.msec()*1000000;
     msg.height=2;
     msg.width=beamnum;
     msg.point_step=8*sizeof(float);

@@ -25,13 +25,12 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
     NOUNUSEDWARNING
-    auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
 
-    if(!params->calibfilename.isEmpty())
+    if(!vars->calibfilename.isEmpty())
     {
         cv::FileStorage fs;
-        fs.open(params->calibfilename.toStdString(),cv::FileStorage::READ);
+        fs.open(vars->calibfilename.toStdString(),cv::FileStorage::READ);
         if(fs.isOpened())
         {
             fs["VelodyneExtrinsicMat"]>>vars->extrinsicmat;
