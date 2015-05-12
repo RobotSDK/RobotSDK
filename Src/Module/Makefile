@@ -26,7 +26,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Module1.0.0
-DISTDIR = /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/.tmp/Module1.0.0
+DISTDIR = /home/alexanderhmw/Git/RobotSDK/Src/Module/.tmp/Module1.0.0
 SUBTARGETS    =  \
 		sub-Camera \
 		sub-Velodyne \
@@ -38,383 +38,381 @@ SUBTARGETS    =  \
 
 sub-Camera-qmake_all:  FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile
+	cd Camera/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile
 	cd Camera/ && $(MAKE) -f Makefile qmake_all
 sub-Camera: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
 sub-Camera-make_first: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
 sub-Camera-all: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
 sub-Camera-clean: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
 sub-Camera-distclean: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
 sub-Camera-install_subtargets: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
 sub-Camera-uninstall_subtargets: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
 sub-Velodyne-qmake_all:  FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile
+	cd Velodyne/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile
 	cd Velodyne/ && $(MAKE) -f Makefile qmake_all
 sub-Velodyne: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
 sub-Velodyne-make_first: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
 sub-Velodyne-all: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
 sub-Velodyne-clean: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
 sub-Velodyne-distclean: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
 sub-Velodyne-install_subtargets: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
 sub-Velodyne-uninstall_subtargets: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
-sub-VirtualScan-qmake_all:  FORCE
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+sub-VirtualScan-qmake_all: sub-Velodyne-qmake_all FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile
+	cd VirtualScan/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile
 	cd VirtualScan/ && $(MAKE) -f Makefile qmake_all
-sub-VirtualScan: FORCE
+sub-VirtualScan: sub-Velodyne FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
-sub-VirtualScan-make_first: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+sub-VirtualScan-make_first: sub-Velodyne-make_first FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
-sub-VirtualScan-all: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+sub-VirtualScan-all: sub-Velodyne-all FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
-sub-VirtualScan-clean: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+sub-VirtualScan-clean: sub-Velodyne-clean FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
-sub-VirtualScan-distclean: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+sub-VirtualScan-distclean: sub-Velodyne-distclean FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
-sub-VirtualScan-install_subtargets: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+sub-VirtualScan-install_subtargets: sub-Velodyne-install_subtargets FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
-sub-VirtualScan-uninstall_subtargets: FORCE
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+sub-VirtualScan-uninstall_subtargets: sub-Velodyne-uninstall_subtargets FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
 sub-Localization-qmake_all:  FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile
+	cd Localization/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile
 	cd Localization/ && $(MAKE) -f Makefile qmake_all
 sub-Localization: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
 sub-Localization-make_first: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
 sub-Localization-all: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
 sub-Localization-clean: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
 sub-Localization-distclean: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
 sub-Localization-install_subtargets: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
 sub-Localization-uninstall_subtargets: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
-sub-DPM-qmake_all:  FORCE
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+sub-DPM-qmake_all: sub-Camera-qmake_all FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile
+	cd DPM/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile
 	cd DPM/ && $(MAKE) -f Makefile qmake_all
-sub-DPM: FORCE
+sub-DPM: sub-Camera FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
-sub-DPM-make_first: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+sub-DPM-make_first: sub-Camera-make_first FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
-sub-DPM-all: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+sub-DPM-all: sub-Camera-all FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
-sub-DPM-clean: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+sub-DPM-clean: sub-Camera-clean FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
-sub-DPM-distclean: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+sub-DPM-distclean: sub-Camera-distclean FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
-sub-DPM-install_subtargets: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+sub-DPM-install_subtargets: sub-Camera-install_subtargets FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
-sub-DPM-uninstall_subtargets: FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+sub-DPM-uninstall_subtargets: sub-Camera-uninstall_subtargets FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
-sub-Fusion-qmake_all:  FORCE
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+sub-Fusion-qmake_all: sub-Camera-qmake_all sub-Velodyne-qmake_all sub-VirtualScan-qmake_all FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile
+	cd Fusion/ && $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile
 	cd Fusion/ && $(MAKE) -f Makefile qmake_all
-sub-Fusion: FORCE
+sub-Fusion: sub-Camera \
+		sub-Velodyne \
+		sub-VirtualScan FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
-sub-Fusion-make_first: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile
+sub-Fusion-make_first: sub-Camera-make_first sub-Velodyne-make_first sub-VirtualScan-make_first FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
-sub-Fusion-all: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile 
+sub-Fusion-all: sub-Camera-all sub-Velodyne-all sub-VirtualScan-all FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
-sub-Fusion-clean: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile all
+sub-Fusion-clean: sub-Camera-clean sub-Velodyne-clean sub-VirtualScan-clean FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
-sub-Fusion-distclean: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile clean
+sub-Fusion-distclean: sub-Camera-distclean sub-Velodyne-distclean sub-VirtualScan-distclean FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
-sub-Fusion-install_subtargets: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile distclean
+sub-Fusion-install_subtargets: sub-Camera-install_subtargets sub-Velodyne-install_subtargets sub-VirtualScan-install_subtargets FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
-sub-Fusion-uninstall_subtargets: FORCE
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile install
+sub-Fusion-uninstall_subtargets: sub-Camera-uninstall_subtargets sub-Velodyne-uninstall_subtargets sub-VirtualScan-uninstall_subtargets FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile uninstall
 
-Makefile: Module.pro /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf \
+Makefile: Module.pro ../../../../SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
+		../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf \
 		Module.pro
 	$(QMAKE) -spec linux-g++ -o Makefile Module.pro
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf:
+../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf:
 Module.pro:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ -o Makefile Module.pro
@@ -431,22 +429,22 @@ uninstall_subtargets: sub-Camera-uninstall_subtargets sub-Velodyne-uninstall_sub
 
 sub-Camera-check:
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
 sub-Velodyne-check:
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
-sub-VirtualScan-check:
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+sub-VirtualScan-check: sub-Velodyne-check
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
 sub-Localization-check:
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
-sub-DPM-check:
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+sub-DPM-check: sub-Camera-check
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
-sub-Fusion-check:
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+sub-Fusion-check: sub-Camera-check sub-Velodyne-check sub-VirtualScan-check
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -f Makefile check
 check: sub-Camera-check sub-Velodyne-check sub-VirtualScan-check sub-Localization-check sub-DPM-check sub-Fusion-check
 install: install_subtargets  FORCE
 
@@ -459,29 +457,29 @@ dist: distdir FORCE
 
 distdir: sub-Camera-distdir sub-Velodyne-distdir sub-VirtualScan-distdir sub-Localization-distdir sub-DPM-distdir sub-Fusion-distdir FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
-	$(COPY_FILE) --parents /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf Module.pro $(DISTDIR)/
+	$(COPY_FILE) --parents ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/linux.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/gcc-base-unix.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-base.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/common/g++-unix.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/qconfig.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_clucene_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_concurrent_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_core_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_dbus_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_declarative_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designer_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_designercomponents_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_enginio_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_gui_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_help_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_location_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimedia_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_network_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_opengl_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_openglextensions_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_platformsupport_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_positioning_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qml_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmldevtools_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qmltest_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quick_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickparticles_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_quickwidgets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_script_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sensors_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_serialport_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_sql_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_svg_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_testlib_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_uitools_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webchannel_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webengine_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginecore_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webenginewidgets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkit_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xml_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_functions.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/qt_config.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/spec_post.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exclusive_builds.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_pre.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/resolve_config.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/default_post.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/warn_on.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/testcase_targets.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/yacc.prf ../../../../SDK/Qt/5.4/gcc_64/mkspecs/features/lex.prf Module.pro $(DISTDIR)/
 
 sub-Camera-distdir: FORCE
 	@test -d Camera/ || mkdir -p Camera/
-	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Camera
+	cd Camera/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/Camera.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Camera
 
 sub-Velodyne-distdir: FORCE
 	@test -d Velodyne/ || mkdir -p Velodyne/
-	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Velodyne
+	cd Velodyne/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Velodyne/Velodyne.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Velodyne
 
 sub-VirtualScan-distdir: FORCE
 	@test -d VirtualScan/ || mkdir -p VirtualScan/
-	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/VirtualScan
+	cd VirtualScan/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScan.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/VirtualScan
 
 sub-Localization-distdir: FORCE
 	@test -d Localization/ || mkdir -p Localization/
-	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Localization
+	cd Localization/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Localization/Localization.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Localization
 
 sub-DPM-distdir: FORCE
 	@test -d DPM/ || mkdir -p DPM/
-	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/DPM
+	cd DPM/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/DPM/DPM.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/DPM
 
 sub-Fusion-distdir: FORCE
 	@test -d Fusion/ || mkdir -p Fusion/
-	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Fusion
+	cd Fusion/ && ( test -e Makefile || $(QMAKE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/Fusion.pro -spec linux-g++ -o Makefile ) && $(MAKE) -e -f Makefile distdir DISTDIR=$(DISTDIR)/Fusion
 

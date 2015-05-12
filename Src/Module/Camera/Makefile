@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DRobotSDK_ModDev -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include -I/usr/include/eigen3 -I/opt/ros/indigo/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtOpenGL -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore -I/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Camera/MOC -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I. -I/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include -I/usr/include/eigen3 -I/opt/ros/indigo/include -I/usr/local/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtOpenGL -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore -I/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Camera/MOC -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = Camera1.0.0
 DISTDIR = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Camera/OBJ/Release/Camera1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/alexanderhmw/SDK/Qt/5.4/gcc_64 -Wl,-rpath,/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -shared -Wl,-soname,libCamera.so.1
-LIBS          = $(SUBLIBS) -L/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release -L/usr/lib/i386-linux-gnu -lGLU -L/opt/ros/indigo/lib -lroscpp -lrosconsole -lroscpp_serialization -lrostime -lxmlrpcpp -lcpp_common -lrosconsole_log4cxx -lrosconsole_backend_interface -ltf -ltf2 -ltf2_ros -lpcl_ros_tf -ltf_conversions -lactionlib -L/usr/lib/x86_64-linux-gnu -lboost_system -lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_objdetect -lopencv_contrib -lopencv_imgproc -L/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -lQt5OpenGL -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release -L/usr/lib/i386-linux-gnu -lGLU -L/opt/ros/indigo/lib -lroscpp -lrosconsole -lroscpp_serialization -lrostime -lxmlrpcpp -lcpp_common -lrosconsole_log4cxx -lrosconsole_backend_interface -ltf -ltf2 -ltf2_ros -lpcl_ros_tf -ltf_conversions -lactionlib -L/usr/lib/x86_64-linux-gnu -lboost_system -L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_objdetect -lopencv_contrib -lopencv_imgproc -L/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -lQt5OpenGL -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -144,8 +144,6 @@ DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.p
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
@@ -326,8 +324,6 @@ Makefile: Camera.pro /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmak
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
@@ -454,8 +450,6 @@ Makefile: Camera.pro /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++/qmak
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri:
@@ -564,6 +558,34 @@ compiler_clean:
 		/opt/ros/indigo/include/ros/datatypes.h \
 		/opt/ros/indigo/include/ros/message_operations.h \
 		/opt/ros/indigo/include/std_msgs/Header.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/rosinterface.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobject.h \
@@ -858,6 +880,34 @@ compiler_clean:
 		/opt/ros/indigo/include/ros/datatypes.h \
 		/opt/ros/indigo/include/ros/message_operations.h \
 		/opt/ros/indigo/include/std_msgs/Header.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/rosinterface.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobject.h \
@@ -1157,6 +1207,34 @@ compiler_clean:
 		/opt/ros/indigo/include/ros/datatypes.h \
 		/opt/ros/indigo/include/ros/message_operations.h \
 		/opt/ros/indigo/include/std_msgs/Header.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/rosinterface.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobject.h \
@@ -1452,9 +1530,9 @@ uninstall_target: FORCE
 
 install_headers: first FORCE
 	@test -d $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include || mkdir -p $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/CameraSensor.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/ImageViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/Camera/ImageProcessor.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/CameraSensor.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/ImageViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Camera/ImageProcessor.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/
 
 uninstall_headers: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/ImageProcessor.h

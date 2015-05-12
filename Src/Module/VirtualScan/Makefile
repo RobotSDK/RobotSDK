@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DRobotSDK_ModDev -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include -I/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include -I/usr/include/eigen3 -I/opt/ros/indigo/include -I/usr/include/pcl-1.7 -I/home/alexanderhmw/SDK/FastVirtualScan/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtOpenGL -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore -I/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/MOC -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I. -I/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include -I/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include -I/usr/include/eigen3 -I/opt/ros/indigo/include -I/usr/local/include/pcl-1.8 -I/usr/local/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtOpenGL -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore -I/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/MOC -I/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = VirtualScan1.0.0
 DISTDIR = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScan1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/alexanderhmw/SDK/Qt/5.4/gcc_64 -Wl,-rpath,/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -shared -Wl,-soname,libVirtualScan.so.1
-LIBS          = $(SUBLIBS) -L/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release -L/usr/lib/i386-linux-gnu -lGLU -L/opt/ros/indigo/lib -lroscpp -lrosconsole -lroscpp_serialization -lrostime -lxmlrpcpp -lcpp_common -lrosconsole_log4cxx -lrosconsole_backend_interface -ltf -ltf2 -ltf2_ros -lpcl_ros_tf -ltf_conversions -lactionlib -L/usr/lib/x86_64-linux-gnu -lboost_system -L/usr/lib -lpcl_io -lpcl_common -lpcl_filters -lpcl_search -lpcl_kdtree -lpcl_features -lpcl_segmentation -lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_objdetect -lopencv_contrib -lopencv_imgproc -L/home/alexanderhmw/SDK/FastVirtualScan/lib/ -lFastVirtualScan_Release -L/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -lQt5OpenGL -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release -L/usr/lib/i386-linux-gnu -lGLU -L/opt/ros/indigo/lib -lroscpp -lrosconsole -lroscpp_serialization -lrostime -lxmlrpcpp -lcpp_common -lrosconsole_log4cxx -lrosconsole_backend_interface -ltf -ltf2 -ltf2_ros -lpcl_ros_tf -ltf_conversions -lactionlib -L/usr/lib/x86_64-linux-gnu -lboost_system -L/usr/local/lib -lpcl_io -lpcl_common -lpcl_filters -lpcl_search -lpcl_kdtree -lpcl_features -lpcl_segmentation -lopencv_core -lopencv_highgui -lopencv_features2d -lopencv_objdetect -lopencv_contrib -lopencv_imgproc -L/home/alexanderhmw/SDK/Qt/5.4/gcc_64/lib -lQt5OpenGL -L/usr/X11R6/lib64 -lQt5Widgets -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,11 +51,13 @@ OBJECTS_DIR   = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ
 SOURCES       = VirtualScanGenerator.cpp \
 		VirtualScanViewer.cpp \
 		VirtualScanPublisher.cpp \
-		VirtualScanCluster.cpp 
+		VirtualScanCluster.cpp \
+		fastvirtualscan.cpp 
 OBJECTS       = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanGenerator.o \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanViewer.o \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanPublisher.o \
-		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanCluster.o
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanCluster.o \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/fastvirtualscan.o
 DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
@@ -146,8 +148,6 @@ DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.p
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
@@ -180,10 +180,12 @@ DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.p
 		VirtualScan.pro VirtualScanGenerator.h \
 		VirtualScanViewer.h \
 		VirtualScanPublisher.h \
-		VirtualScanCluster.h VirtualScanGenerator.cpp \
+		VirtualScanCluster.h \
+		fastvirtualscan.h VirtualScanGenerator.cpp \
 		VirtualScanViewer.cpp \
 		VirtualScanPublisher.cpp \
-		VirtualScanCluster.cpp
+		VirtualScanCluster.cpp \
+		fastvirtualscan.cpp
 QMAKE_TARGET  = VirtualScan
 DESTDIR       = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/lib/Release/#avoid trailing-slash linebreak
 TARGET        = libVirtualScan.so.1.0.0
@@ -330,8 +332,6 @@ Makefile: VirtualScan.pro /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri \
-		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri \
@@ -458,8 +458,6 @@ Makefile: VirtualScan.pro /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/linux-g++
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_websockets_private.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview.pri:
-/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_webview_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_widgets_private.pri:
 /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/modules/qt_lib_x11extras.pri:
@@ -509,8 +507,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents VirtualScanGenerator.h VirtualScanViewer.h VirtualScanPublisher.h VirtualScanCluster.h $(DISTDIR)/
-	$(COPY_FILE) --parents VirtualScanGenerator.cpp VirtualScanViewer.cpp VirtualScanPublisher.cpp VirtualScanCluster.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents VirtualScanGenerator.h VirtualScanViewer.h VirtualScanPublisher.h VirtualScanCluster.h fastvirtualscan.h $(DISTDIR)/
+	$(COPY_FILE) --parents VirtualScanGenerator.cpp VirtualScanViewer.cpp VirtualScanPublisher.cpp VirtualScanCluster.cpp fastvirtualscan.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -552,7 +550,7 @@ compiler_clean:
 
 /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanGenerator.o: VirtualScanGenerator.cpp VirtualScanGenerator.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include/VelodyneSensor.h \
-		/usr/include/pcl-1.7/pcl/point_cloud.h \
+		/usr/local/include/pcl-1.8/pcl/point_cloud.h \
 		/usr/include/eigen3/Eigen/StdVector \
 		/usr/include/eigen3/Eigen/Core \
 		/usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -752,16 +750,44 @@ compiler_clean:
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AlignedBox.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Hyperplane.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h \
-		/usr/include/pcl-1.7/pcl/PCLHeader.h \
-		/usr/include/pcl-1.7/pcl/pcl_macros.h \
-		/usr/include/pcl-1.7/pcl/pcl_config.h \
-		/usr/include/pcl-1.7/pcl/exceptions.h \
-		/usr/include/pcl-1.7/pcl/point_traits.h \
-		/usr/include/pcl-1.7/pcl/PCLPointField.h \
-		/usr/include/pcl-1.7/pcl/point_types.h \
-		/usr/include/pcl-1.7/pcl/register_point_struct.h \
-		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
-		/usr/include/pcl-1.7/pcl/common/point_tests.h \
+		/usr/local/include/pcl-1.8/pcl/PCLHeader.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_macros.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_config.h \
+		/usr/local/include/pcl-1.8/pcl/exceptions.h \
+		/usr/local/include/pcl-1.8/pcl/point_traits.h \
+		/usr/local/include/pcl-1.8/pcl/PCLPointField.h \
+		/usr/local/include/pcl-1.8/pcl/point_types.h \
+		/usr/local/include/pcl-1.8/pcl/register_point_struct.h \
+		/usr/local/include/pcl-1.8/pcl/impl/point_types.hpp \
+		/usr/local/include/pcl-1.8/pcl/common/point_tests.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/opt/ros/indigo/include/sensor_msgs/PointCloud2.h \
 		/opt/ros/indigo/include/ros/types.h \
 		/opt/ros/indigo/include/ros/serialization.h \
@@ -1053,14 +1079,14 @@ compiler_clean:
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/graph.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/sync.h \
 		/opt/ros/indigo/include/sensor_msgs/LaserScan.h \
-		/home/alexanderhmw/SDK/FastVirtualScan/include/fastvirtualscan.h \
+		fastvirtualscan.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtAlgorithms
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanGenerator.o VirtualScanGenerator.cpp
 
 /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanViewer.o: VirtualScanViewer.cpp VirtualScanViewer.h \
 		VirtualScanGenerator.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include/VelodyneSensor.h \
-		/usr/include/pcl-1.7/pcl/point_cloud.h \
+		/usr/local/include/pcl-1.8/pcl/point_cloud.h \
 		/usr/include/eigen3/Eigen/StdVector \
 		/usr/include/eigen3/Eigen/Core \
 		/usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -1260,16 +1286,44 @@ compiler_clean:
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AlignedBox.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Hyperplane.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h \
-		/usr/include/pcl-1.7/pcl/PCLHeader.h \
-		/usr/include/pcl-1.7/pcl/pcl_macros.h \
-		/usr/include/pcl-1.7/pcl/pcl_config.h \
-		/usr/include/pcl-1.7/pcl/exceptions.h \
-		/usr/include/pcl-1.7/pcl/point_traits.h \
-		/usr/include/pcl-1.7/pcl/PCLPointField.h \
-		/usr/include/pcl-1.7/pcl/point_types.h \
-		/usr/include/pcl-1.7/pcl/register_point_struct.h \
-		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
-		/usr/include/pcl-1.7/pcl/common/point_tests.h \
+		/usr/local/include/pcl-1.8/pcl/PCLHeader.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_macros.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_config.h \
+		/usr/local/include/pcl-1.8/pcl/exceptions.h \
+		/usr/local/include/pcl-1.8/pcl/point_traits.h \
+		/usr/local/include/pcl-1.8/pcl/PCLPointField.h \
+		/usr/local/include/pcl-1.8/pcl/point_types.h \
+		/usr/local/include/pcl-1.8/pcl/register_point_struct.h \
+		/usr/local/include/pcl-1.8/pcl/impl/point_types.hpp \
+		/usr/local/include/pcl-1.8/pcl/common/point_tests.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/opt/ros/indigo/include/sensor_msgs/PointCloud2.h \
 		/opt/ros/indigo/include/ros/types.h \
 		/opt/ros/indigo/include/ros/serialization.h \
@@ -1561,7 +1615,7 @@ compiler_clean:
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/graph.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/sync.h \
 		/opt/ros/indigo/include/sensor_msgs/LaserScan.h \
-		/home/alexanderhmw/SDK/FastVirtualScan/include/fastvirtualscan.h \
+		fastvirtualscan.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtAlgorithms \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/QRgb \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QScrollArea \
@@ -1577,7 +1631,7 @@ compiler_clean:
 /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanPublisher.o: VirtualScanPublisher.cpp VirtualScanPublisher.h \
 		VirtualScanGenerator.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include/VelodyneSensor.h \
-		/usr/include/pcl-1.7/pcl/point_cloud.h \
+		/usr/local/include/pcl-1.8/pcl/point_cloud.h \
 		/usr/include/eigen3/Eigen/StdVector \
 		/usr/include/eigen3/Eigen/Core \
 		/usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -1777,16 +1831,44 @@ compiler_clean:
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AlignedBox.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Hyperplane.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h \
-		/usr/include/pcl-1.7/pcl/PCLHeader.h \
-		/usr/include/pcl-1.7/pcl/pcl_macros.h \
-		/usr/include/pcl-1.7/pcl/pcl_config.h \
-		/usr/include/pcl-1.7/pcl/exceptions.h \
-		/usr/include/pcl-1.7/pcl/point_traits.h \
-		/usr/include/pcl-1.7/pcl/PCLPointField.h \
-		/usr/include/pcl-1.7/pcl/point_types.h \
-		/usr/include/pcl-1.7/pcl/register_point_struct.h \
-		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
-		/usr/include/pcl-1.7/pcl/common/point_tests.h \
+		/usr/local/include/pcl-1.8/pcl/PCLHeader.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_macros.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_config.h \
+		/usr/local/include/pcl-1.8/pcl/exceptions.h \
+		/usr/local/include/pcl-1.8/pcl/point_traits.h \
+		/usr/local/include/pcl-1.8/pcl/PCLPointField.h \
+		/usr/local/include/pcl-1.8/pcl/point_types.h \
+		/usr/local/include/pcl-1.8/pcl/register_point_struct.h \
+		/usr/local/include/pcl-1.8/pcl/impl/point_types.hpp \
+		/usr/local/include/pcl-1.8/pcl/common/point_tests.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/opt/ros/indigo/include/sensor_msgs/PointCloud2.h \
 		/opt/ros/indigo/include/ros/types.h \
 		/opt/ros/indigo/include/ros/serialization.h \
@@ -2078,14 +2160,14 @@ compiler_clean:
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/graph.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/sync.h \
 		/opt/ros/indigo/include/sensor_msgs/LaserScan.h \
-		/home/alexanderhmw/SDK/FastVirtualScan/include/fastvirtualscan.h \
+		fastvirtualscan.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtAlgorithms
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanPublisher.o VirtualScanPublisher.cpp
 
 /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanCluster.o: VirtualScanCluster.cpp VirtualScanCluster.h \
 		VirtualScanGenerator.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Velodyne/include/VelodyneSensor.h \
-		/usr/include/pcl-1.7/pcl/point_cloud.h \
+		/usr/local/include/pcl-1.8/pcl/point_cloud.h \
 		/usr/include/eigen3/Eigen/StdVector \
 		/usr/include/eigen3/Eigen/Core \
 		/usr/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -2285,16 +2367,44 @@ compiler_clean:
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/AlignedBox.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/Hyperplane.h \
 		/usr/include/eigen3/Eigen/src/Eigen2Support/Geometry/ParametrizedLine.h \
-		/usr/include/pcl-1.7/pcl/PCLHeader.h \
-		/usr/include/pcl-1.7/pcl/pcl_macros.h \
-		/usr/include/pcl-1.7/pcl/pcl_config.h \
-		/usr/include/pcl-1.7/pcl/exceptions.h \
-		/usr/include/pcl-1.7/pcl/point_traits.h \
-		/usr/include/pcl-1.7/pcl/PCLPointField.h \
-		/usr/include/pcl-1.7/pcl/point_types.h \
-		/usr/include/pcl-1.7/pcl/register_point_struct.h \
-		/usr/include/pcl-1.7/pcl/impl/point_types.hpp \
-		/usr/include/pcl-1.7/pcl/common/point_tests.h \
+		/usr/local/include/pcl-1.8/pcl/PCLHeader.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_macros.h \
+		/usr/local/include/pcl-1.8/pcl/pcl_config.h \
+		/usr/local/include/pcl-1.8/pcl/exceptions.h \
+		/usr/local/include/pcl-1.8/pcl/point_traits.h \
+		/usr/local/include/pcl-1.8/pcl/PCLPointField.h \
+		/usr/local/include/pcl-1.8/pcl/point_types.h \
+		/usr/local/include/pcl-1.8/pcl/register_point_struct.h \
+		/usr/local/include/pcl-1.8/pcl/impl/point_types.hpp \
+		/usr/local/include/pcl-1.8/pcl/common/point_tests.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
 		/opt/ros/indigo/include/sensor_msgs/PointCloud2.h \
 		/opt/ros/indigo/include/ros/types.h \
 		/opt/ros/indigo/include/ros/serialization.h \
@@ -2586,10 +2696,75 @@ compiler_clean:
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/graph.h \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/sync.h \
 		/opt/ros/indigo/include/sensor_msgs/LaserScan.h \
-		/home/alexanderhmw/SDK/FastVirtualScan/include/fastvirtualscan.h \
+		fastvirtualscan.h \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtAlgorithms \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QQueue
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/VirtualScanCluster.o VirtualScanCluster.cpp
+
+/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/fastvirtualscan.o: fastvirtualscan.cpp fastvirtualscan.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QVector \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtAlgorithms \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtGlobal \
+		/opt/ros/indigo/include/sensor_msgs/PointCloud2.h \
+		/opt/ros/indigo/include/ros/types.h \
+		/opt/ros/indigo/include/ros/serialization.h \
+		/opt/ros/indigo/include/ros/roscpp_serialization_macros.h \
+		/opt/ros/indigo/include/ros/macros.h \
+		/opt/ros/indigo/include/ros/time.h \
+		/opt/ros/indigo/include/ros/platform.h \
+		/opt/ros/indigo/include/ros/exception.h \
+		/opt/ros/indigo/include/ros/duration.h \
+		/opt/ros/indigo/include/ros/rostime_decl.h \
+		/opt/ros/indigo/include/ros/serialized_message.h \
+		/opt/ros/indigo/include/ros/message_traits.h \
+		/opt/ros/indigo/include/ros/message_forward.h \
+		/opt/ros/indigo/include/ros/builtin_message_traits.h \
+		/opt/ros/indigo/include/ros/datatypes.h \
+		/opt/ros/indigo/include/ros/message_operations.h \
+		/opt/ros/indigo/include/std_msgs/Header.h \
+		/opt/ros/indigo/include/sensor_msgs/PointField.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/VirtualScan/OBJ/Release/fastvirtualscan.o fastvirtualscan.cpp
 
 ####### Install
 
@@ -2611,12 +2786,14 @@ uninstall_target: FORCE
 
 install_headers: first FORCE
 	@test -d $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include || mkdir -p $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScanGenerator.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScanViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScanPublisher.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
-	-$(INSTALL_FILE) /home/alexanderhmw/Git/dev/RobotSDK/Src/Module/VirtualScan/VirtualScanCluster.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScanGenerator.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScanViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScanPublisher.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/VirtualScanCluster.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/VirtualScan/fastvirtualscan.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/
 
 uninstall_headers: FORCE
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/fastvirtualscan.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/VirtualScanCluster.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/VirtualScanPublisher.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/VirtualScan/include/VirtualScanViewer.h

@@ -7,3 +7,7 @@ SUBDIRS += \
     Localization \
     DPM \
     Fusion
+
+DPM.depends += Camera
+VirtualScan.depends += Velodyne
+Fusion.depends += Camera Velodyne VirtualScan
