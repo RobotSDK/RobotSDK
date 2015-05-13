@@ -1,10 +1,13 @@
-#ifndef CAMERADPMFUSION
-#define CAMERADPMFUSION
+#ifndef IMAGEDPMFUSIONVIEWER
+#define IMAGEDPMFUSIONVIEWER
 
 //=================================================
 //Please add headers here:
-#include<CameraSensor.h>
-#include<DPMDetector.h>
+#include<CameraDPMFusion.h>
+#include<QRgb>
+#include<QScrollArea>
+#include<QTabWidget>
+#include<QLabel>
 
 //=================================================
 #include<RobotSDK.h>
@@ -15,13 +18,13 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS CameraDPMFusion
+#define NODE_CLASS ImageDPMFusionViewer
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 2
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
-#define OUTPUT_PORT_NUM 1
+#define OUTPUT_PORT_NUM 0
 
 //=================================================
 //Params types configuration
@@ -41,7 +44,12 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    ADD_SYNC(dpmsync, 0)
+    QVector<QRgb> colortable;
+public:
+    ADD_QLAYOUT(QHBoxLayout, layout)
+    ADD_QWIDGET(QTabWidget, tabwidget)
+    ADD_QWIDGET(QScrollArea, scrollarea)
+    ADD_QWIDGET(QLabel, viewer, "Image & DPM Fusion Viewer")
 };
 
 //=================================================
@@ -51,13 +59,7 @@ public:
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-public:
-    cv::Mat cvimage;
-    QVector<cv::Rect> detection;
-public:
-    cv::Mat extrinsicmat;
-    cv::Mat cameramat;
-    cv::Mat distcoeff;
+
 };
 
 //=================================================

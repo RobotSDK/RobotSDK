@@ -14,14 +14,16 @@ SOURCES += \
     ImagePointCloudFusionViewer.cpp \
     CameraVirtualScanFusion.cpp \
     ImageVirtualScanFusionViewer.cpp \
-    CameraDPMFusion.cpp
+    CameraDPMFusion.cpp \
+    ImageDPMFusionViewer.cpp
 
 HEADERS += \
     CameraVelodyneFusion.h \
     ImagePointCloudFusionViewer.h \
     CameraVirtualScanFusion.h \
     ImageVirtualScanFusionViewer.h \
-    CameraDPMFusion.h
+    CameraDPMFusion.h \
+    ImageDPMFusionViewer.h
 
 MODULES += Camera Velodyne VirtualScan DPM
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)

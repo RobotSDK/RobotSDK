@@ -15,7 +15,7 @@ PORT_DECL(0, VelodyneSensor)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
     auto data=NODE_DATA;

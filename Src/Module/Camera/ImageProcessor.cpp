@@ -15,7 +15,7 @@ PORT_DECL(0, CameraSensor)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
     auto data=PORT_DATA(0,0);
@@ -55,7 +55,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
     auto data=PORT_DATA(0,0);
@@ -92,7 +92,7 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
     auto data=PORT_DATA(0,0);
@@ -124,7 +124,7 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
 //As an extended main function, if you delete this code segment, original main function will be used
 NODE_EXFUNC_DEF_EXPORT(bool, main, enhance)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     auto outputdata=NODE_DATA;
     auto data=PORT_DATA(0,0);

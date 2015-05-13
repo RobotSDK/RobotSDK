@@ -16,7 +16,7 @@ PORT_DECL(1, DPMDetector)
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     vars->layout->addWidget(vars->tabwidget);
     vars->tabwidget->addTab(vars->viewer,"TimeStamp");
@@ -31,7 +31,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //If you don't need manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     SYNC_CLEAR(vars->dpmsync);
     return 1;
@@ -40,7 +40,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     SYNC_CLEAR(vars->dpmsync);
     return 1;
@@ -49,7 +49,7 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     if(IS_INTERNAL_TRIGGER)
     {

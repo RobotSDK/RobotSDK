@@ -15,7 +15,7 @@ PORT_DECL(0, VirtualScanGenerator)
 //If you don't need initialize node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     if(vars->virtualscanpub==NULL)
     {
@@ -27,7 +27,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     auto inputdata=PORT_DATA(0,0);
 

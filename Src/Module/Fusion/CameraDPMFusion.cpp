@@ -16,7 +16,7 @@ PORT_DECL(1, DPMDetector)
 //If you don't need to manually open node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     SYNC_CLEAR(vars->dpmsync);
 	return 1;
@@ -25,7 +25,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 //If you don't need to manually close node, you can delete this code segment
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     SYNC_CLEAR(vars->dpmsync);
 	return 1;
@@ -34,7 +34,7 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto vars=NODE_VARS;
     bool flag=SYNC_START(vars->dpmsync);
     if(flag)
@@ -45,13 +45,57 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
         outputdata->timestamp=imagedata->timestamp;
 
+        outputdata->cvimage=imagedata->cvimage.clone();
+
         outputdata->extrinsicmat=imagedata->extrinsicmat.clone();
+        outputdata->cameramat=imagedata->cameramat.clone();
+        outputdata->distcoeff=imagedata->distcoeff.clone();
 
         uint i,n=dpmdata->detection.size();
-        for(i=0;i<n;i++)
+        if(n>0)
         {
-
+            cv::Mat corners(3,n*2,CV_64F);
+            for(i=0;i<n;i++)
+            {
+                corners.at<double>(0,i*2)=dpmdata->detection[i].x;
+                corners.at<double>(1,i*2)=dpmdata->detection[i].y;
+                corners.at<double>(2,i*2)=1;
+                corners.at<double>(0,i*2+1)=dpmdata->detection[i].x+dpmdata->detection[i].width;
+                corners.at<double>(1,i*2+1)=dpmdata->detection[i].y+dpmdata->detection[i].height;
+                corners.at<double>(2,i*2+1)=1;
+            }
+            cv::Point2f center(imagedata->cvimage.cols/2/imagedata->scale,imagedata->cvimage.rows/2/imagedata->scale);
+            cv::Mat rotmat=cv::getRotationMatrix2D(center,imagedata->rotation,imagedata->scale);
+            corners=rotmat*corners;
+            outputdata->detection.resize(n);
+            for(i=0;i<n;i++)
+            {
+                if(corners.at<double>(0,i*2)<corners.at<double>(0,i*2+1))
+                {
+                    outputdata->detection[i].x=corners.at<double>(0,i*2);
+                    outputdata->detection[i].width=corners.at<double>(0,i*2+1)-corners.at<double>(0,i*2);
+                }
+                else
+                {
+                    outputdata->detection[i].x=corners.at<double>(0,i*2+1);
+                    outputdata->detection[i].width=corners.at<double>(0,i*2)-corners.at<double>(0,i*2+1);
+                }
+                if(corners.at<double>(1,i*2)<corners.at<double>(1,i*2+1))
+                {
+                    outputdata->detection[i].y=corners.at<double>(1,i*2);
+                    outputdata->detection[i].height=corners.at<double>(1,i*2+1)-corners.at<double>(1,i*2);
+                }
+                else
+                {
+                    outputdata->detection[i].y=corners.at<double>(1,i*2+1);
+                    outputdata->detection[i].height=corners.at<double>(1,i*2)-corners.at<double>(1,i*2+1);
+                }
+            }
         }
+        return 1;
     }
-	return 1;
+    else
+    {
+        return 0;
+    }
 }

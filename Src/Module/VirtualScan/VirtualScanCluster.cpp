@@ -15,7 +15,7 @@ PORT_DECL(0, VirtualScanGenerator)
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
-    NOUNUSEDWARNING
+    NOUNUSEDWARNING;
     auto params=NODE_PARAMS;
     auto outputdata=NODE_DATA;
     auto inputparams=PORT_PARAMS(0,0);
