@@ -7,7 +7,7 @@ USE_DEFAULT_NODE
 
 //=================================================
 //Uncomment below PORT_DECL and set input node class name
-//PORT_DECL(0, InputNodeClassName)
+PORT_DECL(0, CameraDPMFusion)
 
 //=================================================
 //Original node functions
@@ -38,6 +38,8 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
     NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    vars->viewer->setText("Open");
 	return 1;
 }
 
@@ -45,6 +47,8 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
     NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    vars->viewer->setText("Close");
 	return 1;
 }
 
@@ -52,5 +56,41 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
     NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    auto data=PORT_DATA(0,0);
+
+    vars->tabwidget->setTabText(0,data->timestamp.toString("HH:mm:ss:zzz"));
+
+    cv::Mat image=data->cvimage.clone();
+
+    if(image.type()==CV_8UC3)
+    {
+        uint i,n=data->detection.size();
+        for(i=0;i<n;i++)
+        {
+            cv::rectangle(image,data->detection[i],cv::Scalar(255,0,0));
+        }
+        QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_RGB888);
+        vars->viewer->setPixmap(QPixmap::fromImage(img));
+        vars->viewer->resize(img.size());
+    }
+    else if(image.type()==CV_8UC1)
+    {
+        uint i,n=data->detection.size();
+        for(i=0;i<n;i++)
+        {
+            cv::rectangle(image,data->detection[i],cv::Scalar(0));
+        }
+        QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_Indexed8);
+        img.setColorTable(vars->colortable);
+        vars->viewer->setPixmap(QPixmap::fromImage(img));
+        vars->viewer->resize(img.size());
+    }
+    else
+    {
+        vars->viewer->setText("Not Support");
+        return 0;
+    }
+
 	return 1;
 }

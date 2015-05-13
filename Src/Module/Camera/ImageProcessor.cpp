@@ -43,6 +43,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     outputdata->cameramat.at<double>(0,0)*=vars->scale;outputdata->cameramat.at<double>(0,2)*=vars->scale;
     outputdata->cameramat.at<double>(1,1)*=vars->scale;outputdata->cameramat.at<double>(1,2)*=vars->scale;
 
+    outputdata->originalsize=data->originalsize;
     outputdata->rotation=data->rotation+vars->rotation;
     outputdata->scale=data->scale*vars->scale;
 
@@ -80,6 +81,7 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, rotation)
     exrotmat.at<double>(1,0)=s;exrotmat.at<double>(1,1)=c;
     outputdata->extrinsicmat=outputdata->extrinsicmat*exrotmat;
 
+    outputdata->originalsize=data->originalsize;
     outputdata->rotation=data->rotation+vars->rotation;
     outputdata->scale=data->scale;
 
@@ -112,6 +114,7 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, scale)
     outputdata->cameramat.at<double>(0,0)*=vars->scale;outputdata->cameramat.at<double>(0,2)*=vars->scale;
     outputdata->cameramat.at<double>(1,1)*=vars->scale;outputdata->cameramat.at<double>(1,2)*=vars->scale;
 
+    outputdata->originalsize=data->originalsize;
     outputdata->rotation=data->rotation;
     outputdata->scale=data->scale*vars->scale;
 
@@ -138,6 +141,7 @@ NODE_EXFUNC_DEF_EXPORT(bool, main, enhance)
     outputdata->cameramat=data->cameramat.clone();
     outputdata->distcoeff=data->distcoeff.clone();
 
+    outputdata->originalsize=data->originalsize;
     outputdata->rotation=data->rotation;
     outputdata->scale=data->scale;
 

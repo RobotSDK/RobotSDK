@@ -73,6 +73,7 @@ public:
     cv::Mat cameramat;
     cv::Mat distcoeff;
 public:
+    cv::Size originalsize;
     double rotation=0;
     double scale=1;
 };

@@ -88,14 +88,16 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     outputdata->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
 
     outputdata->cvimage=cv_bridge::toCvShare(rosimage)->image.clone();
-    outputdata->extrinsicmat=vars->extrinsicmat.clone();
-    outputdata->cameramat=vars->cameramat.clone();
-    outputdata->distcoeff=vars->distcoeff.clone();
-
     if(rosimage->encoding=="bgr8")
     {
         cv::cvtColor(outputdata->cvimage,outputdata->cvimage,CV_BGR2RGB);
     }
+    outputdata->originalsize.width=outputdata->cvimage.cols;
+    outputdata->originalsize.height=outputdata->cvimage.rows;
+
+    outputdata->extrinsicmat=vars->extrinsicmat.clone();
+    outputdata->cameramat=vars->cameramat.clone();
+    outputdata->distcoeff=vars->distcoeff.clone();   
 
     return 1;
 }

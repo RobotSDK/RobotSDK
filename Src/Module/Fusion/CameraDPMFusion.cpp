@@ -64,30 +64,32 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 corners.at<double>(1,i*2+1)=dpmdata->detection[i].y+dpmdata->detection[i].height;
                 corners.at<double>(2,i*2+1)=1;
             }
-            cv::Point2f center(imagedata->cvimage.cols/2/imagedata->scale,imagedata->cvimage.rows/2/imagedata->scale);
+            cv::Point2f center(imagedata->originalsize.width/2,imagedata->originalsize.height/2);
             cv::Mat rotmat=cv::getRotationMatrix2D(center,imagedata->rotation,imagedata->scale);
             corners=rotmat*corners;
+            int xoffset=(imagedata->cvimage.cols-imagedata->originalsize.width)/2;
+            int yoffset=(imagedata->cvimage.rows-imagedata->originalsize.height)/2;
             outputdata->detection.resize(n);
             for(i=0;i<n;i++)
             {
                 if(corners.at<double>(0,i*2)<corners.at<double>(0,i*2+1))
                 {
-                    outputdata->detection[i].x=corners.at<double>(0,i*2);
+                    outputdata->detection[i].x=corners.at<double>(0,i*2)+xoffset;
                     outputdata->detection[i].width=corners.at<double>(0,i*2+1)-corners.at<double>(0,i*2);
                 }
                 else
                 {
-                    outputdata->detection[i].x=corners.at<double>(0,i*2+1);
+                    outputdata->detection[i].x=corners.at<double>(0,i*2+1)+xoffset;
                     outputdata->detection[i].width=corners.at<double>(0,i*2)-corners.at<double>(0,i*2+1);
                 }
                 if(corners.at<double>(1,i*2)<corners.at<double>(1,i*2+1))
                 {
-                    outputdata->detection[i].y=corners.at<double>(1,i*2);
+                    outputdata->detection[i].y=corners.at<double>(1,i*2)+yoffset;
                     outputdata->detection[i].height=corners.at<double>(1,i*2+1)-corners.at<double>(1,i*2);
                 }
                 else
                 {
-                    outputdata->detection[i].y=corners.at<double>(1,i*2+1);
+                    outputdata->detection[i].y=corners.at<double>(1,i*2+1)+yoffset;
                     outputdata->detection[i].height=corners.at<double>(1,i*2)-corners.at<double>(1,i*2+1);
                 }
             }

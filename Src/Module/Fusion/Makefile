@@ -52,12 +52,14 @@ SOURCES       = CameraVelodyneFusion.cpp \
 		ImagePointCloudFusionViewer.cpp \
 		CameraVirtualScanFusion.cpp \
 		ImageVirtualScanFusionViewer.cpp \
-		CameraDPMFusion.cpp 
+		CameraDPMFusion.cpp \
+		ImageDPMFusionViewer.cpp 
 OBJECTS       = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/CameraVelodyneFusion.o \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/ImagePointCloudFusionViewer.o \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/CameraVirtualScanFusion.o \
 		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/ImageVirtualScanFusionViewer.o \
-		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/CameraDPMFusion.o
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/CameraDPMFusion.o \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/ImageDPMFusionViewer.o
 DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
 		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
@@ -181,11 +183,13 @@ DIST          = /home/alexanderhmw/SDK/Qt/5.4/gcc_64/mkspecs/features/spec_pre.p
 		ImagePointCloudFusionViewer.h \
 		CameraVirtualScanFusion.h \
 		ImageVirtualScanFusionViewer.h \
-		CameraDPMFusion.h CameraVelodyneFusion.cpp \
+		CameraDPMFusion.h \
+		ImageDPMFusionViewer.h CameraVelodyneFusion.cpp \
 		ImagePointCloudFusionViewer.cpp \
 		CameraVirtualScanFusion.cpp \
 		ImageVirtualScanFusionViewer.cpp \
-		CameraDPMFusion.cpp
+		CameraDPMFusion.cpp \
+		ImageDPMFusionViewer.cpp
 QMAKE_TARGET  = Fusion
 DESTDIR       = /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/lib/Release/#avoid trailing-slash linebreak
 TARGET        = libFusion.so.1.0.0
@@ -507,8 +511,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents CameraVelodyneFusion.h ImagePointCloudFusionViewer.h CameraVirtualScanFusion.h ImageVirtualScanFusionViewer.h CameraDPMFusion.h $(DISTDIR)/
-	$(COPY_FILE) --parents CameraVelodyneFusion.cpp ImagePointCloudFusionViewer.cpp CameraVirtualScanFusion.cpp ImageVirtualScanFusionViewer.cpp CameraDPMFusion.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents CameraVelodyneFusion.h ImagePointCloudFusionViewer.h CameraVirtualScanFusion.h ImageVirtualScanFusionViewer.h CameraDPMFusion.h ImageDPMFusionViewer.h $(DISTDIR)/
+	$(COPY_FILE) --parents CameraVelodyneFusion.cpp ImagePointCloudFusionViewer.cpp CameraVirtualScanFusion.cpp ImageVirtualScanFusionViewer.cpp CameraDPMFusion.cpp ImageDPMFusionViewer.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -3031,6 +3035,337 @@ compiler_clean:
 		../../../../Autoware/ros/devel/include/dpm/ImageObjects.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/CameraDPMFusion.o CameraDPMFusion.cpp
 
+/home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/ImageDPMFusionViewer.o: ImageDPMFusionViewer.cpp ImageDPMFusionViewer.h \
+		CameraDPMFusion.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Camera/include/CameraSensor.h \
+		/opt/ros/indigo/include/sensor_msgs/Image.h \
+		/opt/ros/indigo/include/ros/types.h \
+		/opt/ros/indigo/include/ros/serialization.h \
+		/opt/ros/indigo/include/ros/roscpp_serialization_macros.h \
+		/opt/ros/indigo/include/ros/macros.h \
+		/opt/ros/indigo/include/ros/time.h \
+		/opt/ros/indigo/include/ros/platform.h \
+		/opt/ros/indigo/include/ros/exception.h \
+		/opt/ros/indigo/include/ros/duration.h \
+		/opt/ros/indigo/include/ros/rostime_decl.h \
+		/opt/ros/indigo/include/ros/serialized_message.h \
+		/opt/ros/indigo/include/ros/message_traits.h \
+		/opt/ros/indigo/include/ros/message_forward.h \
+		/opt/ros/indigo/include/ros/builtin_message_traits.h \
+		/opt/ros/indigo/include/ros/datatypes.h \
+		/opt/ros/indigo/include/ros/message_operations.h \
+		/opt/ros/indigo/include/std_msgs/Header.h \
+		/usr/local/include/opencv2/opencv.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/core.hpp \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/imgproc/imgproc.hpp \
+		/usr/local/include/opencv2/photo/photo.hpp \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d/features2d.hpp \
+		/usr/local/include/opencv2/objdetect/objdetect.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/ml/ml.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/highgui/highgui.hpp \
+		/usr/local/include/opencv2/contrib/contrib.hpp \
+		/usr/local/include/opencv2/contrib/retina.hpp \
+		/usr/local/include/opencv2/contrib/openfabmap.hpp \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/rosinterface.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QObject \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qqueue.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qapplication.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qeventloop.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qguiapplication.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qinputmethod.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qtimer.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qbasictimer.h \
+		/opt/ros/indigo/include/ros/callback_queue.h \
+		/opt/ros/indigo/include/ros/callback_queue_interface.h \
+		/opt/ros/indigo/include/ros/common.h \
+		/opt/ros/indigo/include/ros/assert.h \
+		/opt/ros/indigo/include/ros/console.h \
+		/opt/ros/indigo/include/ros/console_backend.h \
+		/opt/ros/indigo/include/rosconsole/macros_generated.h \
+		/opt/ros/indigo/include/ros/static_assert.h \
+		/opt/ros/indigo/include/ros/forwards.h \
+		/opt/ros/indigo/include/ros/exceptions.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qreadwritelock.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qfileinfo.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QRegExp \
+		/opt/ros/indigo/include/ros/ros.h \
+		/opt/ros/indigo/include/ros/rate.h \
+		/opt/ros/indigo/include/ros/node_handle.h \
+		/opt/ros/indigo/include/ros/publisher.h \
+		/opt/ros/indigo/include/ros/message.h \
+		/opt/ros/indigo/include/ros/subscriber.h \
+		/opt/ros/indigo/include/ros/subscription_callback_helper.h \
+		/opt/ros/indigo/include/ros/parameter_adapter.h \
+		/opt/ros/indigo/include/ros/message_event.h \
+		/opt/ros/indigo/include/ros/service_server.h \
+		/opt/ros/indigo/include/ros/service_client.h \
+		/opt/ros/indigo/include/ros/service_traits.h \
+		/opt/ros/indigo/include/ros/timer.h \
+		/opt/ros/indigo/include/ros/timer_options.h \
+		/opt/ros/indigo/include/ros/wall_timer.h \
+		/opt/ros/indigo/include/ros/wall_timer_options.h \
+		/opt/ros/indigo/include/ros/advertise_options.h \
+		/opt/ros/indigo/include/ros/advertise_service_options.h \
+		/opt/ros/indigo/include/ros/service_callback_helper.h \
+		/opt/ros/indigo/include/ros/subscribe_options.h \
+		/opt/ros/indigo/include/ros/transport_hints.h \
+		/opt/ros/indigo/include/ros/service_client_options.h \
+		/opt/ros/indigo/include/ros/spinner.h \
+		/opt/ros/indigo/include/ros/init.h \
+		/opt/ros/indigo/include/XmlRpcValue.h \
+		/opt/ros/indigo/include/XmlRpcDecl.h \
+		/opt/ros/indigo/include/ros/single_subscriber_publisher.h \
+		/opt/ros/indigo/include/ros/service.h \
+		/opt/ros/indigo/include/ros/names.h \
+		/opt/ros/indigo/include/ros/master.h \
+		/opt/ros/indigo/include/ros/this_node.h \
+		/opt/ros/indigo/include/ros/param.h \
+		/opt/ros/indigo/include/ros/topic.h \
+		/opt/ros/indigo/include/tf/transform_broadcaster.h \
+		/opt/ros/indigo/include/tf/tf.h \
+		/opt/ros/indigo/include/tf/exceptions.h \
+		/opt/ros/indigo/include/tf2/exceptions.h \
+		/opt/ros/indigo/include/tf/time_cache.h \
+		/opt/ros/indigo/include/tf/transform_datatypes.h \
+		/opt/ros/indigo/include/geometry_msgs/PointStamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Point.h \
+		/opt/ros/indigo/include/geometry_msgs/Vector3Stamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Vector3.h \
+		/opt/ros/indigo/include/geometry_msgs/QuaternionStamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Quaternion.h \
+		/opt/ros/indigo/include/geometry_msgs/TransformStamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Transform.h \
+		/opt/ros/indigo/include/geometry_msgs/PoseStamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Pose.h \
+		/opt/ros/indigo/include/tf/LinearMath/Transform.h \
+		/opt/ros/indigo/include/tf/LinearMath/Matrix3x3.h \
+		/opt/ros/indigo/include/tf/LinearMath/Vector3.h \
+		/opt/ros/indigo/include/tf/LinearMath/Scalar.h \
+		/opt/ros/indigo/include/tf/LinearMath/MinMax.h \
+		/opt/ros/indigo/include/tf/LinearMath/Quaternion.h \
+		/opt/ros/indigo/include/tf/LinearMath/QuadWord.h \
+		/opt/ros/indigo/include/geometry_msgs/TwistStamped.h \
+		/opt/ros/indigo/include/geometry_msgs/Twist.h \
+		/opt/ros/indigo/include/tf2_ros/buffer.h \
+		/opt/ros/indigo/include/tf2_ros/buffer_interface.h \
+		/opt/ros/indigo/include/tf2/buffer_core.h \
+		/opt/ros/indigo/include/tf2/transform_storage.h \
+		/opt/ros/indigo/include/tf2/LinearMath/Vector3.h \
+		/opt/ros/indigo/include/tf2/LinearMath/Quaternion.h \
+		/opt/ros/indigo/include/tf2/transform_datatypes.h \
+		/opt/ros/indigo/include/tf2/convert.h \
+		/opt/ros/indigo/include/tf2_msgs/FrameGraph.h \
+		/opt/ros/indigo/include/tf2_msgs/FrameGraphRequest.h \
+		/opt/ros/indigo/include/tf2_msgs/FrameGraphResponse.h \
+		/opt/ros/indigo/include/tf/tfMessage.h \
+		/opt/ros/indigo/include/tf2_ros/transform_broadcaster.h \
+		/opt/ros/indigo/include/tf/transform_listener.h \
+		/opt/ros/indigo/include/sensor_msgs/PointCloud.h \
+		/opt/ros/indigo/include/geometry_msgs/Point32.h \
+		/opt/ros/indigo/include/sensor_msgs/ChannelFloat32.h \
+		/opt/ros/indigo/include/std_msgs/Empty.h \
+		/opt/ros/indigo/include/tf/FrameGraph.h \
+		/opt/ros/indigo/include/tf/FrameGraphRequest.h \
+		/opt/ros/indigo/include/tf/FrameGraphResponse.h \
+		/opt/ros/indigo/include/tf2_ros/transform_listener.h \
+		/opt/ros/indigo/include/tf2_msgs/TFMessage.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QFile \
+		/opt/ros/indigo/include/cv_bridge/cv_bridge.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/RobotSDK.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/node.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/port.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/valuebase.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/syntax.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QList \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QVector \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QString \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QMap \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QWidget \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QLayout \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qlayout.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QMultiMap \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QPair \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QLibrary \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qlibrary.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QtGlobal \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QApplication \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QMutex \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QMutexLocker \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QDebug \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QMetaObject \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QCoreApplication \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QDockWidget \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qdockwidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QTableWidget \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qtablewidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qtableview.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qframe.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/qvalidator.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qregularexpression.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qslider.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qstyle.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QTabWidget \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QListWidget \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qlistwidget.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qlistview.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QEvent \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/xmldominterface.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml/qdom.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtXml/qtxmlglobal.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QTextStream \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/QDateTime \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/graph.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Kernel/include/sync.h \
+		/home/alexanderhmw/SDK/RobotSDK_4.0/Module/DPM/include/DPMDetector.h \
+		../../../../Autoware/ros/devel/include/dpm/ImageObjects.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtGui/QRgb \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QScrollArea \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qscrollarea.h \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/QLabel \
+		/home/alexanderhmw/SDK/Qt/5.4/gcc_64/include/QtWidgets/qlabel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o /home/alexanderhmw/SDK/RobotSDK_4.0/Build/Module/Fusion/OBJ/Release/ImageDPMFusionViewer.o ImageDPMFusionViewer.cpp
+
 ####### Install
 
 install_target: first FORCE
@@ -3056,8 +3391,10 @@ install_headers: first FORCE
 	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/CameraVirtualScanFusion.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/
 	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/ImageVirtualScanFusionViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/
 	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/CameraDPMFusion.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/
+	-$(INSTALL_FILE) /home/alexanderhmw/Git/RobotSDK/Src/Module/Fusion/ImageDPMFusionViewer.h $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/
 
 uninstall_headers: FORCE
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/ImageDPMFusionViewer.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/CameraDPMFusion.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/ImageVirtualScanFusionViewer.h
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/alexanderhmw/SDK/RobotSDK_4.0/Module/Fusion/include/CameraVirtualScanFusion.h
