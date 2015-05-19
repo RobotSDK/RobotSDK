@@ -26,6 +26,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
     outputdata->timestamp=data->timestamp;
     outputdata->extrinsicmat=data->extrinsicmat.clone();
+    outputdata->rospoints=data->rospoints;
     outputdata->virtualscan=data->virtualscan;
     outputdata->minheights=data->minheights;
     outputdata->maxheights=data->maxheights;

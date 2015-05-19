@@ -17,10 +17,24 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
     NOUNUSEDWARNING;
     auto vars=NODE_VARS;
-    if(vars->virtualscanpub==NULL)
+    if(vars->virtualscanpubpointcloud2==NULL||vars->virtualscanpublaserscan==NULL)
     {
         return 0;
     }
+    return 1;
+}
+
+//If you don't need manually open node, you can delete this code segment
+NODE_FUNC_DEF_EXPORT(bool, openNode)
+{
+    NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    if(vars->virtualscanpubpointcloud2==NULL||vars->virtualscanpublaserscan==NULL)
+    {
+        return 0;
+    }
+    vars->virtualscanpubpointcloud2->resetTopic(vars->topicpointcloud2,vars->queuesize);
+    vars->virtualscanpublaserscan->resetTopic(vars->topiclaserscan,vars->queuesize);
     return 1;
 }
 
@@ -31,45 +45,67 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto inputdata=PORT_DATA(0,0);
 
-    int beamnum=inputdata->virtualscan.size();
-
-    sensor_msgs::PointCloud2 msg;
-    msg.header.frame_id="VirtualScan";
-    msg.header.seq=vars->seq++;
-    msg.header.stamp.sec=inputdata->timestamp.second();
-    msg.header.stamp.nsec=inputdata->timestamp.msec()*1000000;
-    msg.height=2;
-    msg.width=beamnum;
-    msg.point_step=8*sizeof(float);
-    msg.row_step=msg.width*msg.point_step;
-    msg.data.resize(msg.height*msg.width*msg.point_step);
-    unsigned char * base=msg.data.data();
-
+    int i,beamnum=inputdata->virtualscan.size();
     double PI=3.141592654;
     double density=2*PI/beamnum;
-    int i;
-    for(i=0;i<beamnum;i++)
+
     {
-        double theta=i*density-PI;
-        float * data;
-        int * ring;
-
-        data=(float *)(base+(2*i)*msg.point_step);
-        data[0]=inputdata->virtualscan[i]*cos(theta);
-        data[1]=inputdata->virtualscan[i]*sin(theta);
-        data[2]=inputdata->minheights[i];
-        data[4]=255;
-        ring=(int *)(data+5*sizeof(float));
-        *ring=0;
-
-        data=(float *)(base+(2*i+1)*msg.point_step);
-        data[0]=inputdata->virtualscan[i]*cos(theta);
-        data[1]=inputdata->virtualscan[i]*sin(theta);
-        data[2]=inputdata->maxheights[i];
-        data[4]=255;
-        ring=(int *)(data+5*sizeof(float));
-        *ring=1;
+        sensor_msgs::LaserScan msg;
+        msg.header.frame_id=inputdata->rospoints->header.frame_id;
+        msg.header.seq=inputdata->rospoints->header.seq;
+        msg.header.stamp=inputdata->rospoints->header.stamp;
+        msg.angle_min=-PI;
+        msg.angle_max=PI;
+        msg.angle_increment=density;
+        msg.time_increment=0;
+        msg.scan_time=0.1;
+        msg.range_min=0.1;
+        msg.range_max=100;
+        msg.ranges.resize(beamnum);
+        msg.intensities.resize(beamnum);
+        for(i=0;i<beamnum;i++)
+        {
+            msg.ranges[i]=inputdata->virtualscan[i];
+            msg.intensities[i]=255;
+        }
+        vars->virtualscanpublaserscan->sendMessage(msg);
     }
-    vars->virtualscanpub->sendMessage(msg);
+
+    {
+        sensor_msgs::PointCloud2 msg;
+        msg.header.frame_id=inputdata->rospoints->header.frame_id;
+        msg.header.seq=inputdata->rospoints->header.seq;
+        msg.header.stamp=inputdata->rospoints->header.stamp;
+        msg.height=2;
+        msg.width=beamnum;
+        msg.point_step=8*sizeof(float);
+        msg.row_step=msg.width*msg.point_step;
+        msg.data.resize(msg.height*msg.width*msg.point_step);
+        unsigned char * base=msg.data.data();
+
+        for(i=0;i<beamnum;i++)
+        {
+            double theta=i*density-PI;
+            float * data;
+            int * ring;
+
+            data=(float *)(base+(2*i)*msg.point_step);
+            data[0]=inputdata->virtualscan[i]*cos(theta);
+            data[1]=inputdata->virtualscan[i]*sin(theta);
+            data[2]=inputdata->minheights[i];
+            data[4]=255;
+            ring=(int *)(data+5*sizeof(float));
+            *ring=0;
+
+            data=(float *)(base+(2*i+1)*msg.point_step);
+            data[0]=inputdata->virtualscan[i]*cos(theta);
+            data[1]=inputdata->virtualscan[i]*sin(theta);
+            data[2]=inputdata->maxheights[i];
+            data[4]=255;
+            ring=(int *)(data+5*sizeof(float));
+            *ring=1;
+        }
+        vars->virtualscanpubpointcloud2->sendMessage(msg);
+    }
     return 1;
 }

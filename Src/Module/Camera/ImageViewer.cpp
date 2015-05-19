@@ -72,7 +72,33 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     else if(image.type()==CV_8UC1)
     {
         QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_Indexed8);
+        img.setColorCount(256);
         img.setColorTable(vars->colortable);
+        vars->viewer->setPixmap(QPixmap::fromImage(img));
+        vars->viewer->resize(img.size());
+    }
+    else if(image.type()==CV_16UC1)
+    {
+        QImage img(image.cols,image.rows,QImage::Format_Indexed8);
+        img.fill(0);
+        img.setColorCount(256);
+        img.setColorTable(vars->colortable);
+        uint i,j;
+        ushort factor=25;
+        for(i=0;i<image.cols;i++)
+        {
+            for(j=0;j<image.rows;j++)
+            {
+                if(image.at<ushort>(j,i)/factor>=256)
+                {
+                    img.setPixel(i,j,255);
+                }
+                else
+                {
+                    img.setPixel(i,j,image.at<ushort>(j,i)/factor);
+                }
+            }
+        }
         vars->viewer->setPixmap(QPixmap::fromImage(img));
         vars->viewer->resize(img.size());
     }
