@@ -67,7 +67,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     {
         if(rosscan->ranges[i]>0)
         {
-            double theta=rosscan->angle_min+i*rosscan->angle_increment;
+            double theta=rosscan->angle_min+i*rosscan->angle_increment+1.570796327;
             double x=rosscan->ranges[i]*cos(theta);
             double y=rosscan->ranges[i]*sin(theta);
             if(x>=-params->width/2&&x<=params->width/2)
@@ -75,6 +75,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 if(y>=0&&y<=params->height)
                 {
                     data->obstacleflag=1;
+                    break;
                 }
             }
         }

@@ -4,6 +4,7 @@
 //=================================================
 //Please add headers here:
 #include<Planning.h>
+#include<Controller.h>
 #include<QFile>
 #include<QTimer>
 
@@ -19,7 +20,7 @@ namespace RobotSDK_Module
 #define NODE_CLASS PlanningSim
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 0
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 1

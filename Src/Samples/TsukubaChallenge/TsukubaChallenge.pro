@@ -16,14 +16,16 @@ SOURCES += \
     Localization.cpp \
     Obstacle.cpp \
     Planning.cpp \
-    PlanningSim.cpp
+    PlanningSim.cpp \
+    ObstacleInfo.cpp
 
 HEADERS += \
     Controller.h \
     Localization.h \
     Obstacle.h \
     Planning.h \
-    PlanningSim.h
+    PlanningSim.h \
+    ObstacleInfo.h
 
 include($$(HOME)/SDK/RobotSDK_4.0/Kernel/RobotSDK.pri)
 
