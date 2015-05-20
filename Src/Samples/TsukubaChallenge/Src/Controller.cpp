@@ -19,6 +19,7 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
     NOUNUSEDWARNING;
     SHSpur_init();
+    auto vars=NODE_VARS;
     return 1;
 }
 
@@ -63,27 +64,30 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         QStringList order=data->order.split(",",QString::SkipEmptyParts);
         if(order.at(0)=="Line")
         {
-            if(!vars->obstacleflag)
+            vars->checkposflag=1;
+            vars->checkangflag=0;
+            if(order.at(1)=="GL")
             {
-                vars->checkposflag=1;
-                vars->checkangflag=0;
-                if(order.at(1)=="GL")
+                double posx,posy,ang;
+                SHSpur_get_pos_GL(&posx,&posy,&ang);
+                vars->destposx=order.at(2).toDouble();
+                vars->destposy=order.at(3).toDouble();
+                vars->destang=atan2(vars->destposy-posy,vars->destposx-posx);
+                if(!vars->obstacleflag)
                 {
-                    double posx,posy,ang;
-                    SHSpur_get_pos_GL(&posx,&posy,&ang);
-                    vars->destposx=order.at(2).toDouble();
-                    vars->destposy=order.at(3).toDouble();
-                    vars->destang=atan2(vars->destposy-posy,vars->destposx-posx);
                     SHSpur_line_GL(vars->destposx,vars->destposy,vars->destang);
                 }
-                else if(order.at(1)=="LC")
+            }
+            else if(order.at(1)=="LC")
+            {
+                SHSpur_get_pos_GL(&(vars->destposx),&(vars->destposy),&(vars->destang));
+                double dx=order.at(2).toDouble();
+                double dy=order.at(3).toDouble();
+                vars->destposx+=dx;
+                vars->destposy+=dy;
+                vars->destang+=atan2(dy,dx);
+                if(!vars->obstacleflag)
                 {
-                    SHSpur_get_pos_GL(&(vars->destposx),&(vars->destposy),&(vars->destang));
-                    double dx=order.at(2).toDouble();
-                    double dy=order.at(3).toDouble();
-                    vars->destposx+=dx;
-                    vars->destposy+=dy;
-                    vars->destang+=atan2(dy,dx);
                     SHSpur_line_GL(vars->destposx,vars->destposy,vars->destang);
                 }
             }
@@ -114,9 +118,13 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     else if(PORT_DATA_SIZE(2)>0)
     {
         auto data=PORT_DATA(2,0);
-        if(vars->obstacleflag)
+        auto outputdata=NODE_DATA;
+        outputdata->state=None;
+        bool flag1=vars->obstacleflag;
+        bool flag2=data->obstacleflag;
+        if(flag1)
         {
-            if(!vars->obstacleflag)
+            if(!flag2)
             {
                 if(vars->checkposflag)
                 {
@@ -124,13 +132,21 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 }
                 vars->obstacleflag=data->obstacleflag;
             }
+            else
+            {
+                outputdata->state=Wait;
+            }
         }
         else
         {
-            if(vars->obstacleflag)
+            if(flag2)
             {
-                SHSpur_stop();
+                if(vars->checkposflag)
+                {
+                    SHSpur_stop();
+                }
                 vars->obstacleflag=data->obstacleflag;
+                outputdata->state=Wait;
             }
         }
         if(vars->checkposflag)
@@ -139,6 +155,11 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             {
                 SHSpur_stop();
                 vars->checkposflag=0;
+                outputdata->state=Finish;
+            }
+            else
+            {
+                outputdata->state=Process;
             }
         }
         else if(vars->checkangflag)
@@ -147,12 +168,14 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             {
                 SHSpur_stop();
                 vars->checkangflag=0;
+                outputdata->state=Finish;
+            }
+            else
+            {
+                outputdata->state=Process;
             }
         }
-        else
-        {
-            SHSpur_stop();
-        }
+        return 1;
     }
-	return 1;
+    return 0;
 }

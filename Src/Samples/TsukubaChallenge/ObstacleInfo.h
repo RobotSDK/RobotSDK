@@ -1,15 +1,11 @@
-#ifndef CONTROLLER
-#define CONTROLLER
+#ifndef OBSTACLEINFO
+#define OBSTACLEINFO
 
 //=================================================
 //Please add headers here:
-#include<Localization.h>
-#include<Planning.h>
 #include<Obstacle.h>
-
-#include<SHSpur.h>
-#include<math.h>
-#include<QTimer>
+#include<QLabel>
+#include<QLayout>
 
 //=================================================
 #include<RobotSDK.h>
@@ -20,13 +16,13 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS Controller
+#define NODE_CLASS ObstacleInfo
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 3
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
-#define OUTPUT_PORT_NUM 1
+#define OUTPUT_PORT_NUM 0
 
 //=================================================
 //Params types configuration
@@ -35,9 +31,7 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(double, linear_velocity, 1.0)
-    ADD_PARAM(double, angular_velocity, 1.0)
+
 };
 
 //=================================================
@@ -48,30 +42,18 @@ public:
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    ADD_VAR(double, pos_error, 0.2)
-    ADD_VAR(double, ang_error, 0.04)
-    bool checkposflag;
-    bool checkangflag;
-    double destposx, destposy;
-    double destang;
-    bool obstacleflag;
+    ADD_QLAYOUT(QHBoxLayout, layout)
+    ADD_QWIDGET(QLabel, info)
 };
 
 //=================================================
 //Data types configuration
-enum OrderState
-{
-    None,
-    Process,
-    Finish,
-    Wait
-};
+
 //If you need to refer data type of other node class, please uncomment below and comment its own data type.
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-public:
-     OrderState state;
+
 };
 
 //=================================================
