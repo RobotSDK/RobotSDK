@@ -83,8 +83,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 SHSpur_get_pos_GL(&(vars->destposx),&(vars->destposy),&(vars->destang));
                 double dx=order.at(2).toDouble();
                 double dy=order.at(3).toDouble();
-                vars->destposx+=dx;
-                vars->destposy+=dy;
+                vars->destposx+=dx*cos(vars->destang)-dy*sin(vars->destang);
+                vars->destposy+=dx*sin(vars->destang)+dy*cos(vars->destang);
                 vars->destang+=atan2(dy,dx);
                 if(!vars->obstacleflag)
                 {
