@@ -3,7 +3,7 @@
 
 //=================================================
 //Please add headers here:
-
+#include<Controller.h>
 
 //=================================================
 #include<RobotSDK.h>
@@ -39,7 +39,9 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    ADD_VAR(QString, waypointfile, "waypoint.txt")
+    QVector<
 };
 
 //=================================================
