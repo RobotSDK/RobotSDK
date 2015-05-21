@@ -17,7 +17,7 @@ namespace RobotSDK_Module
 #define NODE_CLASS Planning
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 0
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 1

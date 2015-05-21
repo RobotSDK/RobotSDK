@@ -6,6 +6,10 @@ using namespace RobotSDK_Module;
 USE_DEFAULT_NODE
 
 //=================================================
+//Uncomment below PORT_DECL and set input node class name
+PORT_DECL(0, Controller)
+
+//=================================================
 //Original node functions
 
 //If you don't need to initialize node, you can delete this code segment
