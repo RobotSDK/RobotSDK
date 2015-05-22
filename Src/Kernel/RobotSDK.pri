@@ -22,7 +22,6 @@ unix{
     }
 
     INCLUDEPATH += /usr/include/eigen3
-    LIBS *= -L/usr/lib/i386-linux-gnu -lGLU
 
     ROS = $$(ROS_DISTRO)
     isEmpty(ROS){

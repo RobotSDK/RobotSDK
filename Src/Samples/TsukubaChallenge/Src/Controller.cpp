@@ -113,6 +113,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             vars->checkposflag=0;
             vars->checkangflag=0;
             SHSpur_stop();
+            auto outputdata=NODE_DATA;
+            outputdata->state=Finish;
+            return 1;
         }
     }
     else if(PORT_DATA_SIZE(2)>0)
