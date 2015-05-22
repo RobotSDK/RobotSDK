@@ -4,8 +4,6 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
-
 TARGET = TsukubaChallenge
 TEMPLATE = lib
 

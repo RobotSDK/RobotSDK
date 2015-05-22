@@ -1,4 +1,4 @@
-QT += widgets xml opengl
+QT += core widgets xml opengl
 TEMPLATE = lib
 CONFIG += staticlib qt
 CONFIG += c++11

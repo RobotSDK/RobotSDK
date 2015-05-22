@@ -72,7 +72,7 @@ NODE_FUNC_DEF(bool, generateNewOrder)
         {
             while(vars->pointid<vars->waypoint.size())
             {
-                QPointF diff=vars->curpoint-vars->waypoint.at(vars->pointid);
+                QPointF diff=vars->waypoint.at(vars->pointid)-vars->curpoint;
                 double theta=atan2(diff.y(),diff.x());
                 double distance=sqrt(diff.x()*diff.x()+diff.y()*diff.y());
                 if(distance>params->pos_error)

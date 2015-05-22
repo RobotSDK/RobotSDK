@@ -1,4 +1,4 @@
-QT *= widgets xml opengl
+QT *= core widgets xml opengl
 CONFIG *= c++11 qt
 DEFINES *= RobotSDK_ModDev
 
