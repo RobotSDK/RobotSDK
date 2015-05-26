@@ -24,7 +24,8 @@ OTHER_FILES += \
     RobotSDK.h
 
 DISTFILES += \
-    RobotSDK.pri
+    RobotSDK.pri \
+    RobotSDK_CUDA.pri
 
 INCLUDEPATH += .
 

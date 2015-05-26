@@ -27,8 +27,7 @@ unix{
     isEmpty(ROS){
         isEmpty(TMPROS){
         }
-        else
-        {
+        else{
             LIBS *= -L/opt/ros/indigo/lib -lroscpp
             LIBS *= -L/opt/ros/indigo/lib -lrosconsole
             LIBS *= -L/opt/ros/indigo/lib -lroscpp_serialization
