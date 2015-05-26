@@ -24,8 +24,7 @@ OTHER_FILES += \
     RobotSDK.h
 
 DISTFILES += \
-    RobotSDK.pri \
-    RobotSDK_CUDA.pri
+    RobotSDK.pri
 
 INCLUDEPATH += .
 
@@ -60,6 +59,9 @@ unix{
            rosinterface.cpp
         INCLUDEPATH += /opt/ros/$$ROS/include
     }
+    DISTFILES += \
+        RobotSDK_CUDA.pri \
+        setup.bash
 }
 
 win32{

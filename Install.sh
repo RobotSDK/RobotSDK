@@ -14,6 +14,10 @@ qmake -makefile $TMPBASEDIR/Src/Kernel/Kernel.pro -r -o "Makefile.Debug" "CONFIG
 make -f Makefile.Debug;
 make -f Makefile.Debug install;
 rm Makefile.Debug;
+if ! grep -Fxq "source $HOME/SDK/RobotSDK_4.0/Kernel/setup.bash" ~/.bashrc;
+then echo "source $HOME/SDK/RobotSDK_4.0/Kernel/setup.bash" >> ~/.bashrc;
+fi;
+. $HOME/SDK/RobotSDK_4.0/Kernel/setup.bash;
 qmake -makefile $TMPBASEDIR/Src/Robot-X/Robot-X.pro -r -o "Makefile.Release" "CONFIG+=release";
 make -f Makefile.Release -B;
 make -f Makefile.Release install;
@@ -22,5 +26,3 @@ qmake -makefile $TMPBASEDIR/Src/Robot-X/Robot-X.pro -r -o "Makefile.Debug" "CONF
 make -f Makefile.Debug -B;
 make -f Makefile.Debug install;
 rm Makefile.Debug;
-rm install;
-
