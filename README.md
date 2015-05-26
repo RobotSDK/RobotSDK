@@ -12,18 +12,7 @@ git clone https://github.com/RobotSDK/RobotSDK.git
 ```
 cd RobotSDK
 sh Install.sh
-
 ```
- Setup environment variables, write them into ~/.bashrc:
-```
-QTVER=5.4
-QTDIR=$HOME/SDK/Qt/$QTVER/gcc_64
-QTCDIR=$HOME/SDK/Qt/Tools/QtCreator
-export RobotSDKDIR=$HOME/SDK/RobotSDK_4.0
-export PATH=$QTDIR/bin:$QTCDIR/bin:$RobotSDKDIR/Robot-X:$PATH
-export LD_LIBRARY_PATH=$QTDIR/lib:$QTCDIR/lib/qtcreator:/opt/ros/$ROS_DISTRO/lib:$LD_LIBRARY_PATH
-```
-
   (2) for Windows (use Visual Studio Command Prompt)
 ```
 cd RobotSDK
