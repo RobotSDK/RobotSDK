@@ -25,6 +25,30 @@ unix {
     INCLUDEPATH += /usr/include/graphviz
     LIBS += -L/usr/lib -lcgraph
     LIBS += -L/usr/lib -lgvc
+
+    ROS = $$(ROS_DISTRO)
+    isEmpty(ROS){
+        error(Please install ROS first or run via terminal if you have ROS installed)
+    }
+    else{
+        LIBS *= -L/opt/ros/$$ROS/lib -lroscpp
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole
+        LIBS *= -L/opt/ros/$$ROS/lib -lroscpp_serialization
+        LIBS *= -L/opt/ros/$$ROS/lib -lrostime
+        LIBS *= -L/opt/ros/$$ROS/lib -lxmlrpcpp
+        LIBS *= -L/opt/ros/$$ROS/lib -lcpp_common
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole_log4cxx
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole_backend_interface
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf2
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf2_ros
+        LIBS *= -L/opt/ros/$$ROS/lib -lpcl_ros_tf
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf_conversions
+        LIBS *= -L/opt/ros/$$ROS/lib -lactionlib
+        LIBS *= -L/opt/ros/$$ROS/lib -lcv_bridge
+        LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
+        INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
+    }
 }
 
 win32 {

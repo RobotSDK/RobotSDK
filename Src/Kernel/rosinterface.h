@@ -24,25 +24,24 @@
 namespace RobotSDK
 {
 
-#ifndef INITROSMASTERURI
-#define INITROSMASTERURI QString(getenv("ROS_MASTER_URI"))
-#endif
-
 class ROSInterfaceBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit ROSInterfaceBase(QString NodeName, QString ROSMasterURI, QObject *parent);
+    explicit ROSInterfaceBase(QObject *parent);
     ~ROSInterfaceBase();
 protected:
     ros::NodeHandle * nh;
+public:
+    static QString NodeName;
+    static bool initflag;
 };
 
 template<class MSGTYPE>
 class ROSPub : public ROSInterfaceBase
 {
 public:
-    ROSPub(QString Topic, u_int32_t QueueSize, QString NodeName=QString(), QString ROSMasterURi=INITROSMASTERURI, QObject * parent=0);
+    ROSPub(QString Topic, u_int32_t QueueSize, QObject * parent=0);
     ~ROSPub();
 protected:
     ros::Publisher pub;
@@ -53,8 +52,8 @@ public:
 };
 
 template<class MSGTYPE>
-ROSPub<MSGTYPE>::ROSPub(QString Topic, u_int32_t QueueSize, QString NodeName, QString ROSMasterURi, QObject *parent)
-    : ROSInterfaceBase(NodeName,ROSMasterURi,parent)
+ROSPub<MSGTYPE>::ROSPub(QString Topic, u_int32_t QueueSize, QObject *parent)
+    : ROSInterfaceBase(parent)
 {
     pub=nh->advertise<MSGTYPE>(Topic.toStdString(),QueueSize);
 }
@@ -96,7 +95,7 @@ class ROSSubBase : public ROSInterfaceBase
 {
     Q_OBJECT
 public:
-    ROSSubBase(int QueryInterval, QString NodeName, QString ROSMasterURi, QObject * parent);
+    ROSSubBase(int QueryInterval, QObject * parent);
     ~ROSSubBase();
 protected:
     ros::CallbackQueue queue;
@@ -122,7 +121,7 @@ template<class MSGTYPE>
 class ROSSub : public ROSSubBase
 {
 public:
-    ROSSub(QString Topic, u_int32_t QueueSize, int QueryInterval, QString NodeName=QString(), QString ROSMasterURi=INITROSMASTERURI, QObject * parent=0);
+    ROSSub(QString Topic, u_int32_t QueueSize, int QueryInterval, QObject * parent=0);
     ~ROSSub();
 public:
     void receiveMessageCallback(const MSGTYPE & msg);
@@ -139,8 +138,8 @@ public:
 };
 
 template<class MSGTYPE>
-ROSSub<MSGTYPE>::ROSSub(QString Topic, u_int32_t QueueSize, int QueryInterval, QString NodeName, QString ROSMasterURi, QObject *parent)
-    : ROSSubBase(QueryInterval,NodeName,ROSMasterURi,parent)
+ROSSub<MSGTYPE>::ROSSub(QString Topic, u_int32_t QueueSize, int QueryInterval, QObject *parent)
+    : ROSSubBase(QueryInterval,parent)
 {
     sub=nh->subscribe(Topic.toStdString(),QueueSize,&ROSSub<MSGTYPE>::receiveMessageCallback,this);
 }
@@ -207,7 +206,7 @@ class ROSTFPub : public ROSInterfaceBase
 {
     Q_OBJECT
 public:
-    ROSTFPub(QString childFrameID, QString frameID="world", QString NodeName=QString(), QString ROSMasterURI=INITROSMASTERURI, QObject * parent=0);
+    ROSTFPub(QString childFrameID, QString frameID="world", QObject * parent=0);
 protected:
     QString childframeid;
     QString frameid;
@@ -224,7 +223,7 @@ class ROSTFSub : public ROSInterfaceBase
 {
     Q_OBJECT
 public:
-    ROSTFSub(QString destinationFrame, QString originalFrame="world", int QueryInterval=10, QString NodeName=QString(), QString ROSMasterURI=INITROSMASTERURI, QObject * parent=0);
+    ROSTFSub(QString destinationFrame, QString originalFrame="world", int QueryInterval=10, QObject * parent=0);
     ~ROSTFSub();
 protected:
     QString destinationframe;

@@ -25,44 +25,24 @@ unix{
 
     ROS = $$(ROS_DISTRO)
     isEmpty(ROS){
-        isEmpty(TMPROS){
-        }
-        else{
-            LIBS *= -L/opt/ros/indigo/lib -lroscpp
-            LIBS *= -L/opt/ros/indigo/lib -lrosconsole
-            LIBS *= -L/opt/ros/indigo/lib -lroscpp_serialization
-            LIBS *= -L/opt/ros/indigo/lib -lrostime
-            LIBS *= -L/opt/ros/indigo/lib -lxmlrpcpp
-            LIBS *= -L/opt/ros/indigo/lib -lcpp_common
-            LIBS *= -L/opt/ros/indigo/lib -lrosconsole_log4cxx
-            LIBS *= -L/opt/ros/indigo/lib -lrosconsole_backend_interface
-            LIBS *= -L/opt/ros/indigo/lib -ltf
-            LIBS *= -L/opt/ros/indigo/lib -ltf2
-            LIBS *= -L/opt/ros/indigo/lib -ltf2_ros
-            LIBS *= -L/opt/ros/indigo/lib -lpcl_ros_tf
-            LIBS *= -L/opt/ros/indigo/lib -ltf_conversions
-            LIBS *= -L/opt/ros/indigo/lib -lactionlib
-            LIBS *= -L/opt/ros/indigo/lib -lcv_bridge
-            LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
-            INCLUDEPATH += /opt/ros/$$TMPROS/include
-        }
+        error(Please install ROS first or run via terminal if you have ROS installed)
     }
     else{
-        LIBS *= -L/opt/ros/indigo/lib -lroscpp
-        LIBS *= -L/opt/ros/indigo/lib -lrosconsole
-        LIBS *= -L/opt/ros/indigo/lib -lroscpp_serialization
-        LIBS *= -L/opt/ros/indigo/lib -lrostime
-        LIBS *= -L/opt/ros/indigo/lib -lxmlrpcpp
-        LIBS *= -L/opt/ros/indigo/lib -lcpp_common
-        LIBS *= -L/opt/ros/indigo/lib -lrosconsole_log4cxx
-        LIBS *= -L/opt/ros/indigo/lib -lrosconsole_backend_interface
-        LIBS *= -L/opt/ros/indigo/lib -ltf
-        LIBS *= -L/opt/ros/indigo/lib -ltf2
-        LIBS *= -L/opt/ros/indigo/lib -ltf2_ros
-        LIBS *= -L/opt/ros/indigo/lib -lpcl_ros_tf
-        LIBS *= -L/opt/ros/indigo/lib -ltf_conversions
-        LIBS *= -L/opt/ros/indigo/lib -lactionlib
-        LIBS *= -L/opt/ros/indigo/lib -lcv_bridge
+        LIBS *= -L/opt/ros/$$ROS/lib -lroscpp
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole
+        LIBS *= -L/opt/ros/$$ROS/lib -lroscpp_serialization
+        LIBS *= -L/opt/ros/$$ROS/lib -lrostime
+        LIBS *= -L/opt/ros/$$ROS/lib -lxmlrpcpp
+        LIBS *= -L/opt/ros/$$ROS/lib -lcpp_common
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole_log4cxx
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosconsole_backend_interface
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf2
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf2_ros
+        LIBS *= -L/opt/ros/$$ROS/lib -lpcl_ros_tf
+        LIBS *= -L/opt/ros/$$ROS/lib -ltf_conversions
+        LIBS *= -L/opt/ros/$$ROS/lib -lactionlib
+        LIBS *= -L/opt/ros/$$ROS/lib -lcv_bridge
         LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
         INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
     }

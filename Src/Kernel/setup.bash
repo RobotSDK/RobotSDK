@@ -18,9 +18,9 @@ QTCDIR=$QTDIR/Tools/QtCreator
 export RobotSDKDIR=$HOME/SDK/RobotSDK_4.0
 if test -z "$ADDPATH"
 then
-    ADDPATH=$QTMDIR/bin:$QTCDIR/bin
+    ADDPATH=$QTMDIR/bin:$QTCDIR/bin:$HOME/SDK/RobotSDK_4.0/Robot-X
 else
-    ADDPATH=$QTMDIR/bin:$QTCDIR/bin:$ADDPATH
+    ADDPATH=$QTMDIR/bin:$QTCDIR/bin:$HOME/SDK/RobotSDK_4.0/Robot-X:$ADDPATH
 fi
 if test -z "$ADDLIBRARY"
 then

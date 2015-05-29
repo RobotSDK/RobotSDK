@@ -2,24 +2,30 @@
 
 using namespace RobotSDK;
 
-ROSInterfaceBase::ROSInterfaceBase(QString NodeName, QString ROSMasterURI, QObject *parent)
+QString ROSInterfaceBase::NodeName=QString();
+bool ROSInterfaceBase::initflag=0;
+
+ROSInterfaceBase::ROSInterfaceBase(QObject *parent)
     : QObject(parent)
 {
-    qputenv("ROS_MASTER_URI",ROSMasterURI.toUtf8());
-    QStringList arguments=QApplication::instance()->arguments();
-    int argc=1;
-    if(NodeName.isEmpty())
+    if(!initflag)
     {
-        QFileInfo fileinfo(arguments[0]);
-        if(fileinfo.exists())
+        QStringList arguments=QApplication::instance()->arguments();
+        int argc=1;
+        if(NodeName.isEmpty())
         {
-            NodeName=fileinfo.baseName();
-            NodeName.replace(QRegExp("[^a-zA-Z0-9/_$]"),QString("_"));
+            QFileInfo fileinfo(arguments[0]);
+            if(fileinfo.exists())
+            {
+                NodeName=fileinfo.baseName();
+            }
         }
+        NodeName.replace(QRegExp("[^a-zA-Z0-9/_$]"),QString("_"));
+        char *argv=arguments[0].toUtf8().data();
+        ros::init(argc,&argv,NodeName.toStdString());
+        initflag=1;
     }
-    char *argv=arguments[0].toUtf8().data();
 
-    ros::init(argc,&argv,NodeName.toStdString());
     nh=new ros::NodeHandle;
 }
 
@@ -36,8 +42,8 @@ ROSInterfaceBase::~ROSInterfaceBase()
     }
 }
 
-ROSSubBase::ROSSubBase(int QueryInterval, QString NodeName, QString ROSMasterURi, QObject *parent)
-    : ROSInterfaceBase(NodeName,ROSMasterURi,parent)
+ROSSubBase::ROSSubBase(int QueryInterval, QObject *parent)
+    : ROSInterfaceBase(parent)
 {
     nh->setCallbackQueue(&queue);
     timer=new QTimer(this);
@@ -102,8 +108,8 @@ void ROSSubBase::receiveMessage(ros::CallbackQueue::CallOneResult result)
     return;
 }
 
-ROSTFPub::ROSTFPub(QString childFrameID, QString frameID, QString NodeName, QString ROSMasterURI, QObject *parent)
-    : ROSInterfaceBase(NodeName,ROSMasterURI,parent)
+ROSTFPub::ROSTFPub(QString childFrameID, QString frameID, QObject *parent)
+    : ROSInterfaceBase(parent)
 {
     childframeid=childFrameID;
     frameid=frameID;
@@ -135,8 +141,8 @@ void ROSTFPub::resetFrameID(QString frameID)
     frameid=frameID;
 }
 
-ROSTFSub::ROSTFSub(QString destinationFrame, QString originalFrame, int QueryInterval, QString NodeName, QString ROSMasterURI, QObject *parent)
-    : ROSInterfaceBase(NodeName,ROSMasterURI,parent)
+ROSTFSub::ROSTFSub(QString destinationFrame, QString originalFrame, int QueryInterval, QObject *parent)
+    : ROSInterfaceBase(parent)
 {
     destinationframe=destinationFrame;
     originalframe=originalFrame;
