@@ -1,7 +1,18 @@
+for(sourcefile, SOURCES){
+    tmpfind=$$find(sourcefile, .cu)
+    isEmpty(tmpfind){
+    }
+    else{
+        CUDA_SOURCES+=$$sourcefile
+    }
+}
+
 isEmpty(CUDA_SOURCES){
-    message(Please add .cu files to CUDA_SOURCES variable in .pro file)
+    message(Please add .cu files to SOURCES variable in .pro file)
 }
 else{
+    message(Successfully get .cu files from SOURCES: $$CUDA_SOURCES)
+
     CUDA_DIR = /usr/local/cuda
     CUDA_ARCH = sm_35
 
