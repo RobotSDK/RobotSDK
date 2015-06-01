@@ -2,7 +2,6 @@
 
 using namespace RobotSDK;
 
-QString ROSInterfaceBase::NodeName=QString();
 bool ROSInterfaceBase::initflag=0;
 
 ROSInterfaceBase::ROSInterfaceBase(QObject *parent)
@@ -12,16 +11,17 @@ ROSInterfaceBase::ROSInterfaceBase(QObject *parent)
     {
         QStringList arguments=QApplication::instance()->arguments();
         int argc=1;
-        if(NodeName.isEmpty())
+        QString NodeName;
+        if(arguments.size()>1)
         {
-            QFileInfo fileinfo(arguments[0]);
-            if(fileinfo.exists())
-            {
-                NodeName=fileinfo.baseName();
-            }
+            NodeName=arguments[1];
+        }
+        else
+        {
+            NodeName=QFileInfo(arguments[0]).baseName();
         }
         NodeName.replace(QRegExp("[^a-zA-Z0-9/_$]"),QString("_"));
-        char *argv=arguments[0].toUtf8().data();
+        char *argv=NodeName.toUtf8().data();
         ros::init(argc,&argv,NodeName.toStdString());
         initflag=1;
     }

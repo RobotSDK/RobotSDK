@@ -35,6 +35,8 @@
 namespace RobotSDK
 {
 
+#define ROBOTSDKVER QString("4.0")
+
 class XMLValueBase;
 class XMLParamsBase;
 class XMLVarsBase;

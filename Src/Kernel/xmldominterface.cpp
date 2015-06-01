@@ -7,7 +7,32 @@ XMLDomInterface::XMLDomInterface(QString configName, QStringList nodeFullName)
     editflag=0;
     nullflag=0;
 
-    configname=configName;
+    QFileInfo fileinfo(configName);
+    if(fileinfo.isAbsolute())
+    {
+        configname=configName;
+    }
+    else
+    {
+        QStringList arguments=QApplication::instance()->arguments();
+        QString RobotName;
+        if(arguments.size()>1)
+        {
+            RobotName=arguments[1];
+        }
+        else
+        {
+            RobotName=QFileInfo(arguments[0]).baseName();
+        }
+        RobotName.replace(QRegExp("[^a-zA-Z0-9/_$]"),QString("_"));
+#ifdef Q_OS_LINUX
+        configname=QString("%1/SDK/RobotSDK_%2/Robot-X/%3/%4").arg(QString(qgetenv("HOME"))).arg(ROBOTSDKVER).arg(RobotName).arg(configName);
+#endif
+#ifdef Q_OS_WIN32
+        configname=QString("C:/SDK/RobotSDK_%1/Robot-X/%2/%3").arg(ROBOTSDKVER).arg(XMLDomInterface::RobotName).arg(configName);
+#endif
+    }
+    QDir().mkpath(QFileInfo(configname).path());
     QFile file(configname);
     if(!file.exists())
     {

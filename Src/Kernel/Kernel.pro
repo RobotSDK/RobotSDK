@@ -29,7 +29,7 @@ DISTFILES += \
 INCLUDEPATH += .
 
 unix{
-    ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_4.0
+    ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)
 
     HEADERS += \
         glviewer.h
@@ -65,7 +65,7 @@ unix{
 }
 
 win32{
-    ROBOTSDKDIR=C:/SDK/RobotSDK_4.0
+    ROBOTSDKDIR=C:/SDK/RobotSDK_$$(ROBOTSDKVER)
 
     EIGEN=$$(EIGEN_PATH)
     isEmpty(EIGEN){

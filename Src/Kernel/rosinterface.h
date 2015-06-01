@@ -6,7 +6,7 @@
 #include<qstring.h>
 #include<qstringlist.h>
 #include<qqueue.h>
-#include<qapplication.h>
+#include<QApplication>
 #include<qtimer.h>
 #include<ros/callback_queue.h>
 #include<qreadwritelock.h>
@@ -33,7 +33,6 @@ public:
 protected:
     ros::NodeHandle * nh;
 public:
-    static QString NodeName;
     static bool initflag;
 };
 

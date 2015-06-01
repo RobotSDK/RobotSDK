@@ -7,6 +7,7 @@
 #include<QPair>
 #include<QFile>
 #include<QTextStream>
+#include<QtGlobal>
 
 #include<gvc.h>
 
@@ -33,6 +34,9 @@ protected:
     Agraph_t * _graph;
     QMap< XNode *, Agnode_t * > _nodes;
     QMap< XEdge *, Agedge_t * > _edges;
+protected:
+    QString moduledir;
+    QString graphdir;
 public slots:
     void slotAddNode(QString nodeFullName, QString libraryFileName=QString(), QString configFileName=QString("Config.xml"));
 protected slots:

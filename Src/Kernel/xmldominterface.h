@@ -5,11 +5,17 @@
 #include<QString>
 #include<QVector>
 #include<QFile>
+#include<QFileInfo>
+#include<QDir>
 #include<QTextStream>
 #include<QDateTime>
 #include<string>
 #include<QMap>
 #include<QPair>
+#include<QtGlobal>
+#include<QDebug>
+#include<QApplication>
+#include"syntax.h"
 
 namespace RobotSDK
 {

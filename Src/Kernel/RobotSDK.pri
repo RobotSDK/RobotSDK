@@ -9,16 +9,16 @@ unix{
     }
     else{
         for(module, MODULES){
-            INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Module/$$module/include
+            INCLUDEPATH += $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$module/include
         }
     }
 
-    INCLUDEPATH += $$(HOME)/SDK/RobotSDK_4.0/Kernel/include
+    INCLUDEPATH += $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/include
     CONFIG(debug, debug|release){
-        LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+        LIBS += -L$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Debug
     }
     else{
-        LIBS += -L$$(HOME)/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release
+        LIBS += -L$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Release
     }
 
     INCLUDEPATH += /usr/include/eigen3
@@ -46,23 +46,24 @@ unix{
         LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
         INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
     }
+    LIBS *= -L/usr/lib/x86_64-linux-gnu -lglut -lGLU
 
-    MOC_DIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/MOC
-    UI_DIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/UI
+    MOC_DIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/MOC
+    UI_DIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/UI
 
     CONFIG(debug, debug|release){
-        OBJECTS_DIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/OBJ/Debug
-        DESTDIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/lib/Debug
-        target.path = $$(HOME)/SDK/RobotSDK_4.0/Module/$$TARGET/lib/Debug
+        OBJECTS_DIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/OBJ/Debug
+        DESTDIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/lib/Debug
+        target.path = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/lib/Debug
     }
     else{
-        OBJECTS_DIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/OBJ/Release
-        DESTDIR = $$(HOME)/SDK/RobotSDK_4.0/Build/Module/$$TARGET/lib/Release
-        target.path = $$(HOME)/SDK/RobotSDK_4.0/Module/$$TARGET/lib/Release
+        OBJECTS_DIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/OBJ/Release
+        DESTDIR = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/lib/Release
+        target.path = $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/lib/Release
     }
     INSTALLS += target
 
-    headers.path=$$(HOME)/SDK/RobotSDK_4.0/Module/$$TARGET/include
+    headers.path=$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/include
     headers.files=$$HEADERS    
     INSTALLS += headers
 }
@@ -72,16 +73,16 @@ win32{
     }
     else{
         for(module, MODULES){
-            INCLUDEPATH += C:/SDK/RobotSDK_4.0/Module/$$module/include
+            INCLUDEPATH += C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$module/include
         }
     }
 
-    INCLUDEPATH += C:/SDK/RobotSDK_4.0/Kernel/include
+    INCLUDEPATH += C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/include
     CONFIG(debug, debug|release){
-        LIBS += -LC:/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Debug
+        LIBS += -LC:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Debug
     }
     else{
-        LIBS += -LC:/SDK/RobotSDK_4.0/Kernel/lib -lKernel_Release
+        LIBS += -LC:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Release
     }
     EIGEN=$$(EIGEN_PATH)
     isEmpty(EIGEN){
@@ -90,22 +91,22 @@ win32{
         INCLUDEPATH += $$(EIGEN_PATH)
     }
 
-    MOC_DIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/MOC
-    UI_DIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/UI
+    MOC_DIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/MOC
+    UI_DIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/UI
 
     CONFIG(debug, debug|release){
-        OBJECTS_DIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/OBJ/Debug
-        DESTDIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/lib/Debug
-        target.path = C:/SDK/RobotSDK_4.0/Module/$$TARGET/lib/Debug
+        OBJECTS_DIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/OBJ/Debug
+        DESTDIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/lib/Debug
+        target.path = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/lib/Debug
     }
     else{
-        OBJECTS_DIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/OBJ/Release
-        DESTDIR = C:/SDK/RobotSDK_4.0/Build/Module/$$TARGET/lib/Release
-        target.path = C:/SDK/RobotSDK_4.0/Module/$$TARGET/lib/Release
+        OBJECTS_DIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/OBJ/Release
+        DESTDIR = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Build/Module/$$TARGET/lib/Release
+        target.path = C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/lib/Release
     }
     INSTALLS += target
 
-    headers.path=C:/SDK/RobotSDK_4.0/Module/$$TARGET/include
+    headers.path=C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Module/$$TARGET/include
     headers.files=$$HEADERS
     INSTALLS += headers
 }

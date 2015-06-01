@@ -22,6 +22,15 @@ XGraph::XGraph(QObject *parent)
     _agset(_graph, "rankdir", "LR");
 
     qRegisterMetaType<XPort::PORTTYPE>("XPort::PORTTYPE");
+
+#ifdef Q_OS_LINUX
+    moduledir=QString("%1/SDK/RobotSDK_%2/Module").arg(QString(qgetenv("HOME"))).arg(ROBOTSDKVER);
+    graphdir=QString("%1/SDK/RobotSDK_%2/Robot-X").arg(QString(qgetenv("HOME"))).arg(ROBOTSDKVER);
+#endif
+#ifdef Q_OS_WIN32
+    moduledir=QString("C:/SDK/RobotSDK_%1/Module").arg(ROBOTSDKVER);
+    graphdir=QString("C:/SDK/RobotSDK_%1/Robot-X").arg(ROBOTSDKVER);
+#endif
 }
 
 XGraph::~XGraph()
@@ -472,30 +481,36 @@ void XGraph::slotHandleMenu()
             if(nodefullname.size()>0)
             {
 #ifdef Q_OS_LINUX
-                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",QString(),QString("Shared Library (*.so)"));
+                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",moduledir,QString("Shared Library (*.so)"));
 #endif
 #ifdef Q_OS_WIN32
-                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",QString(),QString("Shared Library (*.dll)"));
+                QString libraryfilename=QFileDialog::getOpenFileName(NULL,"Add a Real Node",moduledir,QString("Shared Library (*.dll)"));
 #endif
                 if(libraryfilename.size()>0)
                 {
+                    QFileInfo fileinfo(libraryfilename);
+                    moduledir=fileinfo.path();
                     slotAddNode(nodefullname,libraryfilename);
                 }
             }
         }
         else if(selecteditem->text()==QString("Load Graph..."))
         {
-            QString filename=QFileDialog::getOpenFileName(NULL,"Load Graph",QString(),QString("X (*.x)"));
+            QString filename=QFileDialog::getOpenFileName(NULL,"Load Graph",graphdir,QString("X (*.x)"));
             if(filename.size()>0)
             {
+                QFileInfo fileinfo(filename);
+                graphdir=fileinfo.path();
                 slotLoadGraph(filename);
             }
         }
         else if(selecteditem->text()==QString("Save Graph..."))
         {
-            QString filename=QFileDialog::getSaveFileName(NULL,"Save Graph",QString(),QString("X (*.x)"));
+            QString filename=QFileDialog::getSaveFileName(NULL,"Save Graph",graphdir,QString("X (*.x)"));
             if(filename.size()>0)
             {
+                QFileInfo fileinfo(filename);
+                graphdir=fileinfo.path();
                 slotSaveGraph(filename);
             }
         }
