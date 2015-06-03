@@ -7,7 +7,7 @@ USE_DEFAULT_NODE
 
 //=================================================
 //Uncomment below PORT_DECL and set input node class name
-//PORT_DECL(0, InputNodeClassName)
+PORT_DECL(0, ObstacleMapGenerator)
 
 //=================================================
 //Original node functions
@@ -16,6 +16,14 @@ USE_DEFAULT_NODE
 NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 {
 	NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    vars->viewer->setAlignment(Qt::AlignCenter);
+    vars->scrollarea->setWidget(vars->viewer);
+    vars->tabwidget->addTab(vars->scrollarea,"TimeStamp");
+    vars->layout->addWidget(vars->tabwidget);
+    vars->widget->setLayout(vars->layout);
+
+    vars->setNodeGUIThreadFlag(1);
 	return 1;
 }
 
@@ -23,6 +31,8 @@ NODE_FUNC_DEF_EXPORT(bool, initializeNode)
 NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
 	NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    vars->viewer->setText("Open");
 	return 1;
 }
 
@@ -30,6 +40,8 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
 	NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    vars->viewer->setText("Close");
 	return 1;
 }
 
@@ -37,5 +49,16 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
 	NOUNUSEDWARNING;
+    auto vars=NODE_VARS;
+    auto data=PORT_DATA(0,0);
+
+    vars->tabwidget->setTabText(0,data->timestamp.toString("HH:mm:ss:zzz"));
+
+    cv::Mat image=data->map;
+
+    QImage img(image.data,image.cols,image.rows,image.step,QImage::Format_RGB888);
+    vars->viewer->setPixmap(QPixmap::fromImage(img));
+    vars->viewer->resize(img.size());
+
 	return 1;
 }

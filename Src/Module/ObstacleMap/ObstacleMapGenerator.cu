@@ -10,14 +10,18 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
     int baseid=(mapSize*yid+xid)*3;
     if(xid<mapSize&&yid<mapSize)
     {
-        int center=mapSize/2+1;
+        int center=mapSize/2;
         if(xid!=center||yid!=center)
         {
             double x=(xid-center)*gridSize;
             double y=(center-yid)*gridSize;
-            double theta=atan2(y,x);
             double PI=3.141592654;
             double density=2*PI/beamNum;
+            double theta=atan2(y,x);
+            if(theta<-PI/2)
+            {
+                theta=2*PI+theta;
+            }
             double thetaid=(theta+PI/2)/density;
             int lid=(int(thetaid)+1)%beamNum;
             int rid=(int(thetaid))%beamNum;
@@ -43,15 +47,15 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
                 }
                 else if(delta>radius)
                 {
-                    map[baseid]=255;
-                    map[baseid+1]=0;
-                    map[baseid+2]=0;
-                }
-                else
-                {
                     map[baseid]=0;
                     map[baseid+1]=0;
                     map[baseid+2]=255;
+                }
+                else
+                {
+                    map[baseid]=255;
+                    map[baseid+1]=0;
+                    map[baseid+2]=0;
                 }
             }
         }
@@ -68,7 +72,7 @@ void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize,
     int i;
     for(i=0;i<beamNum;i++)
     {
-        double theta=i*density+PI/2;
+        double theta=i*density-PI/2;
         px[i]=virtualScan[i]*cos(theta);
         py[i]=virtualScan[i]*sin(theta);
     }

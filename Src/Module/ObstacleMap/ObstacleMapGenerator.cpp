@@ -30,6 +30,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto data=NODE_DATA;
     auto inputdata=PORT_DATA(0,0);
+    data->timestamp=inputdata->timestamp;
     data->map=cv::Mat(vars->mapsize,vars->mapsize,CV_8UC3);
     cudaObstacleGenerator(inputdata->virtualscan.size(),inputdata->virtualscan.data()
                           ,vars->mapsize,params->gridsize,data->map.data);
