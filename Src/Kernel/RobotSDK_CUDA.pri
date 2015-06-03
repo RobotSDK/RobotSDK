@@ -23,7 +23,7 @@ else{
     CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
     NVCCFLAGS = --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v
 
-    cuda.commands = $$CUDA_DIR/bin/nvcc -m64 -O3 -arch=$$CUDA_ARCH -c $$NVCCFLAGS \
+    cuda.commands = $$CUDA_DIR/bin/nvcc --compiler-options '-fPIC' -m64 -O3 -arch=$$CUDA_ARCH -c $$NVCCFLAGS \
                     $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT} \
                     2>&1 | sed -r \"s/\\(([0-9]+)\\)/:\\1/g\" 1>&2
     cuda.dependency_type = TYPE_C

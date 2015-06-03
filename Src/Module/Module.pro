@@ -6,7 +6,8 @@ SUBDIRS += \
     VirtualScan \
     Localization \
     DPM \
-    Fusion
+    Fusion \
+    ObstacleMap
 
 DPM.depends += Camera
 VirtualScan.depends += Velodyne
