@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets core gui xml
 
 TARGET = Robot-X
 TEMPLATE = app
@@ -49,6 +47,7 @@ unix {
         LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
         INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
     }
+    LIBS += -L/usr/lib -lgvc
 }
 
 win32 {

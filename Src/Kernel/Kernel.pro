@@ -1,6 +1,6 @@
 QT += core widgets xml opengl
 TEMPLATE = lib
-CONFIG += staticlib qt
+CONFIG += staticlib
 CONFIG += c++11
 
 HEADERS += \
