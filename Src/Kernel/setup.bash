@@ -30,9 +30,9 @@ else
 fi
 if test -z "$ADDLIBRARY"
 then
-    ADDLIBRARY=$QTDIR/lib:$QTCDIR/lib/qtcreator:/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu
+    ADDLIBRARY=$QTMDIR/lib:$QTCDIR/lib/qtcreator:/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu
 else
-    ADDLIBRARY=$QTDIR/lib:$QTCDIR/lib/qtcreator:/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu:$ADDLIBRARY
+    ADDLIBRARY=$QTMDIR/lib:$QTCDIR/lib/qtcreator:/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu:$ADDLIBRARY
 fi
 export PATH=$ADDPATH:$PATH
 export LD_LIBRARY_PATH=$ADDLIBRARY:$LD_LIBRARY_PATH

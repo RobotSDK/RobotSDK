@@ -65,7 +65,7 @@ bool Sync::generateSyncData()
             continue;
         }
         int j,m=databuffer[i].size();
-        for(j=m-1;j>0;j--)
+        for(j=m-1;j>=0;j--)
         {
             QTime targettimestamp=databuffer[i].at(j)->timestamp;
             int delta=basetimestamp.msecsTo(targettimestamp);
@@ -77,7 +77,7 @@ bool Sync::generateSyncData()
                 syncrecordid=i+1;
                 break;
             }
-            else
+            else if(j>0)
             {
                 QTime nexttargettimestamp=databuffer[i].at(j-1)->timestamp;
                 int nextdelta=basetimestamp.msecsTo(nexttargettimestamp);
@@ -96,7 +96,7 @@ bool Sync::generateSyncData()
                 }
             }
         }
-        if(j<=0)
+        if(j<0)
         {
             return 0;
         }
