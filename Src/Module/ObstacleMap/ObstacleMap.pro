@@ -12,12 +12,16 @@ TEMPLATE = lib
 SOURCES += \
     ObstacleMapGenerator.cpp \
     ObstacleMapViewer.cpp \
-    ObstacleMapGenerator.cu
+    ObstacleMapGenerator.cu \
+    TrackingParticleGenerator.cpp \
+    ObstacleMapMeasure.cpp
 
 HEADERS += \
     ObstacleMapGenerator.h \
     ObstacleMapViewer.h \
-    ObstacleMapGenerator.cuh
+    ObstacleMapGenerator.cuh \
+    TrackingParticleGenerator.h \
+    ObstacleMapMeasure.h
 
 MODULES += VirtualScan Velodyne
 include($$(ROBOTSDKMODULE))

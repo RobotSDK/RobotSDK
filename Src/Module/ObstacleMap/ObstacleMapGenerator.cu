@@ -3,7 +3,7 @@
 #include<cuda.h>
 #include<cuda_runtime.h>
 
-__global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py, int mapSize, double gridSize, u_char * map)
+__global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py, int mapSize, double gridSize, double obstacleFactor, u_char * map)
 {
     int xid=blockIdx.x*blockDim.x+threadIdx.x;
     int yid=blockIdx.y*blockDim.y+threadIdx.y;
@@ -37,7 +37,7 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
                 double dy=py[lid]-py[rid];
                 double beta=(dx*py[lid]-px[lid]*dy)/(dx*y-x*dy);
                 double dis=sqrt(x*x+y*y);
-                double radius=1.414213562*gridSize;
+                double radius=obstacleFactor*gridSize;
                 double delta=dis*(1-beta);
                 if(delta<-radius)
                 {
@@ -62,7 +62,7 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
     }
 }
 
-void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, u_char * map)
+void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, double obstacleFactor, u_char * map)
 {
     size_t size=beamNum*sizeof(double);
     double * px=(double *)malloc(size);
@@ -91,7 +91,7 @@ void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize,
     dim3 threadperblock(dim,dim);
     dim3 blockpergrid((mapSize+dim-1)/dim,(mapSize+dim-1)/dim);
 
-    kernelObstacleMapGenerator<<<blockpergrid,threadperblock>>>(beamNum,dpx,dpy,mapSize,gridSize,dmap);
+    kernelObstacleMapGenerator<<<blockpergrid,threadperblock>>>(beamNum,dpx,dpy,mapSize,gridSize,obstacleFactor,dmap);
 
     cudaMemcpy(map,dmap,mapsize,cudaMemcpyDeviceToHost);
     cudaFree(dpx);

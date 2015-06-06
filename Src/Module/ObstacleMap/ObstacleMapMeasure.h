@@ -1,10 +1,10 @@
-#ifndef OBSTACLEMAPGENERATOR
-#define OBSTACLEMAPGENERATOR
+#ifndef OBSTACLEMAPMEASURE
+#define OBSTACLEMAPMEASURE
 
 //=================================================
 //Please add headers here:
-#include<VirtualScanGenerator.h>
-#include"ObstacleMapGenerator.cuh"
+#include"ObstacleMapGenerator.h"
+#include"TrackingParticleGenerator.h"
 
 //=================================================
 #include<RobotSDK.h>
@@ -15,10 +15,10 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS ObstacleMapGenerator
+#define NODE_CLASS ObstacleMapMeasure
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 1
+#define INPUT_PORT_NUM 2
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 1
@@ -30,10 +30,7 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-public:
-    ADD_PARAM(double, gridsize, 0.1)
-    ADD_PARAM(double, maprange, 50)
-    ADD_PARAM(double, obstaclefactor, 2)
+
 };
 
 //=================================================
@@ -43,7 +40,7 @@ public:
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-    ADD_VAR(int, mapsize, 0)
+
 };
 
 //=================================================
@@ -53,8 +50,7 @@ class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-public:
-    cv::Mat map;
+
 };
 
 //=================================================

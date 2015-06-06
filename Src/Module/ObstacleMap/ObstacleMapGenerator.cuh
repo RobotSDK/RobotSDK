@@ -3,7 +3,7 @@
 
 #include<opencv2/opencv.hpp>
 
-extern "C" void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, u_char *map);
+extern "C" void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, double obstacleFactor, u_char *map);
 
 #endif // OBSTACLEMAPGENERATOR_CUH
 
