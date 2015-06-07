@@ -52,7 +52,7 @@ public:
     ADD_INTERNAL_DEFAULT_CONNECTION(apply, clicked)
     ADD_QLAYOUT(QHBoxLayout, buttonlayout)
 public:
-    ADD_SYNC(dpmsync, 1)
+    ADD_SYNC(dpmsync, 0)
 };
 
 //=================================================

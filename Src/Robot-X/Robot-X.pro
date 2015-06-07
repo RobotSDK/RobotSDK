@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT += widgets core gui xml
+QT += widgets
+QT += xml
 
 TARGET = Robot-X
 TEMPLATE = app

@@ -23,9 +23,9 @@ else
 fi
 if test -z "$ADDLIBRARY"
 then
-    ADDLIBRARY=/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu
+    ADDLIBRARY=/opt/ros/$ROS_DISTRO/lib
 else
-    ADDLIBRARY=/opt/ros/$ROS_DISTRO/lib:/usr/lib/x86_64-linux-gnu:$ADDLIBRARY
+    ADDLIBRARY=/opt/ros/$ROS_DISTRO/lib:$ADDLIBRARY
 fi
 export PATH=$ADDPATH:$PATH
 export LD_LIBRARY_PATH=$ADDLIBRARY:$LD_LIBRARY_PATH

@@ -31,6 +31,12 @@ bool Sync::addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & 
                     paramsbuffer[i]=inputParams[i]+paramsbuffer[i];
                     databuffer[i]=inputData[i]+databuffer[i];
                 }
+                else
+                {
+                    qDebug()<<QString("Sync Data Error! Port %1:").arg(i)
+                           <<databuffer[i].front()->timestamp
+                          <<inputData[i].back()->timestamp;
+                }
             }
             else
             {
