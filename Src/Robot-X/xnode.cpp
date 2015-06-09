@@ -2,6 +2,8 @@
 
 using namespace RobotX;
 
+extern XConfig * xconfig;
+
 XConfigPanel::XConfigPanel(QString nodeFullName, QString configFilaName, XNode *nodeParent, QWidget *parent)
     : QDialog(parent)
 {
@@ -11,6 +13,7 @@ XConfigPanel::XConfigPanel(QString nodeFullName, QString configFilaName, XNode *
 
     QVBoxLayout * layout=new QVBoxLayout;
     table=new QTableWidget;
+    table->horizontalHeader()->setStretchLastSection(1);
     layout->addWidget(table);
     QHBoxLayout * buttonlayout=new QHBoxLayout;
     layout->addLayout(buttonlayout);
@@ -67,6 +70,11 @@ void XConfigPanel::load()
 void XConfigPanel::accept()
 {
     apply();
+    xconfig->configtab->removeTab(xconfig->configtab->indexOf(node->configpanel));
+    if(xconfig->configtab->count()==0)
+    {
+        xconfig->configpanel->setVisible(0);
+    }
     node->configpanel=NULL;
     QDialog::accept();
 }
@@ -96,9 +104,21 @@ void XConfigPanel::apply()
 
 void XConfigPanel::reject()
 {
+    xconfig->configtab->removeTab(xconfig->configtab->indexOf(node->configpanel));
+    if(xconfig->configtab->count()==0)
+    {
+        xconfig->configpanel->setVisible(0);
+    }
     node->configpanel=NULL;
     QDialog::reject();
 }
+
+#ifdef Q_OS_LINUX
+QString XNode::moduledir=QString("%1/SDK/RobotSDK_%2/Module").arg(QString(qgetenv("HOME"))).arg(ROBOTSDKVER);
+#endif
+#ifdef Q_OS_WIN32
+QString XNode::moduledir=QString("C:/SDK/RobotSDK_%1/Module").arg(ROBOTSDKVER);
+#endif
 
 XNode::XNode(Graph *graph, QString nodeFullName)
     : QGraphicsProxyWidget(NULL)
@@ -108,8 +128,8 @@ XNode::XNode(Graph *graph, QString nodeFullName)
     _graph=graph;
     connect(this,SIGNAL(signalOpenNode(QString)),_graph,SLOT(openNode(QString)));
     connect(this,SIGNAL(signalCloseNode(QString)),_graph,SLOT(closeNode(QString)));
-    connect(this,SIGNAL(signalShowWidget(QString)),_graph,SLOT(showWidget(QString)));
-    connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
+//    connect(this,SIGNAL(signalShowWidget(QString)),_graph,SLOT(showWidget(QString)));
+//    connect(this,SIGNAL(signalHideWidget(QString)),_graph,SLOT(hideWidget(QString)));
 
     connect(this,SIGNAL(signalChangeNodeExName(QString,QString)),_graph,SLOT(changeNodeExName(QString,QString)));
     connect(this,SIGNAL(signalChangeNodeLibrary(QString,QString)),_graph,SLOT(changeNodeLibrary(QString,QString)));
@@ -258,13 +278,15 @@ void XNode::slotShowWidget()
     {
         if(showwidget->text()==QString("Show Widget"))
         {
-            emit signalShowWidget(nodefullname->text());
-            showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
-            showwidget->setText("Hide Widget");
+            if(_graph->showWidget(nodefullname->text())!=NULL)
+            {
+                showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
+                showwidget->setText("Hide Widget");
+            }
         }
         else
         {
-            emit signalHideWidget(nodefullname->text());
+            _graph->hideWidget(nodefullname->text());
             showwidget->setStyleSheet("QPushButton {background-color: red; color: black;}");
             showwidget->setText("Show Widget");
         }
@@ -377,13 +399,15 @@ void XNode::slotChangeNodeExName()
 void XNode::slotChangeNodeLibrary()
 {
 #ifdef Q_OS_LINUX
-    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("Shared Library (*.so)"));
+    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",moduledir,QString("Shared Library (*.so)"));
 #endif
 #ifdef Q_OS_WIN32
-    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",QString(),QString("Shared Library (*.dll)"));
+    QString newlibrary=QFileDialog::getOpenFileName(NULL,"Open Library",moduledir,QString("Shared Library (*.dll)"));
 #endif
     if(newlibrary.size()>0)
     {
+        QFileInfo fileinfo(newlibrary);
+        moduledir=fileinfo.path();
         if(configpanel!=NULL)
         {
             configpanel->accept();
@@ -518,11 +542,14 @@ void XNode::slotNodeFullNameMenu(const QPoint &pos)
             if(configpanel==NULL)
             {
                 configpanel=new XConfigPanel(nodefullname->text(),configfilename->text(),this);
-                configpanel->show();
+                xconfig->configpanel->setVisible(1);
+                xconfig->configtab->addTab(configpanel,nodefullname->text());
+                xconfig->configtab->setCurrentWidget(configpanel);
             }
             else
             {
-                configpanel->raise();
+                xconfig->configpanel->setVisible(1);
+                xconfig->configtab->setCurrentWidget(configpanel);
             }
         }
         else if(selecteditem->text()==QString("Generate Code"))

@@ -26,7 +26,7 @@ bool Sync::addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & 
         {
             if(databuffer[i].size()>0)
             {
-                if(databuffer[i].front()->timestamp<inputData[i].back()->timestamp)
+                if(databuffer[i].front()->timestamp<=inputData[i].back()->timestamp)
                 {
                     paramsbuffer[i]=inputParams[i]+paramsbuffer[i];
                     databuffer[i]=inputData[i]+databuffer[i];
@@ -108,14 +108,8 @@ bool Sync::generateSyncData()
         }
 
     }
-    for(i=0;i<n;i++)
-    {
-        if(deltatime[i]<=0)
-        {
-            paramsbuffer[i].pop_back();
-            databuffer[i].pop_back();
-        }
-    }
+    paramsbuffer[baseportid].pop_back();
+    databuffer[baseportid].pop_back();
     syncrecordid=0;
     return 1;
 }

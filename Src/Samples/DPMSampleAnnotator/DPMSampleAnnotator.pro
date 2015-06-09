@@ -1,29 +1,34 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-04-27T17:59:31
+# Project created by QtCreator 2015-06-08T15:26:53
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = DPM
+TARGET = DPMSampleAnnotator
 TEMPLATE = lib
 
-DEFINES += DPM_LIBRARY
+DEFINES += DPMSAMPLEANNOTATOR_LIBRARY
 
 SOURCES += \
-    DPMDetector.cpp \
     DPMModifier.cpp \
-    DPMModifierWidgets.cpp \
-    DPMSampleSaver.cpp
+    DPMSampleLoader.cpp \
+    DPMSampleSaver.cpp \
+    DPMReceiver.cpp \
+    ROSBagLoader.cpp \
+    DPMAnnotator.cpp \
+    DPMModifierWidget.cpp
 
 HEADERS += \
-    DPMDetector.h \
+    DPMAnnotator.h \
     DPMModifier.h \
-    DPMModifierWidgets.h \
-    DPMSampleSaver.h
+    DPMSampleLoader.h \
+    DPMSampleSaver.h \
+    DPMReceiver.h \
+    ROSBagLoader.h \
+    DPMModifierWidget.h
 
-MODULES += Camera
 include($$(ROBOTSDKMODULE))
 
 unix{
@@ -37,3 +42,5 @@ unix{
 
     INCLUDEPATH += $$(HOME)/Git/Autoware/ros/devel/include
 }
+
+OTHER_FILES +=

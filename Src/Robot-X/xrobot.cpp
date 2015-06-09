@@ -3,22 +3,34 @@
 
 using namespace RobotX;
 
+XConfig * xconfig;
+
 XRobot::XRobot(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::XRobot)
 {
     ui->setupUi(this);
-
-    graph=new XGraph;
     view=new GraphView;
+    graph=new XGraph;
     view->setScene(graph);
     ui->layout->addWidget(view);
     connect(view,SIGNAL(signalHandleMenu()), graph, SLOT(slotHandleMenu()));
+
+    xconfig=new XConfig;
+    this->addDockWidget(Qt::RightDockWidgetArea,xconfig->configpanel);
+//    this->addDockWidget(Qt::LeftDockWidgetArea,xconfig->mainwindowdock);
 }
 
 XRobot::~XRobot()
 {
+    delete xconfig;
     delete ui;
+}
+
+void XRobot::closeEvent(QCloseEvent *event)
+{
+    graph->slotCloseGraph();
+    QMainWindow::closeEvent(event);
 }
 
 GraphView::GraphView(QWidget *parent)

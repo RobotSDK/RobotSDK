@@ -44,9 +44,9 @@ public slots:
     void openAllNode();
     void closeAllNode();
 public slots:
-    void showWidget(QString nodeFullName);
+    QWidget * showWidget(QString nodeFullName);
     void hideWidget(QString nodeFullName);
-    void showAllWidget();
+    QList<QWidget *> showAllWidget();
     void hideAllWidget();
 public:
     QWidget * const switcherpanel=new QWidget;

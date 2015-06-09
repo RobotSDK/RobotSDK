@@ -13,6 +13,7 @@
 
 #include"xnode.h"
 #include"xedge.h"
+#include"xconfig.h"
 
 namespace RobotX
 {
@@ -71,6 +72,8 @@ public slots:
 public slots:
     void slotLoadGraph(QString xFileName);
     void slotSaveGraph(QString xFileName);
+public:
+    void slotCloseGraph();
 };
 
 }

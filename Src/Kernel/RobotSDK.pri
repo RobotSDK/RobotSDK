@@ -43,6 +43,8 @@ unix{
         LIBS *= -L/opt/ros/$$ROS/lib -ltf_conversions
         LIBS *= -L/opt/ros/$$ROS/lib -lactionlib
         LIBS *= -L/opt/ros/$$ROS/lib -lcv_bridge
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosbag
+        LIBS *= -L/opt/ros/$$ROS/lib -lrosbag_storage
         LIBS *= -L/usr/lib/x86_64-linux-gnu -lboost_system
         INCLUDEPATH += /opt/ros/$$(ROS_DISTRO)/include
     }

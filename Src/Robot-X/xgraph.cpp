@@ -2,6 +2,8 @@
 
 using namespace RobotX;
 
+extern XConfig * xconfig;
+
 XGraph::XGraph(QObject *parent)
     : QGraphicsScene(parent)
 {
@@ -452,11 +454,15 @@ void XGraph::slotHandleMenu()
     menu.addAction("Add a Virtual Node...");
     menu.addAction("Add a Real Node...");
     menu.addSeparator();
+//    menu.addAction("Show Widgets Window");
+    menu.addAction("Show Config Panel");
+    menu.addSeparator();
     menu.addAction("Load Graph...");
     menu.addAction("Save Graph...");
     menu.addSeparator();
     menu.addAction("Open All Nodes");
     menu.addAction("Close All Nodes");
+    menu.addSeparator();
     menu.addAction("Show All Widgets");
     menu.addAction("Hide All Widgets");
     menu.addSeparator();
@@ -494,6 +500,14 @@ void XGraph::slotHandleMenu()
                 }
             }
         }
+//        else if(selecteditem->text()==QString("Show Widgets Window"))
+//        {
+//            xconfig->mainwindowdock->setVisible(1);
+//        }
+        else if(selecteditem->text()==QString("Show Config Panel"))
+        {
+            xconfig->configpanel->setVisible(1);
+        }
         else if(selecteditem->text()==QString("Load Graph..."))
         {
             QString filename=QFileDialog::getOpenFileName(NULL,"Load Graph",graphdir,QString("X (*.x)"));
@@ -524,14 +538,16 @@ void XGraph::slotHandleMenu()
         }
         else if(selecteditem->text()==QString("Show All Widgets"))
         {
-            graph->showAllWidget();
             QMap< QString, XNode * >::const_iterator nodeiter;
             for(nodeiter=nodes.begin();nodeiter!=nodes.end();nodeiter++)
             {
                 if(graph->contains(nodeiter.key()))
                 {
-                    nodeiter.value()->showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
-                    nodeiter.value()->showwidget->setText("Hide Widget");
+                    if(graph->showWidget(nodeiter.key())!=NULL)
+                    {
+                        nodeiter.value()->showwidget->setStyleSheet("QPushButton {background-color: green; color: black;}");
+                        nodeiter.value()->showwidget->setText("Hide Widget");
+                    }
                 }
             }
         }
@@ -649,4 +665,10 @@ void XGraph::slotSaveGraph(QString xFileName)
         }
         file.close();
     }
+}
+
+void XGraph::slotCloseGraph()
+{
+    graph->closeAllNode();
+    graph->hideAllWidget();
 }

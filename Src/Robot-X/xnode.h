@@ -20,11 +20,13 @@
 #include<QTableWidget>
 #include<QDialog>
 #include<QComboBox>
+#include<QHeaderView>
 
 #include<xmldominterface.h>
 #include<assert.h>
 
 #include"xport.h"
+#include"xconfig.h"
 
 using namespace RobotSDK;
 
@@ -67,6 +69,8 @@ public:
     uint _inputportnum;
     uint _outputportnum;
     QString tmpnewnodefullname;
+protected:
+    static QString moduledir;
 public:
     bool resizeFlag=0;
     QWidget * widget=NULL;
@@ -94,8 +98,8 @@ protected slots:
 signals:
     void signalOpenNode(QString nodeFullName);
     void signalCloseNode(QString nodeFullName);
-    void signalShowWidget(QString nodeFullName);
-    void signalHideWidget(QString nodeFullName);
+//    QWidget * signalShowWidget(QString nodeFullName);
+//    void signalHideWidget(QString nodeFullName);
 public slots:
     void slotAddEdge(QString outputNodeFullName, uint outputPortID, QString inputNodeFullName, uint inputPortID);
     void slotRemovePort(XPort::PORTTYPE portType, QString nodeFullName,uint portID);

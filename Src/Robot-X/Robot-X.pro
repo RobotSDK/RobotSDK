@@ -82,14 +82,16 @@ SOURCES += main.cpp\
     xedge.cpp \
     xport.cpp \
     xgraph.cpp \
-    xrobot.cpp
+    xrobot.cpp \
+    xconfig.cpp
 
 HEADERS  += \
     xnode.h \
     xedge.h \
     xport.h \
     xgraph.h \
-    xrobot.h
+    xrobot.h \
+    xconfig.h
 
 FORMS    += \
     xrobot.ui

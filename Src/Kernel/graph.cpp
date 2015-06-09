@@ -441,12 +441,12 @@ void Graph::closeAllNode()
     }
 }
 
-void Graph::showWidget(QString nodeFullName)
+QWidget *Graph::showWidget(QString nodeFullName)
 {
     if(!_nodes.contains(nodeFullName))
     {
         qDebug()<<QString("%1 does not exist in the graph.").arg(nodeFullName);
-        return;
+        return NULL;
     }
     if(_nodes[nodeFullName].second->NODE_VARS_ARG->_guithreadflag
             ||_nodes[nodeFullName].second->NODE_VARS_ARG->_showwidgetflag)
@@ -462,8 +462,10 @@ void Graph::showWidget(QString nodeFullName)
             {
                 widgetgeometry.insert(nodeFullName,_nodes[nodeFullName].second->NODE_VARS_ARG->getWidget()->geometry());
             }
+            return _nodes[nodeFullName].second->NODE_VARS_ARG->getWidget();
         }
     }
+    return NULL;
 }
 
 void Graph::hideWidget(QString nodeFullName)
@@ -484,14 +486,16 @@ void Graph::hideWidget(QString nodeFullName)
     }
 }
 
-void Graph::showAllWidget()
+QList<QWidget *> Graph::showAllWidget()
 {
     QStringList nodelist=_nodes.keys();
     uint i,n=nodelist.size();
+    QList<QWidget *> result;
     for(i=0;i<n;i++)
     {
-        showWidget(nodelist.at(i));
+        result.push_back(showWidget(nodelist.at(i)));
     }
+    return result;
 }
 
 void Graph::hideAllWidget()

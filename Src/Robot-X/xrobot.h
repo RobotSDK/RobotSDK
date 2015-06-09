@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 
 #include<xgraph.h>
+#include<xconfig.h>
 
 namespace Ui {
 class XRobot;
@@ -36,13 +37,13 @@ class XRobot : public QMainWindow
 public:
     explicit XRobot(QWidget *parent = 0);
     ~XRobot();
-
 private:
     Ui::XRobot *ui;
-
 protected:
     GraphView * view;
     XGraph * graph;
+protected:
+    void closeEvent(QCloseEvent * event);
 };
 
 }
