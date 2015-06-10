@@ -18,7 +18,8 @@ SOURCES += \
     DPMReceiver.cpp \
     ROSBagLoader.cpp \
     DPMAnnotator.cpp \
-    DPMModifierWidget.cpp
+    DPMModifierWidget.cpp \
+    DPMAnnotatorWidget.cpp
 
 HEADERS += \
     DPMAnnotator.h \
@@ -27,7 +28,8 @@ HEADERS += \
     DPMSampleSaver.h \
     DPMReceiver.h \
     ROSBagLoader.h \
-    DPMModifierWidget.h
+    DPMModifierWidget.h \
+    DPMAnnotatorWidget.h
 
 include($$(ROBOTSDKMODULE))
 
@@ -42,5 +44,3 @@ unix{
 
     INCLUDEPATH += $$(HOME)/Git/Autoware/ros/devel/include
 }
-
-OTHER_FILES +=

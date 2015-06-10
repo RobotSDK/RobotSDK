@@ -3,7 +3,12 @@
 
 //=================================================
 //Please add headers here:
-
+#include"DPMModifier.h"
+#include<QFile>
+#include<QFileInfo>
+#include<QDir>
+#include<QTextStream>
+#include<QDateTime>
 
 //=================================================
 #include<RobotSDK.h>
@@ -39,7 +44,12 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    bool openfileflag;
+    QFile file;
+    QString imagesdir;
+public:
+    ADD_VAR(int, imagefilenamewidth, 5)
 };
 
 //=================================================

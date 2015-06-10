@@ -1,8 +1,6 @@
 #ifndef DPMMODIFIERWIDGET_H
 #define DPMMODIFIERWIDGET_H
 
-#include"DPMReceiver.h"
-#include"ROSBagLoader.h"
 #include<QWidget>
 #include<QGraphicsPixmapItem>
 #include<QGraphicsRectItem>
@@ -17,6 +15,12 @@
 #include<QMap>
 #include<QColor>
 #include<QPen>
+#include<QCheckBox>
+#include<opencv2/opencv.hpp>
+
+#include<RobotSDK.h>
+namespace RobotSDK_Module
+{
 
 class RobotSDK_EXPORT DPMRect : public QGraphicsRectItem
 {
@@ -46,26 +50,47 @@ class RobotSDK_EXPORT DPMModifierWidget : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit DPMModifierWidget(QStringList categories, QWidget *parent = 0);
+    explicit DPMModifierWidget(QWidget *parent = 0);
+    void setCategories(QStringList categories);
 protected:
     void mousePressEvent(QMouseEvent * event);
 protected:
     QGraphicsScene * scene;
     QGraphicsPixmapItem * pixmap;
-    uint idcount;
 public:
     QMap<QString, QColor> colortable;
     QMap<QString, bool> filter;
     QMap<QString, int> idcount;
+signals:
+    void signalNext();
 public slots:
     void slotDeleteRect(QGraphicsRectItem * rect);
     void slotMoveForward(QGraphicsRectItem * rect);
     void slotMoveBackward(QGraphicsRectItem * rect);
+    void slotSetFilter(QMap<QString, bool> categoryfilter);
 public:
     void clear();
     void addPixmap(QImage & image);
-    void addRect(QString rectCategory, uint rectID, qreal x, qreal y, qreal width, qreal height);
+    void addRect(QString rectCategory, int rectID, qreal x, qreal y, qreal width, qreal height);
     QVector<DPMRect *> getRects();
+protected:
+    void keyPressEvent(QKeyEvent *event);
 };
+
+class RobotSDK_EXPORT DPMController : public QWidget
+{
+    Q_OBJECT
+public:
+    DPMController(QWidget * parent = 0);
+    void setCategories(QStringList categories);
+protected:
+    QVBoxLayout * layout;
+signals:
+    void signalSetFilter(QMap<QString, bool> categoryfilter);
+public slots:
+    void slotSetFilter(int state);
+};
+
+}
 
 #endif // DPMMODIFIERWIDGET_H

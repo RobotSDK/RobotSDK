@@ -3,7 +3,11 @@
 
 //=================================================
 //Please add headers here:
-
+#include"DPMAnnotator.h"
+#include<QFile>
+#include<QFileInfo>
+#include<QTextStream>
+#include<opencv2/opencv.hpp>
 
 //=================================================
 #include<RobotSDK.h>
@@ -29,7 +33,9 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-
+public:
+    ADD_PARAM(QString, rosbagfile, "")
+    ADD_PARAM(QString, samplefilebasename, "")
 };
 
 //=================================================
@@ -39,7 +45,12 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    QFile file;
+    QTextStream stream;
+    QString imagesdir;
+public:
+    ADD_VAR(int, imagefilenamewidth, 5)
 };
 
 //=================================================
@@ -49,7 +60,13 @@ class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-
+public:
+    cv::Mat image;
+    int frameid;
+    QString category;
+    int id;
+    cv::Rect rect;
+    QString attributes;
 };
 
 //=================================================

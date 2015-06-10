@@ -32,7 +32,7 @@ namespace RobotSDK_Module
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
 public:
-    ADD_PARAM(QString, catagory, "car")
+    ADD_PARAM(QString, category, "car")
 };
 
 //=================================================
@@ -47,7 +47,7 @@ public:
     ADD_VAR(u_int32_t, rosqueuesize, 1000)
     ADD_VAR(int, rosqueryinterval, 10)
     ADD_VAR(bool, idflag, 0)
-    ADD_VAR(uint, curid, 0)
+    ADD_VAR(int, curid, 0)
 public:
     typedef ROSSub<dpm::ImageObjectsConstPtr> subtype;
     ADD_INTERNAL_QOBJECT_TRIGGER(subtype, dpmsub, 1, rostopic, rosqueuesize, rosqueryinterval)
@@ -63,7 +63,7 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
     QVector<cv::Rect> detection;
-    QVector<uint> id;
+    QVector<int> id;
 };
 
 //=================================================

@@ -73,6 +73,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     vars->imagepub->sendMessage(*image);
     int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
     data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
+    data->frameid=vars->curframe;
     data->image=cv_bridge::toCvShare(image)->image.clone();
     if(image->encoding=="bgr8")
     {

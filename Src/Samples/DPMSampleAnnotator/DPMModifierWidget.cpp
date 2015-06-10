@@ -1,13 +1,16 @@
 #include "DPMModifierWidget.h"
 
+using namespace RobotSDK_Module;
+
 DPMRect::DPMRect(QString rectCategory, uint rectID, QColor rectColor, qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent)
+    : QGraphicsRectItem(x,y,width,height,parent)
 {
     category=rectCategory;
     id=rectID;
     color=rectColor;
     this->setToolTip(QString("%1_%2").arg(category).arg(id));
     this->setZValue(1);
-    this->setPen(QPen(color));
+    this->setPen(QPen(color, 3));
     this->setBrush(Qt::NoBrush);
     this->setFlag(QGraphicsItem::ItemIsMovable);
     this->setAcceptHoverEvents(1);
@@ -114,21 +117,21 @@ void DPMRect::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void DPMRect::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setPen(QPen(Qt::red));
+    this->setPen(QPen(Qt::red, 3));
     this->update();
     this->setCursor(Qt::OpenHandCursor);
 }
 
 void DPMRect::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setPen(QPen(color));
+    this->setPen(QPen(color, 3));
     this->update();
     this->setCursor(Qt::ArrowCursor);
 }
 
 void DPMRect::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    this->setPen(QPen(Qt::red));
+    this->setPen(QPen(Qt::red, 3));
     this->update();
     qreal width=this->rect().x()+this->rect().width();
     qreal height=this->rect().y()+this->rect().height();
@@ -206,27 +209,36 @@ void DPMRect::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     }
 }
 
-DPMModifierWidget::DPMModifierWidget(QStringList categories, QWidget *parent)
+DPMModifierWidget::DPMModifierWidget(QWidget *parent)
     : QGraphicsView(parent)
 {
     pixmap=NULL;
     scene=new QGraphicsScene;
     this->setScene(scene);
-    uint i,n=categories.size();
-    cv::Mat graymap(n,1,CV_8UC1);
-    for(i=0;i<=n;i++)
+}
+
+void DPMModifierWidget::setCategories(QStringList categories)
+{
+    int i,n=categories.size();
+    int colornum=230;
+    cv::Mat graymap(1,colornum,CV_8UC1);
+    for(i=0;i<colornum;i++)
     {
         graymap.at<uchar>(i)=i;
     }
     cv::Mat colormap;
     cv::applyColorMap(graymap,colormap,cv::COLORMAP_RAINBOW);
+    colortable.clear();
+    filter.clear();
+    idcount.clear();
     for(i=0;i<n;i++)
     {
         QString category=categories.at(i);
-        cv::Vec3b color=colormap.at<cv::Vec3b>(i);
-        colortable.insert(category,QColor(color[0],color[1],color[2]));
+        int colorid=int(i*double(colornum-1)/n);
+        cv::Vec3b color=colormap.at<cv::Vec3b>(colorid);
+        colortable.insert(category,QColor(color.val[0],color.val[1],color.val[2],128));
         filter.insert(category,1);
-        idcount.insert(category,0);
+        idcount.insert(category,-1);
     }
 }
 
@@ -248,7 +260,7 @@ void DPMModifierWidget::slotMoveForward(QGraphicsRectItem *rect)
 void DPMModifierWidget::slotMoveBackward(QGraphicsRectItem *rect)
 {
     QList<QGraphicsItem *> items=scene->items();
-    uint i,n=items.size();
+    int i,n=items.size();
     for(i=0;i<n;i++)
     {
         if(items.at(i)!=rect)
@@ -265,15 +277,36 @@ void DPMModifierWidget::slotMoveBackward(QGraphicsRectItem *rect)
     }
 }
 
+void DPMModifierWidget::slotSetFilter(QMap<QString, bool> categoryfilter)
+{
+    filter=categoryfilter;
+    QList<QGraphicsItem *> rects=scene->items();
+    int i,n=rects.size();
+    for(i=0;i<n;i++)
+    {
+        if(rects[i]!=pixmap)
+        {
+            DPMRect * rect=(DPMRect *)(rects[i]);
+            rect->setVisible(filter.value(rect->category));
+        }
+    }
+}
+
+void DPMModifierWidget::clear()
+{
+    scene->clear();
+}
+
 void DPMModifierWidget::addPixmap(QImage &image)
 {
     pixmap=new QGraphicsPixmapItem(QPixmap::fromImage(image));
     pixmap->setPos(0,0);
     pixmap->setZValue(0);
     scene->addItem(pixmap);
+    scene->setSceneRect(image.rect());
 }
 
-void DPMModifierWidget::addRect(QString rectCategory, uint rectID, qreal x, qreal y, qreal width, qreal height)
+void DPMModifierWidget::addRect(QString rectCategory, int rectID, qreal x, qreal y, qreal width, qreal height)
 {
     if(colortable.contains(rectCategory)&&filter.value(rectCategory))
     {
@@ -286,15 +319,27 @@ QVector<DPMRect *> DPMModifierWidget::getRects()
 {
     QList<QGraphicsItem *> rects=scene->items();
     QVector<DPMRect *> result;
-    uint i,n=rects.size();
+    int i,n=rects.size();
     for(i=0;i<n;i++)
     {
         if(rects[i]!=pixmap)
         {
-            result.push_back((DPMRect *)rect);
+            result.push_back((DPMRect *)rects[i]);
         }
     }
     return result;
+}
+
+void DPMModifierWidget::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key()==Qt::Key_Return)
+    {
+        emit signalNext();
+    }
+    else
+    {
+        QGraphicsView::keyPressEvent(event);
+    }
 }
 
 void DPMModifierWidget::mousePressEvent(QMouseEvent *event)
@@ -310,18 +355,100 @@ void DPMModifierWidget::mousePressEvent(QMouseEvent *event)
             {
                 if(iter.value())
                 {
-                    menu.addAction(QString("Add %1").arg(iter.key()));
+                    menu.addAction(iter.key());
                 }
             }
             QAction * selitem=menu.exec(QCursor::pos());
             if(selitem)
             {
                 QString category=selitem->text();
-                QColor=colortable.value(category);
+                int id=idcount.value(category);
+                QColor color=colortable.value(category);
                 QPointF pos=mapToScene(event->pos());
-                this->addRect(category,pos.x(),pos.y(),100,100);
+                DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100);
+                scene->addItem(rect);
+                idcount.remove(category);
+                idcount.insert(category,id);
             }
             return;
         }
+        else if(item!=NULL)
+        {
+            QGraphicsRectItem * rect=static_cast<QGraphicsRectItem *>(item);
+            rect->setPen(QPen(Qt::red, 3));
+            rect->update();
+            QMenu menu;
+            menu.addAction("Delete Rectangle");
+            menu.addSeparator();
+            menu.addAction("Top Level");
+            menu.addAction("Bottom Level");
+            QAction * selitem=menu.exec(QCursor::pos());
+            if(selitem)
+            {
+                if(selitem->text()=="Delete Rectangle")
+                {
+                    slotDeleteRect(rect);
+                }
+                else if(selitem->text()=="Top Level")
+                {
+                    slotMoveForward(rect);
+                }
+                else if(selitem->text()=="Bottom Level")
+                {
+                    slotMoveBackward(rect);
+                }
+            }
+        }
     }
+    QGraphicsView::mousePressEvent(event);
+}
+
+DPMController::DPMController(QWidget *parent)
+    : QWidget(parent)
+{
+    layout=new QVBoxLayout;
+    this->setLayout(layout);
+}
+
+void DPMController::setCategories(QStringList categories)
+{
+    int i,n=layout->count();
+    for(i=n-1;i>=0;i--)
+    {
+        QCheckBox * checker=(QCheckBox *)(layout->itemAt(i)->widget());
+        layout->removeWidget(checker);
+        delete checker;
+    }
+    int colornum=230;
+    cv::Mat graymap(1,colornum,CV_8UC1);
+    for(i=0;i<colornum;i++)
+    {
+        graymap.at<uchar>(i)=i;
+    }
+    cv::Mat colormap;
+    cv::applyColorMap(graymap,colormap,cv::COLORMAP_RAINBOW);
+    n=categories.size();
+    for(i=0;i<n;i++)
+    {
+        QCheckBox * checker=new QCheckBox(categories.at(i));
+        checker->setChecked(1);
+        int colorid=int(i*double(colornum-1)/n);
+        cv::Vec3b color=colormap.at<cv::Vec3b>(colorid);
+        checker->setStyleSheet(QString("QCheckBox { background-color: rgba(%1, %2, %3, 50%) }").arg(color.val[0]).arg(color.val[1]).arg(color.val[2]));
+        layout->addWidget(checker);
+        connect(checker,SIGNAL(stateChanged(int)),this,SLOT(slotSetFilter(int)));
+    }
+}
+
+void DPMController::slotSetFilter(int state)
+{
+    Q_UNUSED(state);
+    int i,n=layout->count();
+    QMap<QString,bool> result;
+    for(i=0;i<n;i++)
+    {
+        QCheckBox * checker=(QCheckBox *)(layout->itemAt(i)->widget());
+        result.insert(checker->text(),checker->isChecked());
+    }
+    emit signalSetFilter(result);
 }
