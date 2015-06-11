@@ -118,7 +118,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 QImage img(vars->image.data,vars->image.cols,vars->image.rows,vars->image.step,QImage::Format_RGB888);
                 vars->dpmmodifier->addPixmap(img);
             }
-            uint i,n=dpmdata->detection.size();
+            int i,n=dpmdata->detection.size();
             for(i=0;i<n;i++)
             {
                 vars->dpmmodifier->addRect(dpmparams->category,dpmdata->id[i]

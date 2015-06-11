@@ -2,7 +2,7 @@
 
 using namespace RobotSDK_Module;
 
-DPMRect::DPMRect(QString rectCategory, uint rectID, QColor rectColor, qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent)
+DPMRect::DPMRect(QString rectCategory, int rectID, QColor rectColor, qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent)
     : QGraphicsRectItem(x,y,width,height,parent)
 {
     category=rectCategory;

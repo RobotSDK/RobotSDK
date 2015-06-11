@@ -25,10 +25,10 @@ namespace RobotSDK_Module
 class RobotSDK_EXPORT DPMRect : public QGraphicsRectItem
 {
 public:
-    DPMRect(QString rectCategory, uint rectID, QColor rectColor, qreal x, qreal y, qreal width, qreal height, QGraphicsItem * parent=0);
+    DPMRect(QString rectCategory, int rectID, QColor rectColor, qreal x, qreal y, qreal width, qreal height, QGraphicsItem * parent=0);
 public:
     QString category;
-    uint id;
+    int id;
     QColor color;
 protected:
     bool edgeflag;
