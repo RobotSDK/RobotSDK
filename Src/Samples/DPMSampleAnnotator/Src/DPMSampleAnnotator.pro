@@ -19,7 +19,8 @@ SOURCES += \
     ROSBagLoader.cpp \
     DPMAnnotator.cpp \
     DPMModifierWidget.cpp \
-    DPMAnnotatorWidget.cpp
+    DPMAnnotatorWidget.cpp \
+    DPMFakeReceiver.cpp
 
 HEADERS += \
     DPMAnnotator.h \
@@ -29,7 +30,8 @@ HEADERS += \
     DPMReceiver.h \
     ROSBagLoader.h \
     DPMModifierWidget.h \
-    DPMAnnotatorWidget.h
+    DPMAnnotatorWidget.h \
+    DPMFakeReceiver.h
 
 include($$(ROBOTSDKMODULE))
 
