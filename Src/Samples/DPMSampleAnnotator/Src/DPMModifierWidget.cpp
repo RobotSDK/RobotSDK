@@ -311,7 +311,7 @@ void DPMModifierWidget::addRect(QString rectCategory, int rectID, qreal x, qreal
     if(colortable.contains(rectCategory)&&filter.value(rectCategory))
     {
         DPMRect * rect=new DPMRect(rectCategory,rectID,colortable.value(rectCategory),x,y,width,height,pixmap);
-        scene->addItem(rect);
+        //scene->addItem(rect);
     }
 }
 
@@ -373,7 +373,7 @@ void DPMModifierWidget::mousePressEvent(QMouseEvent *event)
                 QColor color=colortable.value(category);
                 QPointF pos=mapToScene(event->pos());
                 DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100,pixmap);
-                scene->addItem(rect);
+                //scene->addItem(rect);
                 idcount.remove(category);
                 idcount.insert(category,id);
             }
@@ -387,7 +387,7 @@ void DPMModifierWidget::mousePressEvent(QMouseEvent *event)
                     QColor color=colortable.value(category);
                     QPointF pos=mapToScene(event->pos());
                     DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100,pixmap);
-                    scene->addItem(rect);
+                    //scene->addItem(rect);
                     idcount.remove(category);
                     idcount.insert(category,id);
                 }
