@@ -79,6 +79,7 @@ DPMAnnotatorWidget::DPMAnnotatorWidget(QWidget *parent) : QWidget(parent)
     vlayout->setStretchFactor(1,1);
 
     attributeslayout=new QTableWidget;
+//    attributeslayout->horizontalHeader()->setStretchLastSection(1);
     vlayout->addWidget(attributeslayout);
     vlayout->setStretchFactor(2,2);
 
@@ -141,7 +142,7 @@ void DPMAnnotatorWidget::showSample(cv::Mat image, int frameid, QString category
     QStringList values=attributes.split(",",QString::SkipEmptyParts);
     int i,n=checkboxes.size();
     int j,m=values.size();
-    attributeslayout->setColumnCount(1);
+    attributeslayout->setColumnCount(2);
     attributeslayout->setRowCount(n);
     for(i=n-1,j=0;i>=0;i--,j++)
     {
@@ -155,7 +156,7 @@ void DPMAnnotatorWidget::showSample(cv::Mat image, int frameid, QString category
         }
     }
     attributeslayout->resizeRowsToContents();
-    attributeslayout->horizontalHeader()->setStretchLastSection(1);
+    attributeslayout->resizeColumnsToContents();
 }
 
 QString DPMAnnotatorWidget::getAttributes()
