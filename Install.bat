@@ -3,6 +3,7 @@
 set "TMPCURPATH=%cd%"
 set "TMPBATPATH=%~dp0"
 set "ROBOTSDKDIR=C:\SDK\RobotSDK_4.0"
+set "ROBOTSDKVER=4.0"
 
 echo Start Generating Documentation!
 
