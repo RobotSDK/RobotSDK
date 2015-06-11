@@ -12,13 +12,15 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+ROBOTSDKVER=4.0
+
 unix {
-    INCLUDEPATH += $$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/include
+    INCLUDEPATH += $$(HOME)/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/include
     CONFIG(debug, debug|release){
-        LIBS += -L$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Debug
+        LIBS += -L$$(HOME)/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/lib -lKernel_Debug
     }
     else{
-        LIBS += -L$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Release
+        LIBS += -L$$(HOME)/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/lib -lKernel_Release
     }
 
     INCLUDEPATH += /usr/include/graphviz
@@ -52,12 +54,12 @@ unix {
 }
 
 win32 {
-    INCLUDEPATH += C:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/include
+    INCLUDEPATH += C:/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/include
     CONFIG(debug, debug|release){
-        LIBS += -LC:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Debug
+        LIBS += -LC:/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/lib -lKernel_Debug
     }
     else{
-        LIBS += -LC:/SDK/RobotSDK_$$(ROBOTSDKVER)/Kernel/lib -lKernel_Release
+        LIBS += -LC:/SDK/RobotSDK_$${ROBOTSDKVER}/Kernel/lib -lKernel_Release
     }
 
     GRAPHVIZ=$$(GRAPHVIZ_PATH)
@@ -97,11 +99,11 @@ FORMS    += \
     xrobot.ui
 
 unix{
-    ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_$$(ROBOTSDKVER)
+    ROBOTSDKDIR=$$(HOME)/SDK/RobotSDK_$${ROBOTSDKVER}
 }
 
 win32{
-    ROBOTSDKDIR=C:/SDK/RobotSDK_$$(ROBOTSDKVER)
+    ROBOTSDKDIR=C:/SDK/RobotSDK_$${ROBOTSDKVER}
 }
 
 MOC_DIR = $$ROBOTSDKDIR/Build/Robot-X/MOC
