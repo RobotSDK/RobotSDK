@@ -230,7 +230,6 @@ void DPMModifierWidget::setCategories(QStringList categories)
     cv::applyColorMap(graymap,colormap,cv::COLORMAP_RAINBOW);
     colortable.clear();
     filter.clear();
-    idcount.clear();
     for(i=0;i<n;i++)
     {
         QString category=categories.at(i);
@@ -238,7 +237,10 @@ void DPMModifierWidget::setCategories(QStringList categories)
         cv::Vec3b color=colormap.at<cv::Vec3b>(colorid);
         colortable.insert(category,QColor(color.val[0],color.val[1],color.val[2],128));
         filter.insert(category,1);
-        idcount.insert(category,-1);
+        if(!idcount.contains(category))
+        {
+            idcount.insert(category,-1);
+        }
     }
 }
 
