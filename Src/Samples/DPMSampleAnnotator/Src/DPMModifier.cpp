@@ -82,8 +82,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 DPMData dpmdata;
                 dpmdata.category=rects[i]->category;
                 dpmdata.id=rects[i]->id;
-                dpmdata.rect.x=rects[i]->rect().x();
-                dpmdata.rect.y=rects[i]->rect().y();
+                dpmdata.rect.x=rects[i]->rect().x()+rects[i]->pos().x();
+                dpmdata.rect.y=rects[i]->rect().y()+rects[i]->pos().y();
                 dpmdata.rect.width=rects[i]->rect().width();
                 dpmdata.rect.height=rects[i]->rect().height();
                 dpmdata.attributes.clear();

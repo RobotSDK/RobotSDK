@@ -310,7 +310,7 @@ void DPMModifierWidget::addRect(QString rectCategory, int rectID, qreal x, qreal
 {
     if(colortable.contains(rectCategory)&&filter.value(rectCategory))
     {
-        DPMRect * rect=new DPMRect(rectCategory,rectID,colortable.value(rectCategory),x,y,width,height);
+        DPMRect * rect=new DPMRect(rectCategory,rectID,colortable.value(rectCategory),x,y,width,height,pixmap);
         scene->addItem(rect);
     }
 }
@@ -324,7 +324,11 @@ QVector<DPMRect *> DPMModifierWidget::getRects()
     {
         if(rects[i]!=pixmap)
         {
-            result.push_back((DPMRect *)rects[i]);
+            DPMRect * rect=(DPMRect *)(rects[i]);
+            if(filter.value(rect->category))
+            {
+                result.push_back(rect);
+            }
         }
     }
     return result;
@@ -351,24 +355,42 @@ void DPMModifierWidget::mousePressEvent(QMouseEvent *event)
         {
             QMenu menu;
             QMap<QString, bool>::const_iterator iter;
+            int tmpcount=0;
+            QString tmpcategory;
             for(iter=filter.begin();iter!=filter.end();iter++)
             {
                 if(iter.value())
                 {
                     menu.addAction(iter.key());
+                    tmpcount++;
+                    tmpcategory=iter.key();
                 }
             }
-            QAction * selitem=menu.exec(QCursor::pos());
-            if(selitem)
+            if(tmpcount==1)
             {
-                QString category=selitem->text();
+                QString category=tmpcategory;
                 int id=idcount.value(category);
                 QColor color=colortable.value(category);
                 QPointF pos=mapToScene(event->pos());
-                DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100);
+                DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100,pixmap);
                 scene->addItem(rect);
                 idcount.remove(category);
                 idcount.insert(category,id);
+            }
+            else if(tmpcount>1)
+            {
+                QAction * selitem=menu.exec(QCursor::pos());
+                if(selitem)
+                {
+                    QString category=selitem->text();
+                    int id=idcount.value(category);
+                    QColor color=colortable.value(category);
+                    QPointF pos=mapToScene(event->pos());
+                    DPMRect * rect=new DPMRect(category,id--,color,pos.x(),pos.y(),100,100,pixmap);
+                    scene->addItem(rect);
+                    idcount.remove(category);
+                    idcount.insert(category,id);
+                }
             }
             return;
         }
