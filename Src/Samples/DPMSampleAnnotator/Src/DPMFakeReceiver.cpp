@@ -40,7 +40,5 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
 
     data->detection.clear();
-    return 1;
-
 	return 1;
 }
