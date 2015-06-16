@@ -62,7 +62,7 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
     }
 }
 
-void cudaObstacleGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, double obstacleFactor, u_char * map)
+void cudaObstacleMapGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, double obstacleFactor, u_char * map)
 {
     size_t size=beamNum*sizeof(double);
     double * px=(double *)malloc(size);

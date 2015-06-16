@@ -1,10 +1,9 @@
-#ifndef OBSTACLEMAPMEASURE
-#define OBSTACLEMAPMEASURE
+#ifndef OBJECTPARTICLERESAMPLE
+#define OBJECTPARTICLERESAMPLE
 
 //=================================================
 //Please add headers here:
-#include"ObstacleMapGenerator.h"
-#include"TrackingParticleGenerator.h"
+
 
 //=================================================
 #include<RobotSDK.h>
@@ -15,10 +14,10 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS ObstacleMapMeasure
+#define NODE_CLASS ObjectParticleResample
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 2
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 1

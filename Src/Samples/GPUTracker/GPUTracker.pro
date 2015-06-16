@@ -1,29 +1,35 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-06-02T17:15:39
+# Project created by QtCreator 2015-06-12T19:42:24
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = ObstacleMap
+TARGET = GPUTracker
 TEMPLATE = lib
 
+DEFINES += GPUTRACKER_LIBRARY
+
 SOURCES += \
+    ObstacleMapGenerator.cu \
     ObstacleMapGenerator.cpp \
     ObstacleMapViewer.cpp \
-    ObstacleMapGenerator.cu \
-    TrackingParticleGenerator.cpp \
-    ObstacleMapMeasure.cpp
+    ObstacleMapGlobalizer.cpp \
+    ObjectDetection.cpp \
+    ObjectParticleResample.cpp \
+    ObjectDetectionWidget.cpp
 
 HEADERS += \
+    ObstacleMapGenerator.cuh \
     ObstacleMapGenerator.h \
     ObstacleMapViewer.h \
-    ObstacleMapGenerator.cuh \
-    TrackingParticleGenerator.h \
-    ObstacleMapMeasure.h
+    ObstacleMapGlobalizer.h \
+    ObjectDetection.h \
+    ObjectParticleResample.h \
+    ObjectDetectionWidget.h
 
-MODULES += VirtualScan Velodyne
+MODULES += VirtualScan Velodyne Localization
 include($$(ROBOTSDKMODULE))
 include($$(ROBOTSDKCUDA))
 
@@ -45,4 +51,3 @@ unix {
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_contrib
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_imgproc
 }
-

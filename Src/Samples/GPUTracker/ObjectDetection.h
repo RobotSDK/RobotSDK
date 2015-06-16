@@ -1,9 +1,10 @@
-#ifndef TRACKINGPARTICLEGENERATOR
-#define TRACKINGPARTICLEGENERATOR
+#ifndef OBJECTDETECTION
+#define OBJECTDETECTION
 
 //=================================================
 //Please add headers here:
-
+#include<ObstacleMapGlobalizer.h>
+#include<ObjectParticleResample.h>
 
 //=================================================
 #include<RobotSDK.h>
@@ -14,7 +15,7 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS TrackingParticleGenerator
+#define NODE_CLASS ObjectDetection
 
 #undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 2

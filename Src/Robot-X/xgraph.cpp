@@ -330,6 +330,7 @@ void XGraph::slotResetPortNum(QString nodeFullName)
     }
     QString nodelabel=QString("{{%1} | %2 | {%3}}").arg(inputlabel).arg(nodeFullName).arg(outputlabel);
     _agset(tmpnode,"label",nodelabel);
+    slotApplyLayout();
 }
 
 void XGraph::slotApplyLayout()

@@ -106,7 +106,6 @@ bool Sync::generateSyncData()
         {
             return 0;
         }
-
     }
     paramsbuffer[baseportid].pop_back();
     databuffer[baseportid].pop_back();
