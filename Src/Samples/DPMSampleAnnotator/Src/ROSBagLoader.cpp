@@ -30,7 +30,8 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
     {
         vars->view=new rosbag::View(vars->bag,rosbag::TopicQuery(params->bagimagetopic.toStdString()));
     }
-    if(vars->view->size()==0)
+    int framenum=vars->view->size();
+    if(framenum==0)
     {
         delete vars->view;
         vars->view=NULL;
@@ -41,8 +42,17 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
     int count=params->bagstart;
     while(count!=0&&vars->curframe<vars->view->size())
     {
-        vars->viewiter++;
-        vars->curframe++;
+        if(params->imageprocflag)
+        {
+            vars->viewiter++;
+            vars->viewiter++;
+            vars->curframe+=2;
+        }
+        else
+        {
+            vars->viewiter++;
+            vars->curframe+=1;
+        }
         count--;
     }
     vars->imagepub->resetTopic(vars->rosimagetopic,vars->rosqueuesize);
@@ -104,11 +114,32 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         if(vars->curframe<vars->view->size())
         {
             image=(*(vars->viewiter)).instantiate<sensor_msgs::Image>();
-            vars->imagepub->sendMessage(*image);
-            if(params->imageprocflag)
+            if(image==NULL)
             {
                 caminfo=(*(vars->viewiter)).instantiate<sensor_msgs::CameraInfo>();
                 vars->caminfopub->sendMessage(*caminfo);
+                vars->viewiter++;
+                vars->curframe++;
+                image=(*(vars->viewiter)).instantiate<sensor_msgs::Image>();
+                vars->imagepub->sendMessage(*image);
+                vars->viewiter++;
+                vars->curframe++;
+            }
+            else if(params->imageprocflag)
+            {
+                vars->imagepub->sendMessage(*image);
+                vars->viewiter++;
+                vars->curframe++;
+                caminfo=(*(vars->viewiter)).instantiate<sensor_msgs::CameraInfo>();
+                vars->caminfopub->sendMessage(*caminfo);
+                vars->viewiter++;
+                vars->curframe++;
+            }
+            else
+            {
+                vars->imagepub->sendMessage(*image);
+                vars->viewiter++;
+                vars->curframe++;
             }
         }
         else
@@ -127,11 +158,20 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 cv::cvtColor(data->image,data->image,CV_BGR2RGB);
             }
         }
-        int count=params->baginterval;
+        int count=params->baginterval-1;
         while(count!=0&&vars->curframe<vars->view->size())
         {
-            vars->viewiter++;
-            vars->curframe++;
+            if(params->imageprocflag)
+            {
+                vars->viewiter++;
+                vars->viewiter++;
+                vars->curframe+=2;
+            }
+            else
+            {
+                vars->viewiter++;
+                vars->curframe+=1;
+            }
             count--;
         }
         return !(params->imageprocflag);
