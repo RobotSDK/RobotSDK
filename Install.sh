@@ -1,6 +1,6 @@
 #!/bin/sh
 TMPBASEDIR=$PWD;
-sudo apt-get -y install qt5-default qtcreator* graphviz-dev doxygen libeigen3-dev freeglut3-dev;
+sudo apt-get -y install qt5-default graphviz-dev doxygen libeigen3-dev freeglut3-dev;
 cd $TMPBASEDIR/Src/Doc;
 mkdir -p $HOME/SDK/RobotSDK_4.0/Doc;
 doxygen RobotSDK_Linux.doc;
