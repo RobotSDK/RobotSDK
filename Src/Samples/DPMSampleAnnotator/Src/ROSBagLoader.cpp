@@ -19,7 +19,17 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
     auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
     vars->bag.open(params->bagfilename.toStdString(),rosbag::bagmode::Read);
-    vars->view=new rosbag::View(vars->bag,rosbag::TopicQuery(params->bagtopic.toStdString()));
+    if(params->imageprocflag)
+    {
+        std::vector<std::string> topics(2);
+        topics[0]=params->bagimagetopic.toStdString();
+        topics[1]=params->bagcaminfotopic.toStdString();
+        vars->view=new rosbag::View(vars->bag,rosbag::TopicQuery(topics));
+    }
+    else
+    {
+        vars->view=new rosbag::View(vars->bag,rosbag::TopicQuery(params->bagimagetopic.toStdString()));
+    }
     if(vars->view->size()==0)
     {
         delete vars->view;
@@ -35,7 +45,14 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
         vars->curframe++;
         count--;
     }
-    vars->imagepub->resetTopic(vars->rostopic,vars->rosqueuesize);
+    vars->imagepub->resetTopic(vars->rosimagetopic,vars->rosqueuesize);
+    vars->caminfopub->resetTopic(vars->roscaminfotopic,vars->rosqueuesize);
+    vars->imagesub->resetTopic(vars->rosreceiveimagetopic,vars->rosqueuesize);
+    vars->imagesub->resetQueryInterval(vars->rosqueryinterval);
+    if(params->imageprocflag)
+    {
+        vars->imagesub->startReceiveSlot();
+    }
 	return 1;
 }
 
@@ -43,12 +60,17 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
 	NOUNUSEDWARNING;
+    auto params=NODE_PARAMS;
     auto vars=NODE_VARS;
     vars->bag.close();
     if(vars->view!=NULL)
     {
         delete vars->view;
         vars->view=NULL;
+    }
+    if(params->imageprocflag)
+    {
+        vars->imagesub->stopReceiveSlot();
     }
 	return 1;
 }
@@ -57,34 +79,61 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
 	NOUNUSEDWARNING;
-    auto params=NODE_PARAMS;
-    auto vars=NODE_VARS;
-    auto data=NODE_DATA;
-    sensor_msgs::Image::Ptr image;
-    if(vars->curframe<vars->view->size())
+    if(IS_INTERNAL_TRIGGER)
     {
-        image=(*(vars->viewiter)).instantiate<sensor_msgs::Image>();
+        auto vars=NODE_VARS;
+        auto data=NODE_DATA;
+        sensor_msgs::ImageConstPtr image=vars->imagesub->getMessage();
+        int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
+        data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
+        data->frameid=image->header.seq;
+        data->image=cv_bridge::toCvShare(image)->image.clone();
+        if(image->encoding=="bgr8")
+        {
+            cv::cvtColor(data->image,data->image,CV_BGR2RGB);
+        }
+        return 1;
     }
     else
     {
-        qDebug()<<"Run out of images";
-        return 0;
+        auto params=NODE_PARAMS;
+        auto vars=NODE_VARS;
+        auto data=NODE_DATA;
+        sensor_msgs::Image::Ptr image;
+        sensor_msgs::CameraInfo::Ptr caminfo;
+        if(vars->curframe<vars->view->size())
+        {
+            image=(*(vars->viewiter)).instantiate<sensor_msgs::Image>();
+            vars->imagepub->sendMessage(*image);
+            if(params->imageprocflag)
+            {
+                caminfo=(*(vars->viewiter)).instantiate<sensor_msgs::CameraInfo>();
+                vars->caminfopub->sendMessage(*caminfo);
+            }
+        }
+        else
+        {
+            qDebug()<<"Run out of images";
+            return 0;
+        }
+        if(!(params->imageprocflag))
+        {
+            int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
+            data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
+            data->frameid=vars->curframe;
+            data->image=cv_bridge::toCvShare(image)->image.clone();
+            if(image->encoding=="bgr8")
+            {
+                cv::cvtColor(data->image,data->image,CV_BGR2RGB);
+            }
+        }
+        int count=params->baginterval;
+        while(count!=0&&vars->curframe<vars->view->size())
+        {
+            vars->viewiter++;
+            vars->curframe++;
+            count--;
+        }
+        return !(params->imageprocflag);
     }
-    vars->imagepub->sendMessage(*image);
-    int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
-    data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
-    data->frameid=vars->curframe;
-    data->image=cv_bridge::toCvShare(image)->image.clone();
-    if(image->encoding=="bgr8")
-    {
-        cv::cvtColor(data->image,data->image,CV_BGR2RGB);
-    }
-    int count=params->baginterval;
-    while(count!=0&&vars->curframe<vars->view->size())
-    {
-        vars->viewiter++;
-        vars->curframe++;
-        count--;
-    }
-    return 1;
 }

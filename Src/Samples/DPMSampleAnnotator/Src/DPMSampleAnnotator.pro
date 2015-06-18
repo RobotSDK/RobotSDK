@@ -21,7 +21,6 @@ SOURCES += \
     DPMModifierWidget.cpp \
     DPMAnnotatorWidget.cpp \
     DPMFakeReceiver.cpp
-
 HEADERS += \
     DPMAnnotator.h \
     DPMModifier.h \

@@ -16,25 +16,26 @@ namespace RobotSDK_Module
 #define TrackedStateNum 5
 typedef union{struct{double x,y,theta,width,length;};double data[TrackedStateNum];} TrackedState;
 
-class TrackedObject
+class TrackedObjectParticlePack
 {
 public:
     static const int statenum;
+    static int particlenum;
     static TrackedState min;
     static TrackedState max;
     static TrackedState sigma;
 public:
-    TrackedObject(QTime timeStamp, cv::Mat egoTransform, TrackedState objectState);
-protected:
+    TrackedObjectPack();
+public:
     QTime timestamp;
     cv::Mat egotransform;
-    bool initialflag;
-    TrackedState objectstate;
+    QVector<int> ids;
+    QVector<int> deltamsec;
+    QVector<TrackedState> objects;
 public:
+    void addObject(QTime timeStamp, cv::Mat egoTransform, int id, TrackedObject object);
+    void addObjectPack(TrackedObjectPack objectPack);
     void updateEgoTransform(QTime timeStamp, cv::Mat egoTransform);
-    bool isInitialState();
-    TrackedState getObjectState();
-    void setObjectState(TrackedState objectState);
 };
 
 class QGraphicsTrackedObjectItem : public QGraphicsItem
@@ -55,6 +56,7 @@ public:
     int idcount;
 public:
     void setMap(QImage & image);
+
 };
 
 }

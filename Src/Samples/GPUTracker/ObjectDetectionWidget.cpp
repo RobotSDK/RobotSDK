@@ -2,22 +2,58 @@
 
 using namespace RobotSDK_Module;
 
-const int TrackedObject::statenum=TrackedStateNum;
-TrackedState TrackedObject::min;
-TrackedState TrackedObject::max;
-TrackedState TrackedObject::sigma;
+const int TrackedObjectParticlePack::statenum=TrackedStateNum;
+int TrackedObjectParticlePack::particlenum=1000;
+TrackedState TrackedObjectParticlePack::min={0,0,0,0,0};
+TrackedState TrackedObjectParticlePack::max={0,0,0,0,0};
+TrackedState TrackedObjectParticlePack::sigma={0,0,0,0,0};
 
-TrackedObject::TrackedObject(QTime timeStamp, cv::Mat egoTransform, TrackedState objectState)
+TrackedObjectParticlePack::TrackedObjectParticlePack()
 {
-    initialflag=1;
-    timestamp=timeStamp;
-    egotransform=egoTransform;
-    objectstate=objectState;
+    timestamp=QTime();
+    egotransform=cv::Mat::eye(4,4,CV_64F);
+    ids.clear();
+    deltamsec.clear();
+    objects.clear();
+}
+
+void TrackedObjectParticlePack::addObject(QTime timeStamp, cv::Mat egoTransform, int id, TrackedObject object)
+{
+    if(!ids.contains(id))
+    {
+        int delta;
+        if(timestamp.isNull())
+        {
+            timestamp=timeStamp;
+            egotransform=egoTransform;
+            delta=0;
+        }
+        else if(timestamp<timeStamp)
+        {
+            int i,n=objects.size();
+            for(i=0;i<n;i++)
+            {
+
+            }
+        }
+        else if(timestamp>timeStamp)
+        {
+
+        }
+        ids.push_back(id);
+        deltamsec.push_back(delta);
+        objects.push_back(object);
+    }
 }
 
 void TrackedObject::updateEgoTransform(QTime timeStamp, cv::Mat egoTransform)
 {
-    if(timeStamp>timestamp)
+    if(timestamp.isNull())
+    {
+        timestamp=timeStamp;
+        egotransform=egoTransform;
+    }
+    else if(timeStamp>timestamp)
     {
         cv::Mat delta=egoTransform.inv()*egotransform;
         cv::Mat position(4,1,CV_64F);
@@ -36,7 +72,6 @@ void TrackedObject::updateEgoTransform(QTime timeStamp, cv::Mat egoTransform)
         objectstate.theta=atan2(orientation.at<double>(1),orientation.at<double>(0));
         timestamp=timeStamp;
         egotransform=egoTransform;
-        initialflag=0;
     }
     return;
 }

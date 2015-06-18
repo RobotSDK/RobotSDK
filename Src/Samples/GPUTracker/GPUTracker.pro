@@ -18,7 +18,9 @@ SOURCES += \
     ObstacleMapGlobalizer.cpp \
     ObjectDetection.cpp \
     ObjectParticleResample.cpp \
-    ObjectDetectionWidget.cpp
+    ObjectDetectionWidget.cpp \
+    ObjectParticleGenerator.cpp \
+    GPUParticleFilter.cpp
 
 HEADERS += \
     ObstacleMapGenerator.cuh \
@@ -27,7 +29,9 @@ HEADERS += \
     ObstacleMapGlobalizer.h \
     ObjectDetection.h \
     ObjectParticleResample.h \
-    ObjectDetectionWidget.h
+    ObjectDetectionWidget.h \
+    ObjectParticleGenerator.h \
+    GPUParticleFilter.h
 
 MODULES += VirtualScan Velodyne Localization
 include($$(ROBOTSDKMODULE))

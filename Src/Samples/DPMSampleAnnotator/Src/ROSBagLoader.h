@@ -8,6 +8,7 @@
 #include<rosbag/view.h>
 #include<rosbag/query.h>
 #include<sensor_msgs/Image.h>
+#include<sensor_msgs/CameraInfo.h>
 #include<opencv2/opencv.hpp>
 #include<cv_bridge/cv_bridge.h>
 #include<rosinterface.h>
@@ -39,7 +40,9 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
 public:
     ADD_PARAM(QString, bagfilename, "")
-    ADD_PARAM(QString, bagtopic, "/image_raw")
+    ADD_PARAM(QString, bagimagetopic, "/image_raw")
+    ADD_PARAM(bool, imageprocflag, 0)
+    ADD_PARAM(QString, bagcaminfotopic, "/camera_info")
     ADD_PARAM(uint, bagstart, 0)
     ADD_PARAM(uint, baginterval, 1)
 };
@@ -57,11 +60,19 @@ public:
     rosbag::View::const_iterator viewiter;
     int curframe;
 public:
-    ADD_VAR(QString, rostopic, "/image_raw")
+    ADD_VAR(QString, rosimagetopic, "/image_raw")
+    ADD_VAR(QString, roscaminfotopic, "/camera_info")
+    ADD_VAR(QString, rosreceiveimagetopic, "/image_raw")
     ADD_VAR(u_int32_t, rosqueuesize, 1000)
+    ADD_VAR(int, rosqueryinterval, 10)
 public:
     typedef ROSPub<sensor_msgs::Image> pubtype;
-    ADD_INTERNAL_QOBJECT_TRIGGER(pubtype, imagepub, 0, rostopic, rosqueuesize)
+    ADD_INTERNAL_QOBJECT_TRIGGER(pubtype, imagepub, 0, rosimagetopic, rosqueuesize)
+    typedef ROSPub<sensor_msgs::CameraInfo> caminfopubtype;
+    ADD_INTERNAL_QOBJECT_TRIGGER(caminfopubtype, caminfopub, 0, roscaminfotopic, rosqueuesize)
+    typedef ROSSub<sensor_msgs::ImageConstPtr> subtype;
+    ADD_INTERNAL_QOBJECT_TRIGGER(subtype, imagesub, 0, rosreceiveimagetopic, rosqueuesize, rosqueryinterval)
+    ADD_INTERNAL_DEFAULT_CONNECTION(imagesub,receiveMessageSignal)
 };
 
 //=================================================
