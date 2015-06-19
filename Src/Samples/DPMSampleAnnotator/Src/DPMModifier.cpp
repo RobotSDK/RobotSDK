@@ -74,6 +74,10 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             data->rosbagfile=vars->rosbagfile;
             data->frameid=vars->frameid;
             data->image=vars->image;
+            if(vars->rgbinvertflag)
+            {
+                cv::cvtColor(data->image,data->image,CV_BGR2RGB);
+            }
             data->saveimageflag=1;
             QVector<DPMRect *> rects=vars->dpmmodifier->getRects();
             int i,n=rects.size();
@@ -115,6 +119,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 vars->rosbagfile=imageparams->bagfilename;
                 vars->frameid=imagedata->frameid;
                 vars->image=imagedata->image.clone();
+                vars->rgbinvertflag=imageparams->rgbinvertflag;
                 QImage img(vars->image.data,vars->image.cols,vars->image.rows,vars->image.step,QImage::Format_RGB888);
                 vars->dpmmodifier->addPixmap(img);
             }

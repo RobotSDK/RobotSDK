@@ -57,6 +57,7 @@ public:
     QString rosbagfile;
     int frameid;
     cv::Mat image;
+    bool rgbinvertflag;
 public:
     ADD_QLAYOUT(QHBoxLayout, layout)
     ADD_QLAYOUT(QVBoxLayout, controllayout)

@@ -45,6 +45,7 @@ public:
     ADD_PARAM(QString, bagcaminfotopic, "/camera_info")
     ADD_PARAM(uint, bagstart, 0)
     ADD_PARAM(uint, baginterval, 1)
+    ADD_PARAM(bool, rgbinvertflag, 0)
 };
 
 //=================================================

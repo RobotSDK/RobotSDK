@@ -91,6 +91,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 	NOUNUSEDWARNING;
     if(IS_INTERNAL_TRIGGER)
     {
+        auto params=NODE_PARAMS;
         auto vars=NODE_VARS;
         auto data=NODE_DATA;
         sensor_msgs::ImageConstPtr image=vars->imagesub->getMessage();
@@ -98,7 +99,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
         data->frameid=image->header.seq;
         data->image=cv_bridge::toCvShare(image)->image.clone();
-        if(image->encoding=="bgr8")
+        if(params->rgbinvertflag)
         {
             cv::cvtColor(data->image,data->image,CV_BGR2RGB);
         }
