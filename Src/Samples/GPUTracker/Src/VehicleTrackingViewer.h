@@ -1,5 +1,5 @@
-#ifndef OBJECTPARTICLERESAMPLE
-#define OBJECTPARTICLERESAMPLE
+#ifndef VEHICLETRACKINGVIEWER
+#define VEHICLETRACKINGVIEWER
 
 //=================================================
 //Please add headers here:
@@ -14,13 +14,13 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS ObjectParticleResample
+#define NODE_CLASS VehicleTrackingViewer
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 1
+#define INPUT_PORT_NUM 2
 
 #undef OUTPUT_PORT_NUM
-#define OUTPUT_PORT_NUM 1
+#define OUTPUT_PORT_NUM 0
 
 //=================================================
 //Params types configuration

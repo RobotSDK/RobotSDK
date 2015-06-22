@@ -1,4 +1,4 @@
-#include"ObjectParticleResample.h"
+#include"VehicleDetector.h"
 using namespace RobotSDK_Module;
 
 //If you need to use extended node, please uncomment below and comment the using of default node

@@ -12,26 +12,32 @@ TEMPLATE = lib
 DEFINES += GPUTRACKER_LIBRARY
 
 SOURCES += \
-    ObstacleMapGenerator.cu \
     ObstacleMapGenerator.cpp \
     ObstacleMapViewer.cpp \
     ObstacleMapGlobalizer.cpp \
-    ObjectDetection.cpp \
-    ObjectParticleResample.cpp \
-    ObjectDetectionWidget.cpp \
-    ObjectParticleGenerator.cpp \
-    GPUParticleFilter.cpp
+    VehicleDetector.cpp \
+    VehicleTracker.cpp \
+    VehicleTrackingViewer.cpp
 
 HEADERS += \
     ObstacleMapGenerator.cuh \
     ObstacleMapGenerator.h \
     ObstacleMapViewer.h \
     ObstacleMapGlobalizer.h \
-    ObjectDetection.h \
-    ObjectParticleResample.h \
-    ObjectDetectionWidget.h \
-    ObjectParticleGenerator.h \
-    GPUParticleFilter.h
+    VehicleDetector.h \
+    VehicleTracker.h \
+    VehicleTrackingViewer.h \
+    egotransform.h \
+    particlefilterbase.h \
+    particlefilterdef.h \
+    randomgenerator.h \
+    VehicleParticleFilter.cuh \
+    VehicleParticleFilter.h
+
+DISTFILES += \
+    ObstacleMapGenerator.cu \
+    egotransform.cu \
+    VehicleParticleFilter.cu
 
 MODULES += VirtualScan Velodyne Localization
 include($$(ROBOTSDKMODULE))
@@ -55,3 +61,4 @@ unix {
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_contrib
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_imgproc
 }
+

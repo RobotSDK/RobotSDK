@@ -1,4 +1,4 @@
-#include"ObjectDetection.h"
+#include"VehicleTrackingViewer.h"
 using namespace RobotSDK_Module;
 
 //If you need to use extended node, please uncomment below and comment the using of default node
@@ -7,8 +7,8 @@ USE_DEFAULT_NODE
 
 //=================================================
 //Uncomment below PORT_DECL and set input node class name
-PORT_DECL(0, ObstacleMapGlobalizer)
-PORT_DECL(1, ObjectParticleResample)
+//PORT_DECL(0, InputNodeClassName)
+//PORT_DECL(1, InputNodeClassName)
 
 //=================================================
 //Original node functions

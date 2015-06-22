@@ -34,7 +34,14 @@ public:
     {
         for(int i=0;i<STATE_NUM(StateType);i++)
         {
-            randomOffset.data[i]=thrust::random::normal_distribution<StateValueType>(stateMean->data[i],stateSigma->data[i])(rng);
+            if(stateSigma->data[i]>0)
+            {
+                randomOffset.data[i]=thrust::random::normal_distribution<StateValueType>(stateMean->data[i],stateSigma->data[i])(rng);
+            }
+            else
+            {
+                randomOffset.data[i]=0;
+            }
         }
     }
 };

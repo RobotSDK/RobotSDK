@@ -16,19 +16,18 @@ CONFIG += c++11
 TEMPLATE = app
 
 HEADERS += \
-    def.h \
-    randomgenerator.h \
+    particlefilter.h \
+    particlefilter.cuh \
     egotransform.h \
+    particlefilterdef.h \
     particlefilterbase.h \
-    particlefilter.h
+    randomgenerator.h
 
 SOURCES += \
     main.cpp
 
 DISTFILES += \
-    randomgenerator.cu \
     egotransform.cu \
-    particlefilterbase.cu \
     particlefilter.cu
 
 include($$(ROBOTSDKCUDA))

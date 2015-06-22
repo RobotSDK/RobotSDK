@@ -262,6 +262,52 @@ public:
 
         d_objects.push_back(d_newparticles);
         objectsid.push_back(objectID);
+
+        objectsnum=objectsid.size();
+        totalparticlenum=objectsnum*particlenum;
+
+        CUDAFREE(d_particles);
+        CUDAFREE(d_cumulative);
+        CUDAFREE(d_weightsum);
+        CUDAFREE(d_resample);
+        cudaMalloc((void **)(&d_particles),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_cumulative),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_weightsum),sizeof(float)*objectsnum);
+        cudaMalloc((void **)(&d_resample),sizeof(float)*totalparticlenum);
+
+        if(h_weightsum!=NULL)
+        {
+            delete []h_weightsum;
+            h_weightsum=NULL;
+        }
+        h_weightsum=new float[objectsnum];
+        if(h_maxweight!=NULL)
+        {
+            delete []h_maxweight;
+            h_maxweight=NULL;
+        }
+        h_maxweight=new float[objectsnum];
+    }
+    void addObjectState(std::vector<int> & objectID, std::vector<StateType> & objectState)
+    {
+        int i,n=objectID.size(),m=objectState.size();
+        if(n*m==0)
+        {
+            return;
+        }
+        int blocknum=GridBlockNum(particlenum);
+        int threadnum=BlockThreadNum;
+        for(i=0;i<n&&i<m;i++)
+        {
+            kernelGenerateUniformRandomOffset<StateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomoffset,d_statemin,d_statemax,particlenum);
+
+            ParticleType * d_newparticles;
+            cudaMalloc((void **)(&d_newparticles),sizeof(ParticleType)*particlenum);
+            kernelInitialParticles<StateType,ParticleType><<<blocknum,threadnum>>>(objectState[i],d_randomoffset,d_newparticles,particlenum);
+
+            d_objects.push_back(d_newparticles);
+            objectsid.push_back(objectID[i]);
+        }
         objectsnum=objectsid.size();
         totalparticlenum=objectsnum*particlenum;
 
@@ -334,7 +380,7 @@ public:
         {
             if(objectsid[i]==objectID)
             {
-                CUDAFREE(d_objects[i])
+                CUDAFREE(d_objects[i]);
                 d_objects.erase(d_objects.begin()+i);
                 objectsid.erase(objectsid.begin()+i);
                 objectsnum=objectsid.size();
@@ -366,6 +412,46 @@ public:
             }
         }
         return 0;
+    }
+    void removeObject(std::vector<int> & objectID)
+    {
+        for(int j=0;j<objectID.size();j++)
+        {
+            for(int i=0;i<objectsnum;i++)
+            {
+                if(objectsid[i]==objectID[j])
+                {
+                    CUDAFREE(d_objects[i]);
+                    d_objects.erase(d_objects.begin()+i);
+                    objectsid.erase(objectsid.begin()+i);
+                    break;
+                }
+            }
+        }
+        objectsnum=objectsid.size();
+        totalparticlenum=objectsnum*particlenum;
+
+        CUDAFREE(d_particles);
+        CUDAFREE(d_cumulative);
+        CUDAFREE(d_weightsum);
+        CUDAFREE(d_resample);
+        cudaMalloc((void **)(&d_particles),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_cumulative),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_weightsum),sizeof(float)*objectsnum);
+        cudaMalloc((void **)(&d_resample),sizeof(float)*totalparticlenum);
+
+        if(h_weightsum!=NULL)
+        {
+            delete []h_weightsum;
+            h_weightsum=NULL;
+        }
+        h_weightsum=new float[objectsnum];
+        if(h_maxweight!=NULL)
+        {
+            delete []h_maxweight;
+            h_maxweight=NULL;
+        }
+        h_maxweight=new float[objectsnum];
     }
 public:
     void randomnizeParticles()
@@ -457,10 +543,7 @@ public:
                 removedids.push_back(objectsid[i]);
             }
         }
-        for(int i=0;i<removedids.size();i++)
-        {
-            removeObject(removedids[i]);
-        }
+        removeObject(removedids);
     }
 };
 

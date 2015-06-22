@@ -23,7 +23,7 @@ public:
     __host__ __device__
     EgoTransform();
     __host__ __device__
-    EgoTransform(StateValueType x1, StateValueType y1, StateValueType theta1, StateValueType x2, StateValueType y2, StateValueType theta2);
+    EgoTransform(StateValueType dx, StateValueType dy, StateValueType theta1, StateValueType theta2);
     __host__ __device__
     EgoTransform(StateValueType * transformMatrix);
 public:

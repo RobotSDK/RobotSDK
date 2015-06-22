@@ -39,19 +39,19 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
                 double dis=sqrt(x*x+y*y);
                 double radius=obstacleFactor*gridSize;
                 double delta=dis*(1-beta);
-                if(delta<-radius)
+                if(delta<-radius) //free
                 {
                     map[baseid]=0;
                     map[baseid+1]=255;
                     map[baseid+2]=0;
                 }
-                else if(delta>radius)
+                else if(delta>radius) //unkonw
                 {
                     map[baseid]=0;
                     map[baseid+1]=0;
                     map[baseid+2]=255;
                 }
-                else
+                else //occ
                 {
                     map[baseid]=255;
                     map[baseid+1]=0;

@@ -1,9 +1,10 @@
-#ifndef OBJECTPARTICLEGENERATOR
-#define OBJECTPARTICLEGENERATOR
+#ifndef VEHICLEDETECTOR
+#define VEHICLEDETECTOR
 
 //=================================================
 //Please add headers here:
-
+#include<ObstacleMapGlobalizer.h>
+#include<VehicleParticleFilter.h>
 
 //=================================================
 #include<RobotSDK.h>
@@ -14,7 +15,7 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS ObjectParticleGenerator
+#define NODE_CLASS VehicleDetector
 
 #undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 1
@@ -49,7 +50,9 @@ class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 //NODE_DATA_TYPE_REF(RefNodeClassName)
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
-
+public:
+    std::vector<int> objectids;
+    std::vector<STATE_TYPE(Vehicle)> objectstates;
 };
 
 //=================================================
