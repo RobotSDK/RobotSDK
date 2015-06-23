@@ -92,6 +92,17 @@ PARTICLE_MEASURE_FUNC(Vehicle,state,measureData)
         UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,-cornerx-measureData.margin,l,1,measureData.wtable,weight);
         UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,-cornerx+measureData.margin,l,2,measureData.wtable,weight);
     }
+    {
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,cornerx,cornery,0,measureData.wtable,weight);
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,cornerx+measureData.margin,cornery,1,measureData.wtable,weight);
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,cornerx,cornery+measureData.margin,1,measureData.wtable,weight);
+
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,-cornerx,cornery,0,measureData.wtable,weight);
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,-cornerx-measureData.margin,cornery,1,measureData.wtable,weight);
+        UPDATEWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,-cornerx,cornery+measureData.margin,1,measureData.wtable,weight);
+
+
+    }
     return weight;
 }
 
