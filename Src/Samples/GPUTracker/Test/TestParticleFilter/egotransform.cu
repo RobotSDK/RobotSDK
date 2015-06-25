@@ -9,10 +9,10 @@ EgoTransform::EgoTransform()
 }
 
 __host__ __device__
-EgoTransform::EgoTransform(StateValueType x1, StateValueType y1, StateValueType theta1, float x2, float y2, float theta2)
+EgoTransform::EgoTransform(StateValueType dx, StateValueType dy, StateValueType theta1, float theta2)
 {
-    StateValueType deltax=x1-x2;
-    StateValueType deltay=y1-y2;
+    StateValueType deltax=-dx;
+    StateValueType deltay=-dy;
     transform.deltax=deltax*cos(theta2)+deltay*sin(theta2);
     transform.deltay=-deltax*sin(theta2)+deltay*cos(theta2);
     transform.deltatheta=theta1-theta2;

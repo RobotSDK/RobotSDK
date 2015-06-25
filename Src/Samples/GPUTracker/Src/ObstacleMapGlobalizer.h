@@ -55,7 +55,9 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 public:
     double gridsize;
     double maprange;
+    double radius;
     cv::Mat map;
+    cv::Mat mapdata;
     cv::Mat transform;
 };
 

@@ -3,16 +3,17 @@
 
 #include"particlefilterdef.h"
 
-STATE_DEF(Vehicle, 6, x,y,theta,v,width,length)
+STATE_DEF(Vehicle, 8, x,y,theta,v,width,length,wsigma,lsigma)
 
 struct ObstacleMap
 {
     int mapsize;
     float gridsize;
+    float radius;
     unsigned char * map;
-    float wtable[3]={2.0f,1.0f,0.4f};
-    int edgepointnum=5;
-    float margin=0.1;
+    float * mapdata;
+    float wtable[3]={20.0f,1.0f,0.1f};
+    float sigma;
 };
 
 MEASUREDATA_DEF(Vehicle,ObstacleMap)

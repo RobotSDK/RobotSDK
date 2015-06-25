@@ -33,16 +33,15 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
     vars->objectid.clear();
     vars->objectstate.clear();
 
-    vars->measuredata.edgepointnum=vars->obmap_edgepointnum;
-    vars->measuredata.margin=vars->obmap_margin;
     QStringList wtable=vars->obmap_wtable.split(",",QString::SkipEmptyParts);
-    if(wtable.size!=3)
+    if(wtable.size()!=3)
     {
         return 0;
     }
     vars->measuredata.wtable[0]=wtable[0].toFloat();
     vars->measuredata.wtable[1]=wtable[1].toFloat();
     vars->measuredata.wtable[2]=wtable[2].toFloat();
+    vars->measuredata.sigma=vars->obmap_sigma;
 
     vars->localheadvec=cv::Mat::zeros(4,1,CV_64F);
     vars->localheadvec.at<double>(0)=1;
@@ -54,7 +53,7 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 NODE_FUNC_DEF_EXPORT(bool, closeNode)
 {
 	NOUNUSEDWARNING;
-    auto vars=NODE_VARS;PORT_DECL(1, VehicleDetector)
+    auto vars=NODE_VARS;
     PF_Vehicle_clear();
 
     vars->mapsync.clear();
@@ -87,12 +86,18 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             int deltamsec=vars->curtimestamp.msecsTo(obstaclemap->timestamp);
             vars->measuredata.gridsize=obstaclemap->gridsize;
             vars->measuredata.mapsize=obstaclemap->map.rows;
+            vars->measuredata.radius=obstaclemap->radius;
             vars->measuredata.map=obstaclemap->map.data;
+            vars->measuredata.mapdata=(float *)(obstaclemap->mapdata.data);
             float dx=obstaclemap->transform.at<double>(0,3)-vars->curtransform.at<double>(0,3);
             float dy=obstaclemap->transform.at<double>(1,3)-vars->curtransform.at<double>(1,3);
             float theta1=vars->curtheta;
             float theta2=atan2(head.at<double>(1),head.at<double>(0));
             PF_Vehicle_advanceParticleFilter2D(deltamsec,vars->measuredata,dx,dy,theta1,theta2);
+
+//            PF_Vehicle_addObjectStates(detection->objectids,detection->objectstates);
+//            PF_Vehicle_measureParticles(vars->measuredata);
+
             PF_Vehicle_removeParticles(vars->threshold);
             PF_Vehicle_estimateObjects(vars->objectid,vars->objectstate);
 
@@ -102,6 +107,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             PF_Vehicle_addObjectStates(detection->objectids,detection->objectstates);
 
             auto data=NODE_DATA;
+            data->timestamp=vars->curtimestamp;
             data->transform=vars->curtransform.clone();
             data->objectid=vars->objectid;
             data->objectstate=vars->objectstate;

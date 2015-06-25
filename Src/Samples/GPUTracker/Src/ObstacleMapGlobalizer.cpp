@@ -45,7 +45,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         data->timestamp=mapdata->timestamp;
         data->gridsize=mapparams->gridsize;
         data->maprange=mapparams->maprange;
+        data->radius=mapparams->obstaclefactor*data->gridsize;
         data->map=mapdata->map;
+        data->mapdata=mapdata->mapdata;
         data->transform=localization->cvtransform;
         return 1;
     }

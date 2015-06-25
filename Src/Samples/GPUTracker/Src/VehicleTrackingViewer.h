@@ -3,7 +3,10 @@
 
 //=================================================
 //Please add headers here:
-
+#include<ObstacleMapGenerator.h>
+#include<VehicleTracker.h>
+#include<VehicleTrackingViewerWidget.h>
+#include<sync.h>
 
 //=================================================
 #include<RobotSDK.h>
@@ -39,7 +42,11 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    ADD_QWIDGET(VehicleTrackingViewerWidget, viewer)
+    ADD_QLAYOUT(QHBoxLayout, layout)
+public:
+    ADD_SYNC(sync,1)
 };
 
 //=================================================

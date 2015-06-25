@@ -32,7 +32,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto inputdata=PORT_DATA(0,0);
     data->timestamp=inputdata->timestamp;
     data->map=cv::Mat(vars->mapsize,vars->mapsize,CV_8UC3);
+    data->mapdata=cv::Mat(vars->mapsize,vars->mapsize,CV_32F);
     cudaObstacleMapGenerator(inputdata->virtualscan.size(),inputdata->virtualscan.data()
-                          ,vars->mapsize,params->gridsize,params->obstaclefactor,data->map.data);
+                          ,vars->mapsize,params->gridsize,params->obstaclefactor,data->map.data,(float *)(data->mapdata.data));
 	return 1;
 }

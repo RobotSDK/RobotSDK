@@ -3,8 +3,9 @@
 
 //=================================================
 //Please add headers here:
-#include<ObstacleMapGlobalizer.h>
+#include<ObstacleMapGenerator.h>
 #include<VehicleParticleFilter.h>
+#include<VehicleDetectorWidget.h>
 
 //=================================================
 #include<RobotSDK.h>
@@ -40,7 +41,12 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    ADD_QWIDGET(VehicleDetectorWidget,detector)
+    ADD_QLAYOUT(QHBoxLayout,layout)
+public:
+    QTime timestamp;
+    int idcount;
 };
 
 //=================================================

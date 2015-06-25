@@ -250,7 +250,7 @@ protected:
         cudaMemcpy(d_randomseeds,randomseeds,sizeof(int)*particlenum,cudaMemcpyHostToDevice);
     }
 public:
-    void addObjectState(int objectID, StateType objectState)
+    void addObjectState(const int objectID, const StateType objectState)
     {
         int blocknum=GridBlockNum(particlenum);
         int threadnum=BlockThreadNum;
@@ -288,7 +288,7 @@ public:
         }
         h_maxweight=new float[objectsnum];
     }
-    void addObjectState(std::vector<int> & objectID, std::vector<StateType> & objectState)
+    void addObjectState(const std::vector<int> & objectID, const std::vector<StateType> & objectState)
     {
         int i,n=objectID.size(),m=objectState.size();
         if(n*m==0)
@@ -535,15 +535,39 @@ public:
         {
             return;
         }
-        std::vector<int> removedids;
-        for(int i=0;i<objectsnum;i++)
+        for(int i=objectsnum-1;i>=0;i--)
         {
-            if(h_maxweight[i]<minWeightThreshold)
+            if(h_maxweight[i]<=minWeightThreshold)
             {
-                removedids.push_back(objectsid[i]);
+                CUDAFREE(d_objects[i]);
+                d_objects.erase(d_objects.begin()+i);
+                objectsid.erase(objectsid.begin()+i);
             }
         }
-        removeObject(removedids);
+        objectsnum=objectsid.size();
+        totalparticlenum=objectsnum*particlenum;
+
+        CUDAFREE(d_particles);
+        CUDAFREE(d_cumulative);
+        CUDAFREE(d_weightsum);
+        CUDAFREE(d_resample);
+        cudaMalloc((void **)(&d_particles),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_cumulative),sizeof(ParticleType)*totalparticlenum);
+        cudaMalloc((void **)(&d_weightsum),sizeof(float)*objectsnum);
+        cudaMalloc((void **)(&d_resample),sizeof(float)*totalparticlenum);
+
+        if(h_weightsum!=NULL)
+        {
+            delete []h_weightsum;
+            h_weightsum=NULL;
+        }
+        h_weightsum=new float[objectsnum];
+        if(h_maxweight!=NULL)
+        {
+            delete []h_maxweight;
+            h_maxweight=NULL;
+        }
+        h_maxweight=new float[objectsnum];
     }
 };
 

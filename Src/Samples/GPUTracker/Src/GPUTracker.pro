@@ -17,7 +17,9 @@ SOURCES += \
     ObstacleMapGlobalizer.cpp \
     VehicleDetector.cpp \
     VehicleTracker.cpp \
-    VehicleTrackingViewer.cpp
+    VehicleTrackingViewer.cpp \
+    VehicleDetectorWidget.cpp \
+    VehicleTrackingViewerWidget.cpp
 
 HEADERS += \
     ObstacleMapGenerator.cuh \
@@ -32,7 +34,9 @@ HEADERS += \
     particlefilterdef.h \
     randomgenerator.h \
     VehicleParticleFilter.cuh \
-    VehicleParticleFilter.h
+    VehicleParticleFilter.h \
+    VehicleDetectorWidget.h \
+    VehicleTrackingViewerWidget.h
 
 DISTFILES += \
     ObstacleMapGenerator.cu \

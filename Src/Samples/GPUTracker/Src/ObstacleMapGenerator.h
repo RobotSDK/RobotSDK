@@ -55,6 +55,7 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
     cv::Mat map;
+    cv::Mat mapdata;
 };
 
 //=================================================

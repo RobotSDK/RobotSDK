@@ -73,15 +73,16 @@
 
 #define PARTICLE_FILTER_INTERACT_FUNCS_DECL(PFName) \
     extern "C" void PF_##PFName##_initialParticleFilter(int particleNum, STATE_TYPE(PFName) & stateMin, STATE_TYPE(PFName) & stateMax, STATE_TYPE(PFName) & stateMean, STATE_TYPE(PFName) & stateSigma); \
-    extern "C" void PF_##PFName##_addObjectState(int objectID, STATE_TYPE(PFName) & objectState); \
-    extern "C" void PF_##PFName##_addObjectStates(std::vector<int> & objectID, std::vector<STATE_TYPE(PFName)> & objectState); \
+    extern "C" void PF_##PFName##_addObjectState(const int objectID, const STATE_TYPE(PFName) & objectState); \
+    extern "C" void PF_##PFName##_addObjectStates(const std::vector<int> & objectID, const std::vector<STATE_TYPE(PFName)> & objectState); \
     extern "C" void PF_##PFName##_advanceParticleFilter(int deltaMsec, MEASUREDATA_TYPE(PFName) & measureData); \
     extern "C" void PF_##PFName##_advanceParticleFilter2D(int deltaMsec, MEASUREDATA_TYPE(PFName) & measureData, StateValueType dx=0, StateValueType dy=0, StateValueType theta1=0, StateValueType theta2=0); \
     extern "C" void PF_##PFName##_advanceParticleFilter3D(int deltaMsec, MEASUREDATA_TYPE(PFName) & measureData, StateValueType * transformMatrix=NULL); \
     extern "C" void PF_##PFName##_removeParticles(float minWeightThreshold); \
     extern "C" bool PF_##PFName##_estimateObject(int objectID, STATE_TYPE(PFName) & objectState); \
     extern "C" void PF_##PFName##_estimateObjects(std::vector<int> & objectsID, std::vector<STATE_TYPE(PFName)> & objectsState); \
-    extern "C" void PF_##PFName##_clear();
+    extern "C" void PF_##PFName##_clear(); \
+    extern "C" void PF_##PFName##_measureParticles(MEASUREDATA_TYPE(PFName) & measureData);
 
 #define PARTICLE_INSTANCE(PFName) PFName##_particlefilter
 #define PARTICLE_FILTER_INTERACT_FUNCS(PFName) \
@@ -90,11 +91,11 @@
     { \
         PARTICLE_INSTANCE(PFName).initialParticleFilter(particleNum,stateMin,stateMax,stateMean,stateSigma); \
     } \
-    extern "C" void PF_##PFName##_addObjectState(int objectID, STATE_TYPE(PFName) & objectState) \
+    extern "C" void PF_##PFName##_addObjectState(const int objectID, const STATE_TYPE(PFName) & objectState) \
     { \
         PARTICLE_INSTANCE(PFName).addObjectState(objectID,objectState); \
     } \
-    extern "C" void PF_##PFName##_addObjectStates(std::vector<int> & objectID, std::vector<STATE_TYPE(PFName)> & objectState) \
+    extern "C" void PF_##PFName##_addObjectStates(const std::vector<int> & objectID, const std::vector<STATE_TYPE(PFName)> & objectState) \
     { \
         PARTICLE_INSTANCE(PFName).addObjectState(objectID,objectState); \
     } \
@@ -141,6 +142,12 @@
     extern "C" void PF_##PFName##_clear() \
     { \
         PARTICLE_INSTANCE(PFName).clear(); \
+    } \
+    extern "C" void PF_##PFName##_measureParticles(MEASUREDATA_TYPE(PFName) & measureData) \
+    { \
+        PARTICLE_INSTANCE(PFName).measureParticles(measureData); \
+        PARTICLE_INSTANCE(PFName).resampleParticles(); \
+        cudaDeviceSynchronize(); \
     }
 
 

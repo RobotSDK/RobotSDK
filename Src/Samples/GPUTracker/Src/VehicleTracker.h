@@ -60,10 +60,9 @@ public:
     ADD_VAR(float, state_length_max, 2)
     ADD_VAR(float, threshold, 1.0)
 public:
-    ADD_VAR(int, obmap_edgepointnum, 5)
-    ADD_VAR(float, obmap_margin, 0.1)
-    ADD_VAR(QString, obmap_wtable, "2.0,1.0,0.4")
+    ADD_VAR(QString, obmap_wtable, "2.0,1.0,0.1")
     MEASUREDATA_TYPE(Vehicle) measuredata;
+    ADD_VAR(float, obmap_sigma, 0.01f)
 public:
     ADD_SYNC(mapsync,1)
 public:
