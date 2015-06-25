@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
         {
             std::cout<<objectid[i]<<"\t"<<states[i].x<<"\t"<<states[i].y<<"\t"<<states[i].theta<<"\t"<<states[i].v<<"\t"<<states[i].width<<"\t"<<states[i].length<<"\n";
         }
+        //getchar();
     }
     return a.exec();
 }
