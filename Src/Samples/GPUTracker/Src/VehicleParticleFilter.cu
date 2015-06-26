@@ -9,8 +9,8 @@ PARTICLE_INITIALIZE_FUNC(Vehicle,initialState,randomOffset)
     state.y=initialState.y+randomOffset.y;
     state.theta=initialState.theta+randomOffset.theta;
     state.v=initialState.v+randomOffset.v;
-    state.width=0;
-    state.length=0;
+    state.width=initialState.width+randomOffset.width;
+    state.length=initialState.length+randomOffset.length;
     state.wsigma=0;
     state.lsigma=0;
 }
@@ -34,7 +34,7 @@ PARTICLE_TRANSFORM_FUNC(Vehicle,transform)
     transform.transformState2D(state.x,state.y,state.theta);
 }
 
-#define GETWEIGHT(ctheta,stheta,statex,statey,mapsize,gridsize,obmap,obmapdata,radius,wtable,sigma,x,y,weight,flag) \
+#define GETWEIGHT(ctheta,stheta,statex,statey,mapsize,gridsize,obmap,obmapdata,radius,wtable,sigma,x,y,weight,innerscore,flag) \
     if(weight>0) \
     { \
         float gx=ctheta*x-stheta*y+statex; \
@@ -51,11 +51,13 @@ PARTICLE_TRANSFORM_FUNC(Vehicle,transform)
             { \
                 float delta=obmapdata[mapdataid]*radius; \
                 weight*=wtable[0]/2+(exp(-delta*delta/sigma))*(wtable[0]/2); \
+                innerscore *=wtable[2]; \
             } \
             else if(obmap[mapid+1]==255) \
             { \
                 float delta=obmapdata[mapdataid]*dis; \
                 weight*=wtable[2]+(exp(-delta*delta/sigma))*(wtable[0]/2-wtable[2]); \
+                innerscore *=wtable[2]; \
             } \
             else \
             { \
@@ -69,6 +71,9 @@ PARTICLE_TRANSFORM_FUNC(Vehicle,transform)
         } \
     }
 
+#define CALINSIDEWEIGHT(ctheta,stheta,statex,statey,mapsize,gridsize,obmap,obmapdata,radius,wtable,sigma,x,y,weight,flag) \
+
+
 PARTICLE_MEASURE_FUNC(Vehicle,state,measureData)
 {
     float c=cos(state.theta);
@@ -79,6 +84,7 @@ PARTICLE_MEASURE_FUNC(Vehicle,state,measureData)
     float V[SEARCHDIM][SEARCHDIM];
     float W[SEARCHDIM][SEARCHDIM];
     float L[SEARCHDIM][SEARCHDIM];
+    float I[SEARCHDIM][SEARCHDIM];
     float S[SEARCHDIM][SEARCHDIM];
 
     bool flag=1;
@@ -89,10 +95,19 @@ PARTICLE_MEASURE_FUNC(Vehicle,state,measureData)
         {
             float y=j*searchstep;
             V[i][j]=1.0f;
-            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,x,y,V[i][j],flag);
-            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,x,-y,V[i][j],flag);
-            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,-x,y,V[i][j],flag);
-            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,-x,-y,V[i][j],flag);
+            float tmpinnerscore=1.0f;
+            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,x,y,V[i][j],tmpinnerscore,flag);
+            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,x,-y,V[i][j],tmpinnerscore,flag);
+            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,-x,y,V[i][j],tmpinnerscore,flag);
+            GETWEIGHT(c,s,state.x,state.y,measureData.mapsize,measureData.gridsize,measureData.map,measureData.mapdata,measureData.radius,measureData.wtable,measureData.sigma,-x,-y,V[i][j],tmpinnerscore,flag);
+            if(j>0)
+            {
+                I[i][j]=I[i][j-1]*tmpinnerscore;
+            }
+            else
+            {
+                I[i][j]=tmpinnerscore;
+            }
         }
     }
     if(flag)
@@ -117,6 +132,10 @@ PARTICLE_MEASURE_FUNC(Vehicle,state,measureData)
         for(int j=startid;j<SEARCHDIM;j++)
         {
             S[i][j]=W[i][j]*L[i][j];
+            if(i>0&&j>0)
+            {
+                S[i][j]*=I[i-1][j-1];
+            }
             if(weight<S[i][j])
             {
                 weight=S[i][j];
