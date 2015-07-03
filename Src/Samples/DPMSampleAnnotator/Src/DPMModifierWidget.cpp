@@ -215,6 +215,7 @@ DPMModifierWidget::DPMModifierWidget(QWidget *parent)
     pixmap=NULL;
     scene=new QGraphicsScene;
     this->setScene(scene);
+    ctrlflag=0;
 }
 
 void DPMModifierWidget::setCategories(QStringList categories)
@@ -338,13 +339,49 @@ QVector<DPMRect *> DPMModifierWidget::getRects()
 
 void DPMModifierWidget::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key()==Qt::Key_Return)
+    switch(event->key())
     {
+    case Qt::Key_Return:
         emit signalNext();
+        break;
+    case Qt::Key_Control:
+        ctrlflag=1;
+        break;
+    default:
+        QGraphicsView::keyPressEvent(event);
+        break;
+    }
+}
+
+void DPMModifierWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Control:
+        ctrlflag=0;
+        break;
+    default:
+        QGraphicsView::keyReleaseEvent(event);
+        break;
+    }
+}
+
+void DPMModifierWidget::wheelEvent(QWheelEvent *event)
+{
+    if(ctrlflag)
+    {
+        if(event->delta()>0)
+        {
+            this->scale(1.1,1.1);
+        }
+        else
+        {
+            this->scale(0.9,0.9);
+        }
     }
     else
     {
-        QGraphicsView::keyPressEvent(event);
+        QGraphicsView::wheelEvent(event);
     }
 }
 

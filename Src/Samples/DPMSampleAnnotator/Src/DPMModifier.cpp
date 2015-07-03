@@ -60,6 +60,23 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 	return 1;
 }
 
+void checkGeometry(int & x, int & y, int & width, int & height, int cols, int rows)
+{
+    int xx=x+width;
+    x=x>=0?x:0;
+    x=x<cols?x:cols-1;
+    xx=xx>=0?xx:0;
+    xx=xx<cols?xx:cols-1;
+    width=xx-x;
+
+    int yy=y+height;
+    y=y>=0?y:0;
+    y=y<rows?y:rows-1;
+    yy=yy>=0?yy:0;
+    yy=yy<rows?yy:rows-1;
+    height=yy-y;
+}
+
 //This is original main function, you must keep it
 NODE_FUNC_DEF_EXPORT(bool, main)
 {
@@ -90,6 +107,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 dpmdata.rect.y=rects[i]->rect().y()+rects[i]->pos().y();
                 dpmdata.rect.width=rects[i]->rect().width();
                 dpmdata.rect.height=rects[i]->rect().height();
+                checkGeometry(dpmdata.rect.x,dpmdata.rect.y,dpmdata.rect.width,dpmdata.rect.height,data->image.cols,data->image.rows);
                 dpmdata.attributes.clear();
                 data->dpmdata.push_back(dpmdata);
             }

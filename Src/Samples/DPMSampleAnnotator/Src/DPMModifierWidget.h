@@ -61,6 +61,7 @@ public:
     QMap<QString, QColor> colortable;
     QMap<QString, bool> filter;
     QMap<QString, int> idcount;
+    bool ctrlflag;
 signals:
     void signalNext();
 public slots:
@@ -75,6 +76,8 @@ public:
     QVector<DPMRect *> getRects();
 protected:
     void keyPressEvent(QKeyEvent *event);
+    void wheelEvent(QWheelEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 };
 
 class RobotSDK_EXPORT DPMController : public QWidget
