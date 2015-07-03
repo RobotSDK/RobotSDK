@@ -54,6 +54,8 @@ public:
     ADD_INTERNAL_QWIDGET_TRIGGER(DPMAnnotatorWidget, annotator)
     ADD_INTERNAL_DEFAULT_CONNECTION(annotator, signalNext)
     ADD_QLAYOUT(QHBoxLayout, layout)
+public:
+    ADD_VAR(bool, rgbconvertflag, 0)
 };
 
 //=================================================

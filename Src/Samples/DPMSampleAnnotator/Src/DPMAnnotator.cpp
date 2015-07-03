@@ -105,7 +105,12 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             vars->category=data->category;
             vars->id=data->id;
             vars->rect=data->rect;
-            vars->annotator->showSample(data->image,data->frameid,data->category,data->id,data->rect,data->attributes);
+            cv::Mat image=data->image;
+            if(vars->rgbconvertflag)
+            {
+                cv::cvtColor(image,image,CV_BGR2RGB);
+            }
+            vars->annotator->showSample(image,data->frameid,data->category,data->id,data->rect,data->attributes);
             vars->dataflag=1;
             return 0;
         }
