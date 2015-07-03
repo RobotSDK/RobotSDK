@@ -9,7 +9,7 @@ USE_DEFAULT_NODE
 //Uncomment below PORT_DECL and set input node class name
 PORT_DECL(0, VehicleDetector)
 PORT_DECL(1, ObstacleMapGlobalizer)
-
+PORT_DECL(2, VirtualScanGenerator)
 
 //=================================================
 //Original node functions
@@ -19,10 +19,10 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
 {
 	NOUNUSEDWARNING;
     auto vars=NODE_VARS;
-    STATE_TYPE(Vehicle) statemin={vars->state_x_min,vars->state_y_min,vars->state_theta_min,vars->state_v_min,vars->state_width_min,vars->state_length_min};
-    STATE_TYPE(Vehicle) statemax={vars->state_x_max,vars->state_y_max,vars->state_theta_max,vars->state_v_max,vars->state_width_max,vars->state_length_max};
+    STATE_TYPE(Vehicle) statemin={vars->state_x_min,vars->state_y_min,vars->state_theta_min,vars->state_theta_min,vars->state_v_min,vars->state_width_min,vars->state_length_min};
+    STATE_TYPE(Vehicle) statemax={vars->state_x_max,vars->state_y_max,vars->state_theta_max,vars->state_theta_max,vars->state_v_max,vars->state_width_max,vars->state_length_max};
     STATE_TYPE(Vehicle) statemean={0,0,0,0,0,0};
-    STATE_TYPE(Vehicle) statesigma={0,0,vars->state_theta_sigma,vars->state_v_sigma,0,0};
+    STATE_TYPE(Vehicle) statesigma={0,0,vars->state_theta_sigma,vars->state_theta_sigma,vars->state_v_sigma,0,0};
     PF_Vehicle_initialParticleFilter(vars->particlenum,statemin,statemax,statemean,statesigma);
 
     vars->mapsync.clear();
@@ -46,6 +46,14 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
     vars->localheadvec=cv::Mat::zeros(4,1,CV_64F);
     vars->localheadvec.at<double>(0)=1;
 
+    QVector<double> GLB(2);
+    QVector<double> GUB(2);
+    QVector<double> GStep(2);
+    GLB[0]=1;GLB[1]=1;
+    GUB[0]=5;GUB[1]=5;
+    GStep[0]=0.1;GStep[1]=0.1;
+    vars->fitter=new FastRectangleFitting(GLB,GUB,GStep);
+
 	return 1;
 }
 
@@ -60,6 +68,9 @@ NODE_FUNC_DEF_EXPORT(bool, closeNode)
 
     vars->objectid.clear();
     vars->objectstate.clear();
+
+    delete vars->fitter;
+
 	return 1;
 }
 
@@ -72,6 +83,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     {
         auto detection=SYNC_DATA(vars->mapsync,0);
         auto obstaclemap=SYNC_DATA(vars->mapsync,1);
+        auto vscan=SYNC_DATA(vars->mapsync,2);
         cv::Mat head=vars->curtransform*vars->localheadvec;
         if(vars->curtimestamp.isNull())
         {
@@ -100,6 +112,18 @@ NODE_FUNC_DEF_EXPORT(bool, main)
 
             PF_Vehicle_removeParticles(vars->threshold);
             PF_Vehicle_estimateObjects(vars->objectid,vars->objectstate);
+
+            QVector<double> virtualscan=vscan->virtualscan;
+            vars->fitter->updateScanBeams(virtualscan);
+            for(int i=0;i<vars->objectstate.size();i++)
+            {
+                vars->fitter->updatePosition(vars->objectstate[i].x,vars->objectstate[i].y);
+                vars->fitter->updateOrientation(vars->objectstate[i].theta);
+                Geometry G;
+                vars->fitter->getFitting(G);
+                vars->objectstate[i].length=G.geometry[0];
+                vars->objectstate[i].width=G.geometry[1];
+            }
 
             vars->curtimestamp=obstaclemap->timestamp;
             vars->curtransform=obstaclemap->transform;

@@ -26,12 +26,15 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
             double thetaid=(theta+PI)/density;
             int lid=(int(thetaid)+1)%beamNum;
             int rid=(int(thetaid))%beamNum;
+            double dx=px[lid]-px[rid];
+            double dy=py[lid]-py[rid];
+            double gap=dx*dx+dy*dy;
             if((px[lid]==0&&py[lid]==0)||(px[rid]==0&&py[rid]==0))
             {
                 map[baseid]=0;
                 map[baseid+1]=255;
                 map[baseid+2]=0;
-                mapdata[mapdataid]=100;
+                mapdata[mapdataid]=10;
             }
             else
             {
@@ -57,10 +60,20 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
                 }
                 else //occ
                 {
-                    map[baseid]=255;
-                    map[baseid+1]=0;
-                    map[baseid+2]=0;
-                    mapdata[mapdataid]=fabs(delta/radius);
+                    if(gap<0.5)
+                    {
+                        map[baseid]=255;
+                        map[baseid+1]=0;
+                        map[baseid+2]=0;
+                        mapdata[mapdataid]=fabs(delta/radius);
+                    }
+                    else
+                    {
+                        map[baseid]=0;
+                        map[baseid+1]=0;
+                        map[baseid+2]=255;
+                        mapdata[mapdataid]=fabs(1-beta);
+                    }
                 }
             }
         }

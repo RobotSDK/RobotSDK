@@ -14,16 +14,18 @@ SOURCES += \
     VirtualScanViewer.cpp \
     VirtualScanPublisher.cpp \
     VirtualScanCluster.cpp \
-    fastvirtualscan.cpp
+    fastvirtualscan.cpp \
+    VirtualScanGlobalizer.cpp
 
 HEADERS += \
     VirtualScanGenerator.h \
     VirtualScanViewer.h \
     VirtualScanPublisher.h \
     VirtualScanCluster.h \
-    fastvirtualscan.h
+    fastvirtualscan.h \
+    VirtualScanGlobalizer.h
 
-MODULES += Velodyne
+MODULES += Velodyne Localization
 include($$(ROBOTSDKMODULE))
 
 unix{

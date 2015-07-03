@@ -3,7 +3,7 @@
 
 #include"particlefilterdef.h"
 
-STATE_DEF(Vehicle, 8, x,y,theta,v,width,length,wsigma,lsigma)
+STATE_DEF(Vehicle, 9, x,y,theta,thetaoffset,v,width,length,wsigma,lsigma)
 
 struct ObstacleMap
 {

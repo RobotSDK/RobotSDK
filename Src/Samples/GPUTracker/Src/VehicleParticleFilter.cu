@@ -8,6 +8,7 @@ PARTICLE_INITIALIZE_FUNC(Vehicle,initialState,randomOffset)
     state.x=initialState.x+randomOffset.x;
     state.y=initialState.y+randomOffset.y;
     state.theta=initialState.theta+randomOffset.theta;
+    state.thetaoffset=randomOffset.thetaoffset;
     state.v=initialState.v+randomOffset.v;
     state.width=initialState.width+randomOffset.width;
     state.length=initialState.length+randomOffset.length;
@@ -27,6 +28,7 @@ PARTICLE_UPDATE_FUNC(Vehicle,deltaMsec)
     float dis=msec*state.v;
     state.x+=dis*cos(state.theta);
     state.y+=dis*sin(state.theta);
+    state.theta+=state.thetaoffset;
 }
 
 PARTICLE_TRANSFORM_FUNC(Vehicle,transform)

@@ -1,43 +1,35 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-06-12T19:42:24
+# Project created by QtCreator 2015-06-29T10:17:51
 #
 #-------------------------------------------------
 
 QT       -= gui
 
-TARGET = GPUTracker
+TARGET = ParticleFilterTracking
 TEMPLATE = lib
 
 SOURCES += \
-    ObstacleMapGenerator.cpp \
-    ObstacleMapViewer.cpp \
-    ObstacleMapGlobalizer.cpp \
     VehicleDetector.cpp \
+    VehicleDetectorWidget.cpp \
     VehicleTracker.cpp \
     VehicleTrackingViewer.cpp \
-    VehicleDetectorWidget.cpp \
     VehicleTrackingViewerWidget.cpp
 
 HEADERS += \
-    ObstacleMapGenerator.cuh \
-    ObstacleMapGenerator.h \
-    ObstacleMapViewer.h \
-    ObstacleMapGlobalizer.h \
-    VehicleDetector.h \
-    VehicleTracker.h \
-    VehicleTrackingViewer.h \
     egotransform.h \
     particlefilterbase.h \
     particlefilterdef.h \
     randomgenerator.h \
-    VehicleParticleFilter.cuh \
-    VehicleParticleFilter.h \
+    VehicleDetector.h \
     VehicleDetectorWidget.h \
-    VehicleTrackingViewerWidget.h
+    VehicleTracker.h \
+    VehicleTrackingViewer.h \
+    VehicleTrackingViewerWidget.h \
+    VehicleParticleFilter.h \
+    VehicleParticleFilter.cuh
 
 DISTFILES += \
-    ObstacleMapGenerator.cu \
     egotransform.cu \
     VehicleParticleFilter.cu
 

@@ -1,14 +1,14 @@
-#ifndef VEHICLETRACKER
-#define VEHICLETRACKER
+#ifndef VEHICLEDETECTOR
+#define VEHICLEDETECTOR
 
 //=================================================
 //Please add headers here:
-#include<VehicleDetector.h>
-#include<ObstacleMapGlobalizer.h>
-#include<VirtualScanGenerator.h>
+#include<VirtualScanGlobalizer.h>
 #include<VehicleParticleFilter.h>
-#include<sync.h>
-#include<fastconvexfitting.h>
+#include<VehicleDetectorWidget.h>
+#include<QImage>
+#include<QPainter>
+#include<QPixmap>
 
 //=================================================
 #include<RobotSDK.h>
@@ -19,10 +19,10 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS VehicleTracker
+#define NODE_CLASS VehicleDetector
 
 #undef INPUT_PORT_NUM
-#define INPUT_PORT_NUM 3
+#define INPUT_PORT_NUM 1
 
 #undef OUTPUT_PORT_NUM
 #define OUTPUT_PORT_NUM 1
@@ -34,7 +34,10 @@ namespace RobotSDK_Module
 //NODE_PARAMS_TYPE_REF(RefNodeClassName)
 class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 {
-
+public:
+    ADD_PARAM(uint, maxrange, 80)
+    ADD_PARAM(uint, gridsize, 10)
+    ADD_PARAM(uint, imagesize, 600)
 };
 
 //=================================================
@@ -45,37 +48,11 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
 public:
-    ADD_VAR(int, particlenum, 5000)
-    ADD_VAR(float, state_x_min, -3)
-    ADD_VAR(float, state_x_max, 3)
-    ADD_VAR(float, state_y_min, -3)
-    ADD_VAR(float, state_y_max, 3)
-    ADD_VAR(float, state_theta_min,-0.3)
-    ADD_VAR(float, state_theta_max,0.3)
-    ADD_VAR(float, state_theta_sigma,0.3)
-    ADD_VAR(float, state_v_min, -10)
-    ADD_VAR(float, state_v_max, 10)
-    ADD_VAR(float, state_v_sigma, 5)
-    ADD_VAR(float, state_width_min, -2)
-    ADD_VAR(float, state_width_max, 2)
-    ADD_VAR(float, state_length_min, -2)
-    ADD_VAR(float, state_length_max, 2)
-    ADD_VAR(float, threshold, 1.0)
+    ADD_QWIDGET(VehicleDetectorWidget,detector)
+    ADD_QLAYOUT(QHBoxLayout,layout)
 public:
-    ADD_VAR(QString, obmap_wtable, "2.0,1.0,0.1")
-    MEASUREDATA_TYPE(Vehicle) measuredata;
-    ADD_VAR(float, obmap_sigma, 0.01f)
-public:
-    ADD_SYNC(mapsync,1)
-public:
-    QTime curtimestamp;
-    cv::Mat curtransform;
-    float curtheta;
-    cv::Mat localheadvec;
-    std::vector<int> objectid;
-    std::vector<STATE_TYPE(Vehicle)> objectstate;
-public:
-    FastRectangleFitting * fitter;
+    QTime timestamp;
+    int idcount;
 };
 
 //=================================================
@@ -86,9 +63,8 @@ public:
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
-    cv::Mat transform;
-    std::vector<int> objectid;
-    std::vector<STATE_TYPE(Vehicle)> objectstate;
+    std::vector<int> objectids;
+    std::vector<STATE_TYPE(Vehicle)> objectstates;
 };
 
 //=================================================
