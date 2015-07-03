@@ -2,46 +2,79 @@
 
 using namespace RobotSDK;
 
-Sync::Sync(uint portNum, uint basePortID)
+Sync::Sync(uint portNum, uint baseID, QList<uint> specPortIDs)
 {
     paramsbuffer.resize(portNum);
     databuffer.resize(portNum);
     syncparams.resize(portNum);
     syncdata.resize(portNum);
     deltatime.resize(portNum);
-    baseportid=basePortID;
-    if(baseportid>=portNum)
+    baseid=baseID;
+    if(baseid>=portNum)
     {
-        baseportid=0;
+        baseid=0;
     }
+    specportids=specPortIDs;
     syncrecordid=0;
 }
 
 bool Sync::addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & inputData)
 {
-    uint i,n=inputParams.size();
-    for(i=0;i<n;i++)
+    if(specportids.size()==0)
     {
-        if(inputData[i].size()>0)
+        uint i,n=inputParams.size();
+        for(i=0;i<n;i++)
         {
-            if(databuffer[i].size()>0)
+            if(inputData[i].size()>0)
             {
-                if(databuffer[i].front()->timestamp<=inputData[i].back()->timestamp)
+                if(databuffer[i].size()>0)
                 {
-                    paramsbuffer[i]=inputParams[i]+paramsbuffer[i];
-                    databuffer[i]=inputData[i]+databuffer[i];
+                    if(databuffer[i].front()->timestamp<=inputData[i].back()->timestamp)
+                    {
+                        paramsbuffer[i]=inputParams[i]+paramsbuffer[i];
+                        databuffer[i]=inputData[i]+databuffer[i];
+                    }
+                    else
+                    {
+                        qDebug()<<QString("Sync Data Error! Port %1:").arg(i)
+                               <<databuffer[i].front()->timestamp
+                              <<inputData[i].back()->timestamp;
+                    }
                 }
                 else
                 {
-                    qDebug()<<QString("Sync Data Error! Port %1:").arg(i)
-                           <<databuffer[i].front()->timestamp
-                          <<inputData[i].back()->timestamp;
+                    paramsbuffer[i]=inputParams[i];
+                    databuffer[i]=inputData[i];
                 }
             }
-            else
+        }
+    }
+    else
+    {
+        uint i,n=specportids.size();
+        for(i=0;i<n;i++)
+        {
+            if(inputData[specportids[i]].size()>0)
             {
-                paramsbuffer[i]=inputParams[i];
-                databuffer[i]=inputData[i];
+                if(databuffer[i].size()>0)
+                {
+                    if(databuffer[i].front()->timestamp<=inputData[specportids[i]].back()->timestamp)
+                    {
+                        paramsbuffer[i]=inputParams[specportids[i]]+paramsbuffer[i];
+                        databuffer[i]=inputData[specportids[i]]+databuffer[i];
+                    }
+                    else
+                    {
+                        qDebug()<<QString("Sync Data Error! Port %1:").arg(i)
+                               <<databuffer[i].front()->timestamp
+                              <<inputData[specportids[i]].back()->timestamp;
+                    }
+                }
+                else
+                {
+                    paramsbuffer[i]=inputParams[specportids[i]];
+                    databuffer[i]=inputData[specportids[i]];
+                }
             }
         }
     }
@@ -50,19 +83,19 @@ bool Sync::addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & 
 
 bool Sync::generateSyncData()
 {
-    if(databuffer[baseportid].size()==0)
+    if(databuffer[baseid].size()==0)
     {
         return 0;
     }
     uint i,n=databuffer.size();
-    QTime basetimestamp=databuffer[baseportid].back()->timestamp;
+    QTime basetimestamp=databuffer[baseid].back()->timestamp;
     if(basetimestamp.isNull())
     {
         return 0;
     }
     for(i=syncrecordid;i<n;i++)
     {
-        if(i==baseportid)
+        if(i==baseid)
         {
             syncparams[i]=paramsbuffer[i].back();
             syncdata[i]=databuffer[i].back();
@@ -107,20 +140,20 @@ bool Sync::generateSyncData()
             return 0;
         }
     }
-    paramsbuffer[baseportid].pop_back();
-    databuffer[baseportid].pop_back();
+    paramsbuffer[baseid].pop_back();
+    databuffer[baseid].pop_back();
     syncrecordid=0;
     return 1;
 }
 
-TRANSFER_PORT_PARAMS_TYPE Sync::getParams(uint portID)
+TRANSFER_PORT_PARAMS_TYPE Sync::getParams(uint syncID)
 {
-    return syncparams[portID];
+    return syncparams[syncID];
 }
 
-TRANSFER_PORT_DATA_TYPE Sync::getData(uint portID)
+TRANSFER_PORT_DATA_TYPE Sync::getData(uint syncID)
 {
-    return syncdata[portID];
+    return syncdata[syncID];
 }
 
 void Sync::clear()

@@ -9,9 +9,10 @@ namespace RobotSDK
 class Sync
 {
 public:
-    Sync(uint portNum, uint basePortID);
+    Sync(uint portNum, uint baseID, QList<uint> specPortIDs=QList<uint>());
 protected:
-    uint baseportid;
+    uint baseid;
+    QList<uint> specportids;
     uint syncrecordid;
     QVector< QList < TRANSFER_PORT_PARAMS_TYPE > > paramsbuffer;
     QVector< QList < TRANSFER_PORT_DATA_TYPE > > databuffer;
@@ -22,24 +23,26 @@ protected:
     bool generateSyncData();
 public:
     bool addParamsData(PORT_PARAMS_CAPSULE & inputParams, PORT_DATA_CAPSULE & inputData);
-    TRANSFER_PORT_PARAMS_TYPE getParams(uint portID);
-    TRANSFER_PORT_DATA_TYPE getData(uint portID);
+    TRANSFER_PORT_PARAMS_TYPE getParams(uint syncID);
+    TRANSFER_PORT_DATA_TYPE getData(uint syncID);
     void clear();
 };
 
 
 #define ADD_SYNC(syncName, basePortID) public: Sync syncName=Sync(INPUT_PORT_NUM, basePortID);
 
+#define ADD_SYNC_SPEC(syncName, specPortIDs, baseSyncID) public: Sync syncName=Sync(specPortIDs.size(), baseSyncID, specPortIDs);
+
 #define SYNC_START(sync) IS_INTERNAL_TRIGGER? \
     false : sync.addParamsData(INPUT_PARAMS_ARG, INPUT_DATA_ARG)
 
-#define SYNC_PARAMS(sync, portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? \
-    std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(sync.getParams(portID)) \
-  : std::shared_ptr< const PORT_PARAMS_TYPE(portID) >()
+#define SYNC_PARAMS(sync, syncID) (syncID>=0 && syncID<INPUT_PORT_NUM && syncID<INPUT_PARAMS_ARG.size()) ? \
+    std::static_pointer_cast< const PORT_PARAMS_TYPE(syncID) >(sync.getParams(syncID)) \
+  : std::shared_ptr< const PORT_PARAMS_TYPE(syncID) >()
 
-#define SYNC_DATA(sync, portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? \
-    std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(sync.getData(portID)) \
-  : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
+#define SYNC_DATA(sync, syncID) (syncID>=0 && syncID<INPUT_PORT_NUM && syncID<INPUT_DATA_ARG.size()) ? \
+    std::static_pointer_cast< const PORT_DATA_TYPE(syncID) >(sync.getData(syncID)) \
+  : std::shared_ptr< const PORT_DATA_TYPE(syncID) >()
 
 #define SYNC_CLEAR(sync) sync.clear();
 
