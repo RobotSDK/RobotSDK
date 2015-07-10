@@ -147,7 +147,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             for(i=0;i<n;i++)
             {
                 vars->dpmmodifier->addRect(dpmparams->category,dpmdata->id[i]
-                                           ,dpmdata->detection[i].x,dpmdata->detection[i].y
+                                           ,dpmdata->detection[i].x+imageparams->x_offset,dpmdata->detection[i].y+imageparams->y_offset
                                            ,dpmdata->detection[i].width,dpmdata->detection[i].height);
             }
             vars->dataflag=1;

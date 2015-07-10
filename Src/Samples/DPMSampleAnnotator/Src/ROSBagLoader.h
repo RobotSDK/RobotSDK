@@ -46,7 +46,8 @@ public:
     ADD_PARAM(uint, bagstart, 0)
     ADD_PARAM(uint, baginterval, 1)
     ADD_PARAM(bool, rgbinvertflag, 0)
-    ADD_PARAM(QString, ROI, "0,0,0,0")
+    ADD_PARAM(int, x_offset, 0)
+    ADD_PARAM(int, y_offset, 0)
 };
 
 //=================================================
@@ -61,7 +62,6 @@ public:
     rosbag::View * view=NULL;
     rosbag::View::const_iterator viewiter;
     int curframe;
-    int x,y,width,height;
 public:
     ADD_VAR(QString, rosimagetopic, "/image_raw")
     ADD_VAR(QString, roscaminfotopic, "/camera_info")
