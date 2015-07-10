@@ -44,7 +44,7 @@ else{
     cuda.depend_command = $$CUDA_DIR/bin/nvcc -O3 -M $$CUDA_INC $$NVCCFLAGS ${QMAKE_FILE_NAME}
 
     QMAKE_EXTRA_COMPILERS += cuda
-    QMAKE_PRE_LINK = $$CUDA_DIR/bin/nvcc --compiler-options '-fPIC' -arch=$$CUDA_ARCH -dlink $(OBJECTS) -o cuda_dlink.o
+    QMAKE_PRE_LINK = $$CUDA_DIR/bin/nvcc --compiler-options '-fPIC' -arch=$$CUDA_ARCH -dlink $(OBJECTS) -o ${OBJECTS_DIR}/cuda_dlink.o
 
     LIBS += cuda_dlink.o
 

@@ -60,7 +60,7 @@ __global__ void kernelObstacleMapGenerator(int beamNum, double * px, double * py
                 }
                 else //occ
                 {
-                    if(gap<0.5)
+                    if(sqrt(gap)<0.2)
                     {
                         map[baseid]=255;
                         map[baseid+1]=0;

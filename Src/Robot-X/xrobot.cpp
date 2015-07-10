@@ -19,6 +19,19 @@ XRobot::XRobot(QWidget *parent) :
     xconfig=new XConfig;
     this->addDockWidget(Qt::RightDockWidgetArea,xconfig->configpanel);
 //    this->addDockWidget(Qt::LeftDockWidgetArea,xconfig->mainwindowdock);
+
+    QStringList arguments=QApplication::instance()->arguments();
+    QString NodeName;
+    if(arguments.size()>1)
+    {
+        NodeName=arguments[1];
+    }
+    else
+    {
+        NodeName=QFileInfo(arguments[0]).baseName();
+    }
+    NodeName.replace(QRegExp("[^a-zA-Z0-9/_$]"),QString("_"));
+    this->setWindowTitle(QString("Robot-X : %1").arg(NodeName));
 }
 
 XRobot::~XRobot()

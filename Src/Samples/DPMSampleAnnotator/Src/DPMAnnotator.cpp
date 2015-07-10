@@ -105,7 +105,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             vars->category=data->category;
             vars->id=data->id;
             vars->rect=data->rect;
-            cv::Mat image=data->image;
+            cv::Mat image;
+            data->image.convertTo(image,-1,vars->alpha,vars->beta);
             if(vars->rgbconvertflag)
             {
                 cv::cvtColor(image,image,CV_BGR2RGB);

@@ -15,7 +15,10 @@ SOURCES += \
     VirtualScanPublisher.cpp \
     VirtualScanCluster.cpp \
     fastvirtualscan.cpp \
-    VirtualScanGlobalizer.cpp
+    VirtualScanGlobalizer.cpp \
+    LineExtractor.cpp \
+    VirtualScanROI_DPM.cpp \
+    LineExtractorViewer.cpp
 
 HEADERS += \
     VirtualScanGenerator.h \
@@ -23,9 +26,12 @@ HEADERS += \
     VirtualScanPublisher.h \
     VirtualScanCluster.h \
     fastvirtualscan.h \
-    VirtualScanGlobalizer.h
+    VirtualScanGlobalizer.h \
+    LineExtractor.h \
+    VirtualScanROI_DPM.h \
+    LineExtractorViewer.h
 
-MODULES += Velodyne Localization
+MODULES += Velodyne Localization DPM Camera
 include($$(ROBOTSDKMODULE))
 
 unix{
@@ -45,4 +51,11 @@ unix{
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_objdetect
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_contrib
     LIBS += -L/usr/lib/x86_64-linux-gnu -lopencv_imgproc
+
+    INCLUDEPATH += /usr/local/include/mrpt/base/include
+    INCLUDEPATH +=/usr/local/include/mrpt/mrpt-config
+    LIBS += -L/usr/local/lib -lmrpt-base
+
+    INCLUDEPATH += $$(HOME)/Git/Autoware/ros/devel/include
 }
+

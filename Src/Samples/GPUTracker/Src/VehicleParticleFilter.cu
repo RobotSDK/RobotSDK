@@ -43,7 +43,6 @@ PARTICLE_TRANSFORM_FUNC(Vehicle,transform)
         float gy=stheta*x+ctheta*y+statey; \
         int mx=mapsize/2-int(gy/gridsize+0.5f); \
         int my=mapsize/2-int(gx/gridsize+0.5f); \
-        float dis=sqrt(gx*gx+gy*gy); \
         if(mx>=0&&mx<mapsize&&my>=0&&my<mapsize) \
         { \
             flag=0; \
@@ -51,20 +50,18 @@ PARTICLE_TRANSFORM_FUNC(Vehicle,transform)
             int mapdataid=my*mapsize+mx; \
             if(obmap[mapid+0]==255) \
             { \
-                float delta=obmapdata[mapdataid]*radius; \
-                weight*=wtable[0]/2+(exp(-delta*delta/sigma))*(wtable[0]/2); \
-                innerscore *=wtable[2]; \
+                weight*=1.0f; \
+                innerscore *=0.1f; \
             } \
             else if(obmap[mapid+1]==255) \
             { \
-                float delta=obmapdata[mapdataid]*dis; \
-                weight*=wtable[2]+(exp(-delta*delta/sigma))*(wtable[0]/2-wtable[2]); \
-                innerscore *=wtable[2]; \
+                weight*=0.1f; \
+                innerscore *=1.0f; \
             } \
             else \
             { \
-                float delta=obmapdata[mapdataid]*dis; \
-                weight*=wtable[1]+(exp(-delta*delta/sigma))*(wtable[0]/2-wtable[1]); \
+                weight*=0.5f; \
+                innerscore *=0.5f; \
             } \
         } \
         else \

@@ -59,6 +59,9 @@ public:
     cv::Mat image;
     bool rgbinvertflag;
 public:
+    ADD_VAR(double, alpha, 1)
+    ADD_VAR(double, beta, 0)
+public:
     ADD_QLAYOUT(QHBoxLayout, layout)
     ADD_QLAYOUT(QVBoxLayout, controllayout)
     ADD_QWIDGET(QTabWidget, tabwidget)

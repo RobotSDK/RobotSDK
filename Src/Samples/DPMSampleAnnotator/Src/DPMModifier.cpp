@@ -138,7 +138,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 vars->frameid=imagedata->frameid;
                 vars->image=imagedata->image.clone();
                 vars->rgbinvertflag=imageparams->rgbinvertflag;
-                QImage img(vars->image.data,vars->image.cols,vars->image.rows,vars->image.step,QImage::Format_RGB888);
+                cv::Mat tmpimage;
+                vars->image.convertTo(tmpimage,-1,vars->alpha,vars->beta);
+                QImage img(tmpimage.data,tmpimage.cols,tmpimage.rows,tmpimage.step,QImage::Format_RGB888);
                 vars->dpmmodifier->addPixmap(img);
             }
             int i,n=dpmdata->detection.size();

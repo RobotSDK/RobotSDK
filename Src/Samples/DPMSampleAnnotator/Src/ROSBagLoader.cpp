@@ -55,6 +55,16 @@ NODE_FUNC_DEF_EXPORT(bool, openNode)
         }
         count--;
     }
+    QStringList tmplist=params->ROI.split(",",QString::SkipEmptyParts);
+    if(tmplist.size()!=4)
+    {
+        return 0;
+    }
+    vars->x=tmplist[0].toInt();
+    vars->y=tmplist[1].toInt();
+    vars->width=tmplist[2].toInt();
+    vars->height=tmplist[3].toInt();
+
     vars->imagepub->resetTopic(vars->rosimagetopic,vars->rosqueuesize);
     vars->caminfopub->resetTopic(vars->roscaminfotopic,vars->rosqueuesize);
     vars->imagesub->resetTopic(vars->rosreceiveimagetopic,vars->rosqueuesize);
@@ -122,25 +132,50 @@ NODE_FUNC_DEF_EXPORT(bool, main)
                 vars->viewiter++;
                 vars->curframe++;
                 image=(*(vars->viewiter)).instantiate<sensor_msgs::Image>();
+                if(vars->width>0&&vars->height>0)
+                {
+                    cv_bridge::CvImagePtr tmpimage=cv_bridge::toCvCopy(*image);
+                    cv::Rect roi;
+                    roi.x=vars->x;
+                    roi.y=vars->y;
+                    roi.width=vars->width;
+                    roi.height=vars->height;
+                    tmpimage->image=tmpimage->image(roi);
+                    tmpimage->toImageMsg(*image);
+                }
                 vars->imagepub->sendMessage(*image);
-                vars->viewiter++;
-                vars->curframe++;
-            }
-            else if(params->imageprocflag)
-            {
-                vars->imagepub->sendMessage(*image);
-                vars->viewiter++;
-                vars->curframe++;
-                caminfo=(*(vars->viewiter)).instantiate<sensor_msgs::CameraInfo>();
-                vars->caminfopub->sendMessage(*caminfo);
                 vars->viewiter++;
                 vars->curframe++;
             }
             else
             {
-                vars->imagepub->sendMessage(*image);
-                vars->viewiter++;
-                vars->curframe++;
+                if(vars->width>0&&vars->height>0)
+                {
+                    cv_bridge::CvImagePtr tmpimage=cv_bridge::toCvCopy(*image);
+                    cv::Rect roi;
+                    roi.x=vars->x;
+                    roi.y=vars->y;
+                    roi.width=vars->width;
+                    roi.height=vars->height;
+                    tmpimage->image=tmpimage->image(roi);
+                    tmpimage->toImageMsg(*image);
+                }
+                if(params->imageprocflag)
+                {
+                    vars->imagepub->sendMessage(*image);
+                    vars->viewiter++;
+                    vars->curframe++;
+                    caminfo=(*(vars->viewiter)).instantiate<sensor_msgs::CameraInfo>();
+                    vars->caminfopub->sendMessage(*caminfo);
+                    vars->viewiter++;
+                    vars->curframe++;
+                }
+                else
+                {
+                    vars->imagepub->sendMessage(*image);
+                    vars->viewiter++;
+                    vars->curframe++;
+                }
             }
         }
         else

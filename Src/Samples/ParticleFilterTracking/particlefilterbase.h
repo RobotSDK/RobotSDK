@@ -18,7 +18,7 @@
 
 #include<vector>
 
-template<class StateType>
+template<class StateType, class SampleStateType, class RandomStateType>
 class ParticleBase
 {
 public:
@@ -36,18 +36,18 @@ public:
     }
 public:
     __host__ __device__
-    virtual void initialize(StateType & initialState, StateType & randomOffset)=0;
+    virtual void initialize(StateType & initialState, SampleStateType & randomOffset)=0;
     __host__ __device__
-    virtual void randomnize(StateType & randomOffset)=0;
+    virtual void randomnize(RandomStateType & randomOffset)=0;
     __host__ __device__
     virtual void transform(EgoTransform & transform)=0;
     __host__ __device__
     virtual void update(int & deltaMsec)=0;
 };
 
-template<class StateType, class ParticleType>
+template<class StateType, class SampleStateType, class ParticleType>
 __global__
-void kernelInitialParticles(StateType objectState, StateType * randomOffset, ParticleType * newParticles, int particleNum)
+void kernelInitialParticles(StateType objectState, SampleStateType * randomOffset, ParticleType * newParticles, int particleNum)
 {
     GetThreadID(id, particleNum);
     ParticleType particle;
@@ -56,9 +56,9 @@ void kernelInitialParticles(StateType objectState, StateType * randomOffset, Par
     newParticles[id]=particle;
 }
 
-template<class StateType, class ParticleType>
+template<class RandomStateType, class ParticleType>
 __global__
-void kernelRandomnizeParticles(StateType * randomOffset, ParticleType * intputParticles, ParticleType * outputParticles, int particleNum)
+void kernelRandomnizeParticles(RandomStateType * randomOffset, ParticleType * intputParticles, ParticleType * outputParticles, int particleNum)
 {
     GetThreadID(id, particleNum);
     ParticleType particle=intputParticles[id];
@@ -128,7 +128,7 @@ public:
     virtual float particleMeasure(StateType & state, MeasureDataType & measureData)=0;
 };
 
-template<class StateType, class ParticleType, class MeasureDataType, class ParticleMeasureType>
+template<class StateType, class SampleStateType, class RandomStateType, class ParticleType, class MeasureDataType, class ParticleMeasureType>
 class ParticleFilterBase
 {
 protected:
@@ -138,10 +138,12 @@ protected:
     int totalparticlenum=0;
 protected:
     int * d_randomseeds=NULL;
-    RandomOffsetGenerator<StateType> * d_randomgenerator=NULL;
-    StateType * d_statemin=NULL, * d_statemax=NULL;
-    StateType * d_statemean=NULL , * d_statesigma=NULL;
-    StateType * d_randomoffset=NULL;
+    RandomOffsetGenerator<SampleStateType> * d_samplegenerator=NULL;
+    RandomOffsetGenerator<RandomStateType> * d_randomgenerator=NULL;
+    SampleStateType * d_samplemin=NULL, * d_samplemax=NULL;
+    SampleStateType * d_sampleoffset=NULL;
+    RandomStateType * d_randommean=NULL , * d_randomsigma=NULL;
+    RandomStateType * d_randomoffset=NULL;
 protected:
     thrust::minstd_rand rng;
     thrust::random::uniform_real_distribution<float> dist;
@@ -168,7 +170,7 @@ public:
         clear();
     }
 public:
-    void initialParticleFilter(int particleNum, StateType stateMin, StateType stateMax, StateType stateMean, StateType stateSigma)
+    void initialParticleFilter(int particleNum, SampleStateType sampleMin, SampleStateType sampleMax, RandomStateType randomMean, RandomStateType randomSigma)
     {                
         clear();
 
@@ -176,24 +178,28 @@ public:
         objectsnum=0;
         totalparticlenum=0;
 
-        cudaMalloc((void **)(&d_randomseeds),particlenum*sizeof(int));
-        generateRandomSeeds(d_randomseeds);
-
-        cudaMalloc((void **)(&d_randomgenerator),particlenum*sizeof(RandomOffsetGenerator<StateType>));
+        cudaMalloc((void **)(&d_samplegenerator),particlenum*sizeof(RandomOffsetGenerator<SampleStateType>));
+        cudaMalloc((void **)(&d_randomgenerator),particlenum*sizeof(RandomOffsetGenerator<RandomStateType>));
 
         int blocknum=GridBlockNum(particlenum);
         int threadnum=BlockThreadNum;
-        kernelSetRandomSeeds<StateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomseeds,particlenum);
 
-        cudaMalloc((void **)(&d_statemin),sizeof(StateType));
-        cudaMemcpy((void *)d_statemin,&stateMin,sizeof(StateType),cudaMemcpyHostToDevice);
-        cudaMalloc((void **)(&d_statemax),sizeof(StateType));
-        cudaMemcpy((void *)d_statemax,&stateMax,sizeof(StateType),cudaMemcpyHostToDevice);
-        cudaMalloc((void **)(&d_statemean),sizeof(StateType));
-        cudaMemcpy((void *)d_statemean,&stateMean,sizeof(StateType),cudaMemcpyHostToDevice);
-        cudaMalloc((void **)(&d_statesigma),sizeof(StateType));
-        cudaMemcpy((void *)d_statesigma,&stateSigma,sizeof(StateType),cudaMemcpyHostToDevice);
-        cudaMalloc((void **)(&d_randomoffset),particlenum*sizeof(StateType));
+        generateRandomSeeds();
+        kernelSetRandomSeeds<SampleStateType><<<blocknum,threadnum>>>(d_samplegenerator,d_randomseeds,particlenum);
+        generateRandomSeeds();
+        kernelSetRandomSeeds<RandomStateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomseeds,particlenum);
+
+        cudaMalloc((void **)(&d_samplemin),sizeof(SampleStateType));
+        cudaMemcpy((void *)d_samplemin,&sampleMin,sizeof(SampleStateType),cudaMemcpyHostToDevice);
+        cudaMalloc((void **)(&d_samplemax),sizeof(SampleStateType));
+        cudaMemcpy((void *)d_samplemax,&sampleMax,sizeof(SampleStateType),cudaMemcpyHostToDevice);
+        cudaMalloc((void **)(&d_sampleoffset),particlenum*sizeof(SampleStateType));
+
+        cudaMalloc((void **)(&d_randommean),sizeof(RandomStateType));
+        cudaMemcpy((void *)d_randommean,&randomMean,sizeof(RandomStateType),cudaMemcpyHostToDevice);
+        cudaMalloc((void **)(&d_randomsigma),sizeof(RandomStateType));
+        cudaMemcpy((void *)d_randomsigma,&randomSigma,sizeof(RandomStateType),cudaMemcpyHostToDevice);
+        cudaMalloc((void **)(&d_randomoffset),particlenum*sizeof(RandomStateType));
 
         h_particles=new ParticleType[particlenum];
         h_resample=new float[particlenum];
@@ -203,9 +209,11 @@ public:
     void clear()
     {
         CUDAFREE(d_randomseeds);
+        CUDAFREE(d_samplegenerator)
         CUDAFREE(d_randomgenerator);
-        CUDAFREE(d_statemin);CUDAFREE(d_statemax);
-        CUDAFREE(d_statemean);CUDAFREE(d_statesigma);
+        CUDAFREE(d_samplemin);CUDAFREE(d_samplemax);
+        CUDAFREE(d_sampleoffset);
+        CUDAFREE(d_randommean);CUDAFREE(d_randomsigma);
         CUDAFREE(d_randomoffset);
         CUDAFREE(d_weightsum);
         CUDAFREE(d_resample);
@@ -243,22 +251,27 @@ public:
         }
     }
 protected:
-    void generateRandomSeeds(int * d_randomSeeds)
+    void generateRandomSeeds()
     {
         int * randomseeds=new int[particlenum];
         thrust::generate(randomseeds,randomseeds+particlenum,rand);
+        if(d_randomseeds==NULL)
+        {
+            cudaMalloc((void **)(&d_randomseeds),particlenum*sizeof(int));
+        }
         cudaMemcpy(d_randomseeds,randomseeds,sizeof(int)*particlenum,cudaMemcpyHostToDevice);
+        delete []randomseeds;
     }
 public:
     void addObjectState(const int objectID, const StateType objectState)
     {
         int blocknum=GridBlockNum(particlenum);
         int threadnum=BlockThreadNum;
-        kernelGenerateUniformRandomOffset<StateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomoffset,d_statemin,d_statemax,particlenum);
+        kernelGenerateUniformRandomOffset<SampleStateType><<<blocknum,threadnum>>>(d_samplegenerator,d_sampleoffset,d_samplemin,d_samplemax,particlenum);
 
         ParticleType * d_newparticles;
         cudaMalloc((void **)(&d_newparticles),sizeof(ParticleType)*particlenum);
-        kernelInitialParticles<StateType,ParticleType><<<blocknum,threadnum>>>(objectState,d_randomoffset,d_newparticles,particlenum);
+        kernelInitialParticles<StateType,SampleStateType,ParticleType><<<blocknum,threadnum>>>(objectState,d_sampleoffset,d_newparticles,particlenum);
 
         d_objects.push_back(d_newparticles);
         objectsid.push_back(objectID);
@@ -299,11 +312,11 @@ public:
         int threadnum=BlockThreadNum;
         for(i=0;i<n&&i<m;i++)
         {
-            kernelGenerateUniformRandomOffset<StateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomoffset,d_statemin,d_statemax,particlenum);
+            kernelGenerateUniformRandomOffset<SampleStateType><<<blocknum,threadnum>>>(d_samplegenerator,d_sampleoffset,d_samplemin,d_samplemax,particlenum);
 
             ParticleType * d_newparticles;
             cudaMalloc((void **)(&d_newparticles),sizeof(ParticleType)*particlenum);
-            kernelInitialParticles<StateType,ParticleType><<<blocknum,threadnum>>>(objectState[i],d_randomoffset,d_newparticles,particlenum);
+            kernelInitialParticles<StateType,SampleStateType,ParticleType><<<blocknum,threadnum>>>(objectState[i],d_sampleoffset,d_newparticles,particlenum);
 
             d_objects.push_back(d_newparticles);
             objectsid.push_back(objectID[i]);
@@ -333,7 +346,7 @@ public:
         }
         h_maxweight=new float[objectsnum];
     }
-    bool estimateObjectState(int objectID, StateType & objectState)
+    bool estimateObjectState(int objectID, StateType & objectState, StateValueType & normalizer)
     {
         for(int i=0;i<objectsnum;i++)
         {
@@ -343,11 +356,12 @@ public:
                 ParticleType particle;
                 for(int j=0;j<STATE_NUM(StateType);j++)
                 {
+                    normalizer=0;
                     for(int k=0;k<particlenum;k++)
                     {
-                        particle.state.data[j]+=h_particles[k].state.data[j];
+                        particle.state.data[j]+=h_particles[k].state.data[j]*h_particles[k].weight;
+                        normalizer+=h_particles[k].weight;
                     }
-                    particle.state.data[j]/=particlenum;
                 }
                 objectState=particle.state;
                 return 1;
@@ -355,20 +369,22 @@ public:
         }
         return 0;
     }
-    std::vector<int> estimateObjectState(std::vector<StateType> & objectsState)
+    std::vector<int> estimateObjectState(std::vector<StateType> & objectsState, std::vector<StateValueType> & normalizer)
     {
         objectsState.resize(objectsnum);
+        normalizer.resize(objectsnum);
         for(int i=0;i<objectsnum;i++)
         {
             cudaMemcpy(h_particles,d_objects[i],sizeof(ParticleType)*particlenum,cudaMemcpyDeviceToHost);
             ParticleType particle;
             for(int j=0;j<STATE_NUM(StateType);j++)
             {
+                normalizer[i]=0;
                 for(int k=0;k<particlenum;k++)
                 {
-                    particle.state.data[j]+=h_particles[k].state.data[j];
+                    particle.state.data[j]+=h_particles[k].state.data[j]*h_particles[k].weight;
+                    normalizer[i]+=h_particles[k].weight;
                 }
-                particle.state.data[j]/=particlenum;
             }
             objectsState[i]=particle.state;
         }
@@ -464,8 +480,8 @@ public:
         int threadnum=BlockThreadNum;
         for(int i=0;i<objectsnum;i++)
         {
-            kernelGenerateNormalRandomOffset<StateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomoffset,d_statemean,d_statesigma,particlenum);
-            kernelRandomnizeParticles<StateType,ParticleType><<<blocknum,threadnum>>>(d_randomoffset,d_objects[i],d_particles+i*particlenum,particlenum);
+            kernelGenerateNormalRandomOffset<RandomStateType><<<blocknum,threadnum>>>(d_randomgenerator,d_randomoffset,d_randommean,d_randomsigma,particlenum);
+            kernelRandomnizeParticles<RandomStateType,ParticleType><<<blocknum,threadnum>>>(d_randomoffset,d_objects[i],d_particles+i*particlenum,particlenum);
         }
     }
     void updateParticles(int & deltaMsec)
