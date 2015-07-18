@@ -206,9 +206,13 @@ void ROSTFSub::receiveTFSlot()
             tfs.push_back(transform);
             lasttf=transform;
             lastflag=1;
+            lock.unlock();
             emit receiveTFSignal();
         }
-        lock.unlock();
+        else
+        {
+            lock.unlock();
+        }
     }
 }
 
