@@ -50,7 +50,7 @@ class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 public:
     ADD_SYNC(sync,0)
 public:
-    ADD_VAR(double, cluster_threshold, )
+    ADD_VAR(double, cluster_threshold, 0)
 };
 
 //=================================================

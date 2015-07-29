@@ -175,11 +175,11 @@ void FastVirtualScan::getVirtualScan(double theta, double maxFloor, double minCe
         int candid=0;
         bool roadfilterflag=1;
         bool denoiseflag=1;
-        while(candid<beamnum&&svs[i][candid].height>minCeiling)
+        while(candid<size&&svs[i][candid].height>minCeiling)
         {
             candid++;
         }
-        if(candid>=beamnum||svs[i][candid].rotlength==MAXVIRTUALSCAN)
+        if(candid>=size||svs[i][candid].rotlength==MAXVIRTUALSCAN)
         {
             virtualScan[i]=0;
             minheights[i]=0;
@@ -188,11 +188,12 @@ void FastVirtualScan::getVirtualScan(double theta, double maxFloor, double minCe
         }
         if(svs[i][candid].height>maxFloor)
         {
-            virtualScan[i]=svs[i].front().length;
-            minheights[i]=svs[i].front().height;
+            virtualScan[i]=svs[i][candid].length;
+            minheights[i]=svs[i][candid].height;
             denoiseflag=0;
             roadfilterflag=0;
         }
+        int firstcandid=candid;
         for(int j=candid+1;j<size;j++)
         {
             if(svs[i][j].rotid<=svs[i][candid].rotid)
@@ -207,8 +208,8 @@ void FastVirtualScan::getVirtualScan(double theta, double maxFloor, double minCe
                 if(roadfilterflag)
                 {
                     virtualScan[i]=0;
-                    minheights[i]=svsback[i][startrotid].height;
-                    maxheights[i]=svsback[i][startrotid].height;
+                    minheights[i]=0;//svsback[i][startrotid].height;
+                    maxheights[i]=0;//svsback[i][startrotid].height;
                 }
                 else
                 {
@@ -229,8 +230,8 @@ void FastVirtualScan::getVirtualScan(double theta, double maxFloor, double minCe
                         }
                         else if(svs[i][j].height>maxFloor)
                         {
-                            virtualScan[i]=svs[i].front().length;
-                            minheights[i]=svs[i].front().height;
+                            virtualScan[i]=svs[i][firstcandid].length;
+                            minheights[i]=svs[i][firstcandid].height;
                             denoiseflag=0;
                             roadfilterflag=0;
                         }
