@@ -71,6 +71,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         vars->virtualscanpublaserscan->sendMessage(msg);
     }
 
+    if(vars->pub3dflag)
     {
         sensor_msgs::PointCloud2 msg;
         msg.header.frame_id=inputdata->rospoints->header.frame_id;
@@ -81,7 +82,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         msg.point_step=8*sizeof(float);
         msg.row_step=msg.width*msg.point_step;
         msg.data.resize(msg.height*msg.width*msg.point_step);
-        unsigned char * base=msg.data.data();
+        unsigned char * base=(unsigned char *)&(msg.data[0]);
 
         for(i=0;i<beamnum;i++)
         {

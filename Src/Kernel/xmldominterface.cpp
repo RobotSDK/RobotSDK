@@ -29,7 +29,7 @@ XMLDomInterface::XMLDomInterface(QString configName, QStringList nodeFullName)
         configname=QString("%1/SDK/RobotSDK_%2/Robot-X/%3/%4").arg(QString(qgetenv("HOME"))).arg(ROBOTSDKVER).arg(RobotName).arg(configName);
 #endif
 #ifdef Q_OS_WIN32
-        configname=QString("C:/SDK/RobotSDK_%1/Robot-X/%2/%3").arg(ROBOTSDKVER).arg(XMLDomInterface::RobotName).arg(configName);
+        configname=QString("C:/SDK/RobotSDK_%1/Robot-X/%2/%3").arg(ROBOTSDKVER).arg(RobotName).arg(configName);
 #endif
     }
     QDir().mkpath(QFileInfo(configname).path());

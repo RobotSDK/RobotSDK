@@ -15,7 +15,10 @@ SOURCES += \
     CameraVirtualScanFusion.cpp \
     ImageVirtualScanFusionViewer.cpp \
     CameraDPMFusion.cpp \
-    ImageDPMFusionViewer.cpp
+    ImageDPMFusionViewer.cpp \
+    ImageTrackerMarkerFusion.cpp \
+    ImageTrackerMarkerFusionViewer.cpp \
+    TrackerMarkerReceiver.cpp
 
 HEADERS += \
     CameraVelodyneFusion.h \
@@ -23,7 +26,10 @@ HEADERS += \
     CameraVirtualScanFusion.h \
     ImageVirtualScanFusionViewer.h \
     CameraDPMFusion.h \
-    ImageDPMFusionViewer.h
+    ImageDPMFusionViewer.h \
+    ImageTrackerMarkerFusion.h \
+    ImageTrackerMarkerFusionViewer.h \
+    TrackerMarkerReceiver.h
 
 MODULES += Camera Velodyne VirtualScan DPM
 include($$(ROBOTSDKMODULE))

@@ -44,6 +44,7 @@ public:
     ADD_VAR(QString, topicpointcloud2, "/virtualscan")
     ADD_VAR(QString, topiclaserscan, "/laserscan")
     ADD_VAR(u_int32_t, queuesize, 1000)
+    ADD_VAR(bool, pub3dflag, 1)
 public:
     typedef ROSPub<sensor_msgs::PointCloud2> rospubpointcloud2;
     ADD_INTERNAL_QOBJECT_TRIGGER(rospubpointcloud2, virtualscanpubpointcloud2, 0, topicpointcloud2, queuesize)

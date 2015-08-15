@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 
-#include<xgraph.h>
-#include<xconfig.h>
+#include"xgraph.h"
+#include"xconfig.h"
 
 namespace Ui {
 class XRobot;

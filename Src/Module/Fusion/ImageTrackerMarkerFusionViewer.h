@@ -1,9 +1,14 @@
-#ifndef DPMSAMPLESAVER
-#define DPMSAMPLESAVER
+#ifndef IMAGETRACKERMARKERFUSIONVIEWER
+#define IMAGETRACKERMARKERFUSIONVIEWER
 
 //=================================================
 //Please add headers here:
-#include"DPMModifier.h"
+#include<ImageTrackerMarkerFusion.h>
+#include<QGraphicsView>
+#include<QGraphicsScene>
+#include<QGraphicsPixmapItem>
+#include<QGraphicsLineItem>
+#include<QImage>
 
 //=================================================
 #include<RobotSDK.h>
@@ -14,7 +19,7 @@ namespace RobotSDK_Module
 //Node configuration
 
 #undef NODE_CLASS
-#define NODE_CLASS DPMSampleSaver
+#define NODE_CLASS ImageTrackerMarkerFusionViewer
 
 #undef INPUT_PORT_NUM
 #define INPUT_PORT_NUM 1
@@ -39,7 +44,10 @@ class NODE_PARAMS_TYPE : public NODE_PARAMS_BASE_TYPE
 //NODE_VARS_TYPE_REF(RefNodeClassName)
 class NODE_VARS_TYPE : public NODE_VARS_BASE_TYPE
 {
-
+public:
+    ADD_QLAYOUT(QHBoxLayout,layout)
+    ADD_QWIDGET(QTabWidget,tab)
+    ADD_QWIDGET(QGraphicsView,viewer)
 };
 
 //=================================================

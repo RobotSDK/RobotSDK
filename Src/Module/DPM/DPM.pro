@@ -12,16 +12,10 @@ TEMPLATE = lib
 DEFINES += DPM_LIBRARY
 
 SOURCES += \
-    DPMDetector.cpp \
-    DPMModifier.cpp \
-    DPMModifierWidgets.cpp \
-    DPMSampleSaver.cpp
+    DPMDetector.cpp
 
 HEADERS += \
-    DPMDetector.h \
-    DPMModifier.h \
-    DPMModifierWidgets.h \
-    DPMSampleSaver.h
+    DPMDetector.h
 
 MODULES += Camera
 include($$(ROBOTSDKMODULE))

@@ -59,14 +59,16 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     int msec=(outputdata->rosdetection->header.stamp.sec)%(24*60*60)*1000+(outputdata->rosdetection->header.stamp.nsec)/1000000;
     outputdata->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
 
-    outputdata->detection.resize(outputdata->rosdetection->car_num);
+    int objnum=outputdata->rosdetection->obj.size();
+
+    outputdata->detection.resize(objnum);
     int i;
-    for(i=0;i<outputdata->rosdetection->car_num;i++)
+    for(i=0;i<objnum;i++)
     {
-        outputdata->detection[i].x=outputdata->rosdetection->corner_point[i*4];
-        outputdata->detection[i].y=outputdata->rosdetection->corner_point[i*4+1];
-        outputdata->detection[i].width=outputdata->rosdetection->corner_point[i*4+2];
-        outputdata->detection[i].height=outputdata->rosdetection->corner_point[i*4+3];
+        outputdata->detection[i].x=outputdata->rosdetection->obj[i].x;
+        outputdata->detection[i].y=outputdata->rosdetection->obj[i].y;
+        outputdata->detection[i].width=outputdata->rosdetection->obj[i].width;
+        outputdata->detection[i].height=outputdata->rosdetection->obj[i].height;
     }
     return 1;
 }

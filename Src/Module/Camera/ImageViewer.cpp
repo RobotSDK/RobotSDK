@@ -59,7 +59,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto data=PORT_DATA(0,0);
 
-    vars->tabwidget->setTabText(0,data->timestamp.toString("HH:mm:ss:zzz"));
+    vars->tabwidget->setTabText(0,QString("%1  %2 x %3").arg(data->timestamp.toString("HH:mm:ss:zzz")).arg(data->cvimage.cols).arg(data->cvimage.rows));
     qDebug()<<data->timestamp;
 
     cv::Mat image=data->cvimage;
