@@ -52,7 +52,7 @@ nmake install
 
 echo Start ConfigSystem.exe
 
-cd "%TMPDISKDRIVER%:\Build\RobotSDK\Tools"
+cd "%TMPDISKDRIVER%:\Build\RobotSDK\Tools\ConfigSystem"
 
 if defined QTDIR if defined BOOSTDIR start .\ConfigSystem.exe %TMPDISKDRIVER% %QTDIR% %BOOSTDIR%
 
