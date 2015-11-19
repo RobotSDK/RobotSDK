@@ -1,79 +1,79 @@
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.1.1}{New Features of RobotSDK 4.0}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.1}{New\040Features\040of\040RobotSDK\0404.0}{chapter.1}% 2
 \BOOKMARK [2][-]{subsection.1.1.1}{Robot-X}{section.1.1}% 3
-\BOOKMARK [2][-]{subsection.1.1.2}{Simple and Free Module Development}{section.1.1}% 4
-\BOOKMARK [2][-]{subsection.1.1.3}{Kernel Update}{section.1.1}% 5
-\BOOKMARK [2][-]{subsection.1.1.4}{Integrate Mature Tools}{section.1.1}% 6
-\BOOKMARK [1][-]{section.1.2}{How to Install RobotSDK 4.0}{chapter.1}% 7
+\BOOKMARK [2][-]{subsection.1.1.2}{Simple\040and\040Free\040Module\040Development}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.3}{Kernel\040Update}{section.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.1.4}{Integrate\040Mature\040Tools}{section.1.1}% 6
+\BOOKMARK [1][-]{section.1.2}{How\040to\040Install\040RobotSDK\0404.0}{chapter.1}% 7
 \BOOKMARK [2][-]{subsection.1.2.1}{Linux}{section.1.2}% 8
 \BOOKMARK [2][-]{subsection.1.2.2}{Windows}{section.1.2}% 9
-\BOOKMARK [1][-]{section.1.3}{About the Quick Manual}{chapter.1}% 10
-\BOOKMARK [0][-]{chapter.2}{Robot-X: A Super High Level Application}{}% 11
-\BOOKMARK [1][-]{section.2.1}{Abstract Graph Model Construction}{chapter.2}% 12
+\BOOKMARK [1][-]{section.1.3}{About\040the\040Quick\040Manual}{chapter.1}% 10
+\BOOKMARK [0][-]{chapter.2}{Robot-X:\040A\040Super\040High\040Level\040Application}{}% 11
+\BOOKMARK [1][-]{section.2.1}{Abstract\040Graph\040Model\040Construction}{chapter.2}% 12
 \BOOKMARK [2][-]{subsection.2.1.1}{Node}{section.2.1}% 13
-\BOOKMARK [3][-]{subsubsection.2.1.1.1}{Add Node}{subsection.2.1.1}% 14
-\BOOKMARK [3][-]{subsubsection.2.1.1.2}{Virtual Node and Real Node}{subsection.2.1.1}% 15
-\BOOKMARK [3][-]{subsubsection.2.1.1.3}{Set Port Number}{subsection.2.1.1}% 16
-\BOOKMARK [3][-]{subsubsection.2.1.1.4}{Change Shared Library}{subsection.2.1.1}% 17
-\BOOKMARK [3][-]{subsubsection.2.1.1.5}{Change ExName}{subsection.2.1.1}% 18
-\BOOKMARK [3][-]{subsubsection.2.1.1.6}{Change Config File and Values}{subsection.2.1.1}% 19
-\BOOKMARK [3][-]{subsubsection.2.1.1.7}{Generate Code}{subsection.2.1.1}% 20
-\BOOKMARK [3][-]{subsubsection.2.1.1.8}{Delete Node}{subsection.2.1.1}% 21
+\BOOKMARK [3][-]{subsubsection.2.1.1.1}{Add\040Node}{subsection.2.1.1}% 14
+\BOOKMARK [3][-]{subsubsection.2.1.1.2}{Virtual\040Node\040and\040Real\040Node}{subsection.2.1.1}% 15
+\BOOKMARK [3][-]{subsubsection.2.1.1.3}{Set\040Port\040Number}{subsection.2.1.1}% 16
+\BOOKMARK [3][-]{subsubsection.2.1.1.4}{Change\040Shared\040Library}{subsection.2.1.1}% 17
+\BOOKMARK [3][-]{subsubsection.2.1.1.5}{Change\040ExName}{subsection.2.1.1}% 18
+\BOOKMARK [3][-]{subsubsection.2.1.1.6}{Change\040Config\040File\040and\040Values}{subsection.2.1.1}% 19
+\BOOKMARK [3][-]{subsubsection.2.1.1.7}{Generate\040Code}{subsection.2.1.1}% 20
+\BOOKMARK [3][-]{subsubsection.2.1.1.8}{Delete\040Node}{subsection.2.1.1}% 21
 \BOOKMARK [2][-]{subsection.2.1.2}{Edge}{section.2.1}% 22
-\BOOKMARK [3][-]{subsubsection.2.1.2.1}{Add an Edge}{subsection.2.1.2}% 23
-\BOOKMARK [3][-]{subsubsection.2.1.2.2}{Check an Edge}{subsection.2.1.2}% 24
-\BOOKMARK [3][-]{subsubsection.2.1.2.3}{Delete an Edge}{subsection.2.1.2}% 25
+\BOOKMARK [3][-]{subsubsection.2.1.2.1}{Add\040an\040Edge}{subsection.2.1.2}% 23
+\BOOKMARK [3][-]{subsubsection.2.1.2.2}{Check\040an\040Edge}{subsection.2.1.2}% 24
+\BOOKMARK [3][-]{subsubsection.2.1.2.3}{Delete\040an\040Edge}{subsection.2.1.2}% 25
 \BOOKMARK [2][-]{subsection.2.1.3}{Graph}{section.2.1}% 26
-\BOOKMARK [3][-]{subsubsection.2.1.3.1}{Save and Load a Graph}{subsection.2.1.3}% 27
-\BOOKMARK [3][-]{subsubsection.2.1.3.2}{Export Graph Image and Dot File}{subsection.2.1.3}% 28
-\BOOKMARK [3][-]{subsubsection.2.1.3.3}{Zoom in and out}{subsection.2.1.3}% 29
-\BOOKMARK [3][-]{subsubsection.2.1.3.4}{Clear Graph}{subsection.2.1.3}% 30
-\BOOKMARK [1][-]{section.2.2}{Use Robot-X to Launch and Control Software}{chapter.2}% 31
-\BOOKMARK [2][-]{subsection.2.2.1}{Open and Close Nodes}{section.2.2}% 32
-\BOOKMARK [2][-]{subsection.2.2.2}{Show and Hide Widgets}{section.2.2}% 33
-\BOOKMARK [0][-]{chapter.3}{Functional Module Development: Free C Style Programming}{}% 34
-\BOOKMARK [1][-]{section.3.1}{Project Configuration}{chapter.3}% 35
-\BOOKMARK [2][-]{subsection.3.1.1}{Create Shared Library Project}{section.3.1}% 36
-\BOOKMARK [2][-]{subsection.3.1.2}{Configure Project with RobotSDK}{section.3.1}% 37
-\BOOKMARK [2][-]{subsection.3.1.3}{For Visual Studio}{section.3.1}% 38
-\BOOKMARK [1][-]{section.3.2}{Basic Steps to Program Functional Module}{chapter.3}% 39
-\BOOKMARK [2][-]{subsection.3.2.1}{Header File}{section.3.2}% 40
-\BOOKMARK [3][-]{subsubsection.3.2.1.1}{Step 1: Add Required Headers [C Style]}{subsection.3.2.1}% 41
-\BOOKMARK [3][-]{subsubsection.3.2.1.2}{Step 2: Configure Node}{subsection.3.2.1}% 42
-\BOOKMARK [3][-]{subsubsection.3.2.1.3}{Step 3: Add Elements to "Params", "Vars" and "Data"}{subsection.3.2.1}% 43
-\BOOKMARK [3][-]{subsubsection.3.2.1.4}{Step 4: Declare functions [C Style]}{subsection.3.2.1}% 44
-\BOOKMARK [2][-]{subsection.3.2.2}{Source File}{section.3.2}% 45
-\BOOKMARK [3][-]{subsubsection.3.2.2.1}{Step 1: Choose Node}{subsection.3.2.2}% 46
-\BOOKMARK [3][-]{subsubsection.3.2.2.2}{Step 2: Functions Programming [C Style]}{subsection.3.2.2}% 47
-\BOOKMARK [1][-]{section.3.3}{RobotSDK Syntax}{chapter.3}% 48
-\BOOKMARK [2][-]{subsection.3.3.1}{Configure Node}{section.3.3}% 49
-\BOOKMARK [2][-]{subsection.3.3.2}{Configure "Params", "Vars" and "Data"}{section.3.3}% 50
+\BOOKMARK [3][-]{subsubsection.2.1.3.1}{Save\040and\040Load\040a\040Graph}{subsection.2.1.3}% 27
+\BOOKMARK [3][-]{subsubsection.2.1.3.2}{Export\040Graph\040Image\040and\040Dot\040File}{subsection.2.1.3}% 28
+\BOOKMARK [3][-]{subsubsection.2.1.3.3}{Zoom\040in\040and\040out}{subsection.2.1.3}% 29
+\BOOKMARK [3][-]{subsubsection.2.1.3.4}{Clear\040Graph}{subsection.2.1.3}% 30
+\BOOKMARK [1][-]{section.2.2}{Use\040Robot-X\040to\040Launch\040and\040Control\040Software}{chapter.2}% 31
+\BOOKMARK [2][-]{subsection.2.2.1}{Open\040and\040Close\040Nodes}{section.2.2}% 32
+\BOOKMARK [2][-]{subsection.2.2.2}{Show\040and\040Hide\040Widgets}{section.2.2}% 33
+\BOOKMARK [0][-]{chapter.3}{Functional\040Module\040Development:\040Free\040C\040Style\040Programming}{}% 34
+\BOOKMARK [1][-]{section.3.1}{Project\040Configuration}{chapter.3}% 35
+\BOOKMARK [2][-]{subsection.3.1.1}{Create\040Shared\040Library\040Project}{section.3.1}% 36
+\BOOKMARK [2][-]{subsection.3.1.2}{Configure\040Project\040with\040RobotSDK}{section.3.1}% 37
+\BOOKMARK [2][-]{subsection.3.1.3}{For\040Visual\040Studio}{section.3.1}% 38
+\BOOKMARK [1][-]{section.3.2}{Basic\040Steps\040to\040Program\040Functional\040Module}{chapter.3}% 39
+\BOOKMARK [2][-]{subsection.3.2.1}{Header\040File}{section.3.2}% 40
+\BOOKMARK [3][-]{subsubsection.3.2.1.1}{Step\0401:\040Add\040Required\040Headers\040[C\040Style]}{subsection.3.2.1}% 41
+\BOOKMARK [3][-]{subsubsection.3.2.1.2}{Step\0402:\040Configure\040Node}{subsection.3.2.1}% 42
+\BOOKMARK [3][-]{subsubsection.3.2.1.3}{Step\0403:\040Add\040Elements\040to\040"Params",\040"Vars"\040and\040"Data"}{subsection.3.2.1}% 43
+\BOOKMARK [3][-]{subsubsection.3.2.1.4}{Step\0404:\040Declare\040functions\040[C\040Style]}{subsection.3.2.1}% 44
+\BOOKMARK [2][-]{subsection.3.2.2}{Source\040File}{section.3.2}% 45
+\BOOKMARK [3][-]{subsubsection.3.2.2.1}{Step\0401:\040Choose\040Node}{subsection.3.2.2}% 46
+\BOOKMARK [3][-]{subsubsection.3.2.2.2}{Step\0402:\040Functions\040Programming\040[C\040Style]}{subsection.3.2.2}% 47
+\BOOKMARK [1][-]{section.3.3}{RobotSDK\040Syntax}{chapter.3}% 48
+\BOOKMARK [2][-]{subsection.3.3.1}{Configure\040Node}{section.3.3}% 49
+\BOOKMARK [2][-]{subsection.3.3.2}{Configure\040"Params",\040"Vars"\040and\040"Data"}{section.3.3}% 50
 \BOOKMARK [3][-]{subsubsection.3.3.2.1}{"Params"}{subsection.3.3.2}% 51
 \BOOKMARK [3][-]{subsubsection.3.3.2.2}{"Vars"}{subsection.3.3.2}% 52
 \BOOKMARK [3][-]{subsubsection.3.3.2.3}{"Data"}{subsection.3.3.2}% 53
-\BOOKMARK [2][-]{subsection.3.3.3}{Choose Node}{section.3.3}% 54
-\BOOKMARK [2][-]{subsection.3.3.4}{Node Function}{section.3.3}% 55
-\BOOKMARK [3][-]{subsubsection.3.3.4.1}{Node Function Declaration}{subsection.3.3.4}% 56
-\BOOKMARK [3][-]{subsubsection.3.3.4.2}{Node Function Definition}{subsection.3.3.4}% 57
-\BOOKMARK [3][-]{subsubsection.3.3.4.3}{Access Node's Values}{subsection.3.3.4}% 58
-\BOOKMARK [3][-]{subsubsection.3.3.4.4}{Access Obtained Port's Values}{subsection.3.3.4}% 59
-\BOOKMARK [3][-]{subsubsection.3.3.4.5}{Call Node Function}{subsection.3.3.4}% 60
-\BOOKMARK [2][-]{subsection.3.3.5}{Obtain Values from Input Ports}{section.3.3}% 61
-\BOOKMARK [3][-]{subsubsection.3.3.5.1}{Obtain Behavior}{subsection.3.3.5}% 62
-\BOOKMARK [3][-]{subsubsection.3.3.5.2}{Obtain Parameters}{subsection.3.3.5}% 63
-\BOOKMARK [2][-]{subsection.3.3.6}{Emit Values from Output Ports}{section.3.3}% 64
-\BOOKMARK [2][-]{subsection.3.3.7}{Node's Flags}{section.3.3}% 65
-\BOOKMARK [3][-]{subsubsection.3.3.7.1}{GUI Thread Flag}{subsection.3.3.7}% 66
-\BOOKMARK [3][-]{subsubsection.3.3.7.2}{Show Widget Flag}{subsection.3.3.7}% 67
-\BOOKMARK [2][-]{subsection.3.3.8}{Node Central Widget}{section.3.3}% 68
+\BOOKMARK [2][-]{subsection.3.3.3}{Choose\040Node}{section.3.3}% 54
+\BOOKMARK [2][-]{subsection.3.3.4}{Node\040Function}{section.3.3}% 55
+\BOOKMARK [3][-]{subsubsection.3.3.4.1}{Node\040Function\040Declaration}{subsection.3.3.4}% 56
+\BOOKMARK [3][-]{subsubsection.3.3.4.2}{Node\040Function\040Definition}{subsection.3.3.4}% 57
+\BOOKMARK [3][-]{subsubsection.3.3.4.3}{Access\040Node's\040Values}{subsection.3.3.4}% 58
+\BOOKMARK [3][-]{subsubsection.3.3.4.4}{Access\040Obtained\040Port's\040Values}{subsection.3.3.4}% 59
+\BOOKMARK [3][-]{subsubsection.3.3.4.5}{Call\040Node\040Function}{subsection.3.3.4}% 60
+\BOOKMARK [2][-]{subsection.3.3.5}{Obtain\040Values\040from\040Input\040Ports}{section.3.3}% 61
+\BOOKMARK [3][-]{subsubsection.3.3.5.1}{Obtain\040Behavior}{subsection.3.3.5}% 62
+\BOOKMARK [3][-]{subsubsection.3.3.5.2}{Obtain\040Parameters}{subsection.3.3.5}% 63
+\BOOKMARK [2][-]{subsection.3.3.6}{Emit\040Values\040from\040Output\040Ports}{section.3.3}% 64
+\BOOKMARK [2][-]{subsection.3.3.7}{Node's\040Flags}{section.3.3}% 65
+\BOOKMARK [3][-]{subsubsection.3.3.7.1}{GUI\040Thread\040Flag}{subsection.3.3.7}% 66
+\BOOKMARK [3][-]{subsubsection.3.3.7.2}{Show\040Widget\040Flag}{subsection.3.3.7}% 67
+\BOOKMARK [2][-]{subsection.3.3.8}{Node\040Central\040Widget}{section.3.3}% 68
 \BOOKMARK [2][-]{subsection.3.3.9}{Sync}{section.3.3}% 69
-\BOOKMARK [0][-]{chapter.4}{Node Extension: Customize Node Behavior}{}% 70
-\BOOKMARK [1][-]{section.4.1}{Extend Default Node}{chapter.4}% 71
-\BOOKMARK [2][-]{subsection.4.1.1}{Default Node}{section.4.1}% 72
-\BOOKMARK [2][-]{subsection.4.1.2}{5 Kinds of Extension}{section.4.1}% 73
-\BOOKMARK [3][-]{subsubsection.4.1.2.1}{1st Extension}{subsection.4.1.2}% 74
-\BOOKMARK [3][-]{subsubsection.4.1.2.2}{2nd Extension}{subsection.4.1.2}% 75
-\BOOKMARK [3][-]{subsubsection.4.1.2.3}{3rd Extension}{subsection.4.1.2}% 76
-\BOOKMARK [3][-]{subsubsection.4.1.2.4}{4th Extension}{subsection.4.1.2}% 77
-\BOOKMARK [3][-]{subsubsection.4.1.2.5}{5th Extension}{subsection.4.1.2}% 78
-\BOOKMARK [1][-]{section.4.2}{RobotSDK Syntax for Node Extension}{chapter.4}% 79
+\BOOKMARK [0][-]{chapter.4}{Node\040Extension:\040Customize\040Node\040Behavior}{}% 70
+\BOOKMARK [1][-]{section.4.1}{Extend\040Default\040Node}{chapter.4}% 71
+\BOOKMARK [2][-]{subsection.4.1.1}{Default\040Node}{section.4.1}% 72
+\BOOKMARK [2][-]{subsection.4.1.2}{5\040Kinds\040of\040Extension}{section.4.1}% 73
+\BOOKMARK [3][-]{subsubsection.4.1.2.1}{1st\040Extension}{subsection.4.1.2}% 74
+\BOOKMARK [3][-]{subsubsection.4.1.2.2}{2nd\040Extension}{subsection.4.1.2}% 75
+\BOOKMARK [3][-]{subsubsection.4.1.2.3}{3rd\040Extension}{subsection.4.1.2}% 76
+\BOOKMARK [3][-]{subsubsection.4.1.2.4}{4th\040Extension}{subsection.4.1.2}% 77
+\BOOKMARK [3][-]{subsubsection.4.1.2.5}{5th\040Extension}{subsection.4.1.2}% 78
+\BOOKMARK [1][-]{section.4.2}{RobotSDK\040Syntax\040for\040Node\040Extension}{chapter.4}% 79

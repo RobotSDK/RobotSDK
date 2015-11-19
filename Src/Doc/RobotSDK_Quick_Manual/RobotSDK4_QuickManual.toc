@@ -44,7 +44,7 @@
 \contentsline {subsubsection}{\numberline {3.2.1.4}Step 4: Declare functions [C Style]}{28}{subsubsection.3.2.1.4}
 \contentsline {subsection}{\numberline {3.2.2}Source File}{28}{subsection.3.2.2}
 \contentsline {subsubsection}{\numberline {3.2.2.1}Step 1: Choose Node}{28}{subsubsection.3.2.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2.2}Step 2: Functions Programming [C Style]}{28}{subsubsection.3.2.2.2}
+\contentsline {subsubsection}{\numberline {3.2.2.2}Step 2: Functions Programming [C Style]}{29}{subsubsection.3.2.2.2}
 \contentsline {section}{\numberline {3.3}RobotSDK Syntax}{31}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Configure Node}{31}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Configure "Params", "Vars" and "Data"}{31}{subsection.3.3.2}
