@@ -510,7 +510,7 @@ The functional modules are packed in shared library, therefore, we should first 
 
 \subsection{Configure Project with RobotSDK}
 
-After creating shared library project, we need to configure this project with RobotSDK. Open the .pro file in the project panel as Fig.\ref{fig:newproject2} bottom-right and we will see its contents as Fig.\ref{fig:configproject1} top-left. The only thing you need to do is to include "RobotSDK.pri" file as Fig.\ref{fig:configproject1} right (you need to choose one according to your OS). The configuration is done.
+After creating shared library project, we need to configure this project with RobotSDK. Open the .pro file in the project panel as Fig.\ref{fig:newproject2} bottom-right and we will see its contents as Fig.\ref{fig:configproject1} top-left. Remember to add build step with argument install. The only thing you need to do is to include "RobotSDK.pri" file as Fig.\ref{fig:configproject1} right (you need to choose one according to your OS), or you can just include($$(ROBOTSDKMODULE)) which is a new added macro. The configuration is done.
 
 [Update-150427] You can use "MODULES" in front the "include" sentence to include other module's header file. See "Module" in source code. 
 
