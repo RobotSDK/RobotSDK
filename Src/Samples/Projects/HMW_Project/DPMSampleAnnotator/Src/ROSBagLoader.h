@@ -86,6 +86,7 @@ public:
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
+    double rostimestamp;
     int frameid;
     cv::Mat image;
 };

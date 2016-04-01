@@ -3,7 +3,7 @@
 
 //=================================================
 //Please add headers here:
-#include<dpm/ImageObjects.h>
+#include<libdpm_ocv/ImageObjects.h>
 #include<rosinterface.h>
 #include<opencv2/opencv.hpp>
 
@@ -49,7 +49,7 @@ public:
     ADD_VAR(bool, idflag, 0)
     ADD_VAR(int, curid, 0)
 public:
-    typedef ROSSub<dpm::ImageObjectsConstPtr> subtype;
+    typedef ROSSub<libdpm_ocv::ImageObjectsConstPtr> subtype;
     ADD_INTERNAL_QOBJECT_TRIGGER(subtype, dpmsub, 1, rostopic, rosqueuesize, rosqueryinterval)
     ADD_INTERNAL_DEFAULT_CONNECTION(dpmsub, receiveMessageSignal)
 };
@@ -62,6 +62,7 @@ public:
 class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
+    double rostimestamp;
     QVector<cv::Rect> detection;
     QVector<int> id;
 };

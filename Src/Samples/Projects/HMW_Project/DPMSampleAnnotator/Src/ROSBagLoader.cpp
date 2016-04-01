@@ -96,8 +96,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         auto vars=NODE_VARS;
         auto data=NODE_DATA;
         sensor_msgs::ImageConstPtr image=vars->imagesub->getMessage();
-        int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
+        qint64 msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
         data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
+        data->rostimestamp=image->header.stamp.toSec();
         data->frameid=image->header.seq;
         data->image=cv_bridge::toCvShare(image)->image.clone();
         if(params->rgbinvertflag)
@@ -176,8 +177,9 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         }
         if(!(params->imageprocflag))
         {
-            int msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
+            qint64 msec=(image->header.stamp.sec)%(24*60*60)*1000+(image->header.stamp.nsec)/1000000;
             data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
+            data->rostimestamp=image->header.stamp.toSec();
             data->frameid=vars->curframe;
             data->image=cv_bridge::toCvShare(image)->image.clone();
             if(image->encoding=="bgr8")

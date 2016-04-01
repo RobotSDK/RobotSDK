@@ -60,8 +60,8 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     int i,n=data->dpmdata.size();
     for(i=0;i<n;i++)
     {
-        QString sampleinfo=QString("%1,%2,%3,%4,%5,%6,%7")
-                .arg(data->frameid).arg(data->dpmdata[i].category).arg(data->dpmdata[i].id)
+        QString sampleinfo=QString("%1,%2,%3,%4,%5,%6,%7,%8")
+                .arg(data->rostimestamp).arg(data->frameid).arg(data->dpmdata[i].category).arg(data->dpmdata[i].id)
                 .arg(data->dpmdata[i].rect.x).arg(data->dpmdata[i].rect.y)
                 .arg(data->dpmdata[i].rect.width).arg(data->dpmdata[i].rect.height);
         if(data->dpmdata[i].attributes.size()>0)

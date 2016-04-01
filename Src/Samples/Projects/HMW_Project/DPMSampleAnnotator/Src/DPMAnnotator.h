@@ -44,6 +44,7 @@ public:
 public:
     bool dataflag;
     QString rosbagfile;
+    double rostimestamp;
     int frameid;
     QString category;
     int id;

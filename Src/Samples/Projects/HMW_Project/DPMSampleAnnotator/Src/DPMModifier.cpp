@@ -87,6 +87,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         auto data=NODE_DATA;
         if(vars->dataflag)
         {
+            data->rostimestamp=vars->rostimestamp;
             data->timestamp=vars->timestamp;
             data->rosbagfile=vars->rosbagfile;
             data->frameid=vars->frameid;
@@ -134,6 +135,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
             {
                 vars->dpmmodifier->clear();
                 vars->timestamp=dpmdata->timestamp;
+                vars->rostimestamp=dpmdata->rostimestamp;
                 vars->rosbagfile=imageparams->bagfilename;
                 vars->frameid=imagedata->frameid;
                 vars->image=imagedata->image.clone();

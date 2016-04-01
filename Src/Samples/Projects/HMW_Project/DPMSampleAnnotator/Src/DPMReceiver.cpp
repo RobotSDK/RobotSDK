@@ -35,10 +35,10 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     auto vars=NODE_VARS;
     auto data=NODE_DATA;
 
-    dpm::ImageObjectsConstPtr rosdetection=vars->dpmsub->getMessage();
-    int msec=(rosdetection->header.stamp.sec)%(24*60*60)*1000+(rosdetection->header.stamp.nsec)/1000000;
+    libdpm_ocv::ImageObjectsConstPtr rosdetection=vars->dpmsub->getMessage();
+    qint64 msec=(rosdetection->header.stamp.sec)%(24*60*60)*1000+(rosdetection->header.stamp.nsec)/1000000;
     data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
-
+    data->rostimestamp=rosdetection->header.stamp.toSec();
     data->detection.resize(rosdetection->car_num);
     data->id.resize(rosdetection->car_num);
     int i;

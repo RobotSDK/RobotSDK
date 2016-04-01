@@ -79,6 +79,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         if(vars->dataflag&&attributes.size()>0)
         {
             data->rosbagfile=vars->rosbagfile;
+            data->rostimestamp=vars->rostimestamp;
             data->frameid=vars->frameid;
             data->saveimageflag=0;
             data->dpmdata.resize(1);
@@ -101,6 +102,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
         if(vars->categories.contains(data->category))
         {
             vars->rosbagfile=params->rosbagfile;
+            vars->rostimestamp=data->rostimestamp;
             vars->frameid=data->frameid;
             vars->category=data->category;
             vars->id=data->id;

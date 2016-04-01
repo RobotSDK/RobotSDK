@@ -54,6 +54,7 @@ public:
 public:
     bool dataflag;
     QTime timestamp;
+    double rostimestamp;
     QString rosbagfile;
     int frameid;
     cv::Mat image;
@@ -99,6 +100,7 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
     QString rosbagfile;
+    double rostimestamp;
     int frameid;
     bool saveimageflag;
     cv::Mat image;

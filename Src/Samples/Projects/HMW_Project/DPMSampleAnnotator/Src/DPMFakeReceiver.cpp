@@ -38,7 +38,7 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     sensor_msgs::ImageConstPtr rosimage=vars->dpmsub->getMessage();
     int msec=(rosimage->header.stamp.sec)%(24*60*60)*1000+(rosimage->header.stamp.nsec)/1000000;
     data->timestamp=QTime::fromMSecsSinceStartOfDay(msec);
-
+    data->rostimestamp=rosimage->header.stamp.toSec();
     data->detection.clear();
 	return 1;
 }

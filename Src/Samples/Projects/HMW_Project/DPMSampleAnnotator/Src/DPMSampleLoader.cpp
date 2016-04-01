@@ -53,24 +53,25 @@ NODE_FUNC_DEF_EXPORT(bool, main)
     }
     QString sample=vars->stream.readLine();
     QStringList valuelist=sample.split(",",QString::SkipEmptyParts);
-    if(valuelist.size()<7)
+    if(valuelist.size()<8)
     {
         qDebug()<<"Sample file broken";
         return 0;
     }
-    data->frameid=valuelist[0].toInt();
+    data->rostimestamp=valuelist[0].toDouble();
+    data->frameid=valuelist[1].toInt();
     QString imagefile=QString("%1/%2.png").arg(vars->imagesdir).arg(data->frameid,vars->imagefilenamewidth,10,QChar('0'));
     data->image=cv::imread(imagefile.toStdString());
-    data->category=valuelist[1];
-    data->id=valuelist[2].toInt();
-    data->rect.x=valuelist[3].toInt();
-    data->rect.y=valuelist[4].toInt();
-    data->rect.width=valuelist[5].toInt();
-    data->rect.height=valuelist[6].toInt();
-    if(valuelist.size()>7)
+    data->category=valuelist[2];
+    data->id=valuelist[3].toInt();
+    data->rect.x=valuelist[4].toInt();
+    data->rect.y=valuelist[5].toInt();
+    data->rect.width=valuelist[6].toInt();
+    data->rect.height=valuelist[7].toInt();
+    if(valuelist.size()>8)
     {
         int i,n=valuelist.size();
-        for(i=7;i<n;i++)
+        for(i=8;i<n;i++)
         {
             data->attributes+=valuelist[i]+QString(",");
         }

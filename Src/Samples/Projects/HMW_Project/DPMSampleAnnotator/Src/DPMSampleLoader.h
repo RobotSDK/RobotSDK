@@ -62,6 +62,7 @@ class NODE_DATA_TYPE : public NODE_DATA_BASE_TYPE
 {
 public:
     cv::Mat image;
+    double rostimestamp;
     int frameid;
     QString category;
     int id;
