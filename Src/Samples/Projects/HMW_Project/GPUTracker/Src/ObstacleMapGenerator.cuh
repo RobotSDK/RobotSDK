@@ -1,9 +1,0 @@
-#ifndef OBSTACLEMAPGENERATOR_CUH
-#define OBSTACLEMAPGENERATOR_CUH
-
-#include<opencv2/opencv.hpp>
-
-extern "C" void cudaObstacleMapGenerator(int beamNum, const double * virtualScan, int mapSize, double gridSize, double obstacleFactor, u_char *map, float *mapdata);
-
-#endif // OBSTACLEMAPGENERATOR_CUH
-

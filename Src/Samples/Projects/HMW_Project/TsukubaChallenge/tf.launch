@@ -1,5 +1,0 @@
-<launch>
-    <node pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /odom /world 10" name="tf1"/>    
-    <node pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /odm_frame /base_link 10" name="tf2"/>
-    <node pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /base_link /laser 10" name="tf3"/>
-</launch>

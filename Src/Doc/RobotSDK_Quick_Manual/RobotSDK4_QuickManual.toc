@@ -1,5 +1,5 @@
 \contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}
-\contentsline {section}{\numberline {1.1}New Features of RobotSDK 4.0}{5}{section.1.1}
+\contentsline {section}{\numberline {1.1}New Features of RobotSDK 4.1}{5}{section.1.1}
 \contentsline {subsection}{\numberline {1.1.1}Robot-X}{5}{subsection.1.1.1}
 \contentsline {subsection}{\numberline {1.1.2}Simple and Free Module Development}{5}{subsection.1.1.2}
 \contentsline {subsection}{\numberline {1.1.3}Kernel Update}{5}{subsection.1.1.3}
