@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>RobotSDK Workshop UI</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="./go.js"></script>
+        <link rel='stylesheet' href='./DataInspector.css' />
+        <script type="text/javascript" src="./DataInspector.js"></script>
+        <script type="text/javascript">
+            function init(){
+                var $=go.GraphObject.make;
+
+                myDiagram=$(go.Diagram,"myDiagram",
+                    {initialContentAlignment:go.Spot.Center,"undoManager.isEnabled":true,"grid.visible":false,"grid.gridCellSize":new go.Size(10,10),"draggingTool.isGridSnapEnabled":true});
+
+                myDiagram.nodeTemplate=
+                    $(go.Node,"Auto",new go.Binding("location","loc",go.Point.parse).makeTwoWay(go.Point.stringify),
+                        {locationObjectName:"MODULE",locationSpot:go.Spot.Center,selectionObjectName:"MODULE"},
+                        $(go.Shape,"Rectangle",{name:"MODULE",fill:"gold",stroke:"black",strokeWidth:2}),
+                        $(go.Panel,"Table",{defaultColumnSeparatorStroke:"black",defaultRowSeparatorStroke:"black"},
+                            $(go.TextBlock,"INPUT",{row:0,column:0,minSize:new go.Size(60,20),margin:0,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),                      
+                            $(go.TextBlock,new go.Binding("text","nodeName").makeTwoWay(),{row:0,column:1,wrap:go.TextBlock.WrapFit,editable:true,isMultiline: false,minSize:new go.Size(100,20),margin:0,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),                            
+                            $(go.TextBlock,"OUTPUT",{row:0,column:2,minSize:new go.Size(60,20),margin:0,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                        
+                            $(go.Panel,"Vertical",new go.Binding("itemArray","inputPorts"),{row:1,column:0,name:"INPUT",itemTemplate:
+                                $(go.Panel,"Vertical",{margin:5},
+                                    $(go.Panel,"Auto",new go.Binding("portId","portId"),
+                                        {cursor:"pointer",stretch:go.GraphObject.Fill,
+                                            fromSpot:go.Spot.Right,fromLinkable:false,fromLinkableSelfNode:false,
+                                            toSpot:go.Spot.Left,toLinkable:true,toLinkableSelfNode:true},
+                                        $(go.Shape,"Rectangle",{fill:"black",stroke:null,strokeWidth:0,minSize:new go.Size(60,20)}),
+                                        $(go.TextBlock,new go.Binding("text","portId"),{margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"white"})))}),
+                                    
+                            $(go.Panel,"Table",{row:1,column:1,defaultColumnSeparatorStroke:"gray",defaultRowSeparatorStroke:"gray"},
+                                $(go.TextBlock,"Class:",{row:0,column:0,minSize:new go.Size(30,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,new go.Binding("text","nodeClass").makeTwoWay(),{row:0,column:1,wrap:go.TextBlock.WrapFit,editable:true,isMultiline: false,minSize:new go.Size(60,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,"Param:",{row:1,column:0,minSize:new go.Size(30,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,new go.Binding("text","nodeParam").makeTwoWay(),{row:1,column:1,wrap:go.TextBlock.WrapFit,editable:true,isMultiline: false,minSize:new go.Size(60,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,"Var:",{row:2,column:0,minSize:new go.Size(30,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,new go.Binding("text","nodeVar").makeTwoWay(),{row:2,column:1,wrap:go.TextBlock.WrapFit,editable:true,isMultiline: false,minSize:new go.Size(60,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,"Data:",{row:3,column:0,minSize:new go.Size(30,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}),
+                                $(go.TextBlock,new go.Binding("text","nodeData").makeTwoWay(),{row:3,column:1,wrap:go.TextBlock.WrapFit,editable:true,isMultiline: false,minSize:new go.Size(60,20),margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"})),
+                                    
+                            $(go.Panel,"Vertical",new go.Binding("itemArray","outputPorts"),{row:1,column:2,name:"OUTPUT",itemTemplate:
+                                $(go.Panel,"Vertical",{margin:5},
+                                    $(go.Panel,"Auto",new go.Binding("portId","portId"),
+                                        {cursor:"pointer",stretch:go.GraphObject.Fill,
+                                            fromSpot:go.Spot.Right,fromLinkable:true,fromLinkableSelfNode:true,
+                                            toSpot:go.Spot.Left,toLinkable:false,toLinkableSelfNode:false},
+                                        $(go.Shape,"Rectangle",{fill:"black",stroke:null,strokeWidth:0,minSize:new go.Size(60,20)}),
+                                        $(go.TextBlock,new go.Binding("text","portId"),{margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"white"})))}),
+                                    
+                            $("Button",{row:2,column:0,minSize:new go.Size(60,20),margin:5,click:addInputPort},$(go.TextBlock,"Add",{margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"})),
+                            $("Button",{row:2,column:2,minSize:new go.Size(60,20),margin:5,click:addOutputPort},$(go.TextBlock,"Add",{margin:5,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}))
+                      ));
+              
+                myDiagram.linkTemplate=$(go.Link,
+                    {routing:go.Link.AvoidsNodes,corner:10,curve:go.Link.JumpOver,reshapable:true,resegmentable:true,relinkableFrom:true,relinkableTo:true},
+                    $(go.Shape,{stroke:"black",strokeWidth:2}),$(go.Shape,{toArrow:"Standard"}));
+
+                load();
+            }
+            
+            function addInputPort(e,obj){
+                myDiagram.startTransaction("addInputPort");
+                var node=obj.part;
+                var i=0;
+                while(node.findPort("IN_"+i.toString())!==node) i++;
+                var name="IN_"+i.toString();
+                var arr=node.data["inputPorts"];
+                if(arr){
+                    var newportdata={
+                        portId:name                            
+                    };
+                    myDiagram.model.insertArrayItem(arr,-1,newportdata);
+                }
+                myDiagram.commitTransaction("addInputPort");
+            }
+            
+            function addOutputPort(e,obj){
+                myDiagram.startTransaction("addOutputPort");
+                var node=obj.part;
+                var i=0;
+                while(node.findPort("OUT_"+i.toString())!==node) i++;
+                var name="OUT_"+i.toString();
+                var arr=node.data["outputPorts"];
+                if(arr){
+                    var newportdata={
+                        portId:name                            
+                    };
+                    myDiagram.model.insertArrayItem(arr,-1,newportdata);
+                }
+                myDiagram.commitTransaction("addOutputPort");
+            }
+            
+            function save(){
+                document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+                myDiagram.isModified = false;
+            }
+            function load(){
+                myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+            }
+        </script>
+    </head>
+    <body onload=init()>
+        <div id="myDiagram" style="border:solid 1px black; width:100%; height:500px"></div>
+        <p>
+            <button onclick="save()">Save</button>
+            <button onclick="load()">Load</button>
+        </p>
+        <textarea id="mySavedModel" style="width:100%;height:500px">
+  {
+    "class":"go.GraphLinksModel",
+    "copiesArrays":true,
+    "copiesArrayObjects":true,
+    "linkFromPortIdProperty":"fromPort",
+    "linkToPortIdProperty":"toPort",
+    "nodeDataArray":[
+      {"key":"Velodyne","inputPorts":[],"outputPorts":[{"portId":"OUT_0","dataType":"PointCloud"}]},
+      {"key":"VScan","inputPorts":[{"portId":"IN_0","dataType":"PointCloud"}],"outputPorts":[{"portId":"OUT_0","dataType":"Scan"},{"portId":"OUT_1","dataType":"Stixel"}]},
+      {"key":"Scan Viewer","inputPorts":[{"portId":"IN_0","dataType":"Scan"}],"outputPorts":[]},
+      {"key":"Stixel Viewer","inputPorts":[{"portId":"IN_0","dataType":"Stixel"}],"outputPorts":[]}
+    ],
+    "linkDataArray":[
+      {"from":"Velodyne","to":"VScan","fromPort":"OUT_0","toPort":"IN_0"},
+      {"from":"VScan","to":"Scan Viewer","fromPort":"OUT_0","toPort":"IN_0"},
+      {"from":"VScan","to":"Stixel Viewer","fromPort":"OUT_1","toPort":"IN_0"}
+    ]
+  }
+        </textarea>
+    </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RobotSDK Module</title>
+  <script type="text/javascript" src="../go.js"></script>
+  <script type="text/javascript" id="code">
+    function init(){
+      var $=go.GraphObject.make;
+
+      myDiagram=$(go.Diagram,"myDiagram",
+        {initialContentAlignment:go.Spot.Center,"undoManager.isEnabled":true,"grid.visible":true,"grid.gridCellSize":new go.Size(10,10)});
+
+      var nodeMenu=$(go.Adornment,"Vertical",
+        $("ContextMenuButton",$(go.TextBlock,"Add Input Port"),{click:function(e,obj){addPort("input");}}),
+        $("ContextMenuButton",$(go.TextBlock,"Add Output Port"),{click:function(e,obj){addPort("output");}}));
+
+      var portMenu=$(go.Adornment,"Vertical",
+        $("ContextMenuButton",$(go.TextBlock,"Remove Port"),{click:function(e,obj){removePort(obj.part.adornedObject);}}));
+
+      myDiagram.nodeTemplate=$(go.Node,"Table",new go.Binding("location","loc",go.Point.parse).makeTwoWay(go.Point.stringify),
+        {locationObjectName:"BODY",locationSpot:go.Spot.Center,selectionObjectName:"BODY",contextMenu:nodeMenu},
+
+        $(go.Panel,"Auto",{row:0,column:1,name:"BODY",stretch:go.GraphObject.Fill},
+          $(go.Shape,"Rectangle",{fill:"red",stroke:"black",strokeWidth:1,minSize:new go.Size(50,50)}),
+          $(go.TextBlock,new go.Binging("text","key"),{margin:10,textAlign:"center",font:"14px Segoe UI,sans-serif",stroke:"white"})),
+
+        $(go.Panel,"Vertical",new go.Binding("itemArray","inputPorts"),
+          {row:0,column: 0,itemTemplate:
+            $(go.Panel,"Auto",new go.Binding("portId","portId"),
+              {_side:"input",cursor:"pointer",contextMenu:portMenu,
+                fromLinkable:false,fromSpot:go.Spot.Left,fromLinkableSelfNode:false,
+                toLinkable:true,toSpot:go.Spot.Left,toLinkableSelfNode:true},
+              $(go.Shape,"Rectangle",{fill:"white",stroke:"black",strokeWidth:1,minSize:new go.Size(20,20)}),
+              $(go.TextBlock,new go.Binding("text","dataType"),{margin:10,textAlign:"center",font:"14px Segoe UI,sans-serif",stroke:"black"}))}),
+
+        $(go.Panel,"Vertical",new go.Binding("itemArray","outputPorts"),
+          {row:0,column:2,itemTemplate:
+            $(go.Panel,"Auto",new go.Binding("portId","portId"),
+              {_side:"output",cursor:"pointer",contextMenu:portMenu,
+                fromLinkable:true,fromSpot:go.Spot.Right,fromLinkableSelfNode:true,
+                toLinkable:false,toSpot:go.Spot.Right,toLinkableSelfNode:false},
+              $(go.Shape,"Rectangle",{fill:"white",stroke:"black",strokeWidth:1,minSize:new go.Size(20,20)}),
+              $(go.TextBlock,new go.Binding("text","dataType"),{margin:10,textAlign:"center",font:"14px Segoe UI,sans-serif",stroke:"black"}))}));
+
+      myDiagram.linkTemplate=$(go.Link,
+        {routing:go.Link.AvoidsNodes,corner:5,curve:go.Link.JumpOver,reshapable:true,resegmentable:true,relinkableFrom:true,relinkableTo:true},
+        $(go.Shape,{stroke:"black",strokeWidth:2}),$(go.Shape,{toArrow:"Standard"}));
+
+      myDiagram.toolManager.clickCreatingTool.archetypeNodeData={key:"Node",inputPorts:[],outputPorts:[]};
+
+      load();
+    }
+
+    function addPort(side){
+      myDiagram.startTransaction("addPort");
+      myDiagram.selection.each(function(node){
+        if(!(node instanceof go.Node)) return;
+        var i=0;
+        while (node.findPort(side+i.toString())!==node) i++;
+        var name=side+i.toString();
+        var arr=node.data[side+"Ports"];
+        if(arr){
+          var newportdata={portId:name,dataType:"dataType"};
+          myDiagram.model.insertArrayItem(arr, -1, newportdata);
+        }
+      });
+      myDiagram.commitTransaction("addPort");
+    }
+
+    function removePort(port){
+      myDiagram.startTransaction("removePort");
+      var pid=port.portId;
+      var arr=port.panel.itemArray;
+      for(var i=0;i<arr.length;i++){
+        if(arr[i].portId===pid){
+          myDiagram.model.removeArrayItem(arr, i);
+          break;
+        }
+      }
+      myDiagram.commitTransaction("removePort");
+    }
+
+    function removeAll(port){
+      myDiagram.startTransaction("removePorts");
+      var nodedata=port.part.data;
+      var side=port._side;
+      myDiagram.model.setDataProperty(nodedata,side+"Ports",[]);
+      myDiagram.commitTransaction("removePorts");
+    }
+
+    function save(){
+      document.getElementById("mySavedModel").value=myDiagram.model.toJson();
+      myDiagram.isModified=false;
+    }
+    function load(){
+      myDiagram.model=go.Model.fromJson(document.getElementById("mySavedModel").value);
+    }
+  </script>
+</head>
+<body onload="init()">
+  <div id="myDiagram" style="border:solid 1px black; width:100%; height:500px"></div>
+  Add port to selected nodes:
+  <button onclick="addPort('input')">Input</button>
+  <button onclick="addPort('output')">Output</button>
+  <p>
+  <button id="SaveButton" onclick="save()">Save</button>
+  <button onclick="load()">Load</button>
+  </p>
+  <textarea id="mySavedModel" style="width:100%;height:200px">
+    {
+      "class":"go.GraphLinksModel",
+      "copiesArrays": true,
+      "copiesArrayObjects": true,
+      "linkFromPortIdProperty": "fromPort",
+      "linkToPortIdProperty": "toPort",
+      "nodeDataArray":[{"key":"unit One","loc":"0 0","inputPorts":[],"outputPorts":[]}],
+      "linkDataArray":[]
+    }
+  </textarea>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test RobotSDK Module Template</title>
+    <script type="text/javascript" src="../go.js"></script>
+    <script type="text/javascript">
+    function init(){
+      var $=go.GraphObject.make;
+
+      myDiagram=$(go.Diagram,"myDiagram",
+        {initialContentAlignment:go.Spot.Center,"undoManager.isEnabled":true,"grid.visible":true,"grid.gridCellSize":new go.Size(50,50),"draggingTool.isGridSnapEnabled":true});
+
+      var portLabelSize=new go.Size(32,32);
+      var portSize=new go.Size(24,24);
+
+
+      myDiagram.nodeTemplate=$(go.Node,"Auto",new go.Binding("location","loc",go.Point.parse).makeTwoWay(go.Point.stringify),
+        {locationObjectName:"MODULE",locationSpot:go.Spot.TopLeft,selectionObjectName:"MODULE"},
+        $(go.Shape,"Rectangle",{name:"MODULE",fill:"white",stroke:"black",strokeWidth:1}),
+        $(go.Panel,"Table",{defaultColumnSeparatorStroke:"black",defaultRowSeparatorStroke:"black"},
+          $(go.Panel,"Auto",
+            {row:1,column:1,name:"BODY",stretch:go.GraphObject.Fill},
+            $(go.Shape,"Rectangle",{fill:"gold",stroke:null,strokeWidth:0,minSize:new go.Size(64,64)}),
+            $(go.TextBlock,new go.Binding("text","key"),{margin:10,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"})),
+
+          $(go.Panel,"Auto",
+            {row:0,column:0},
+            $(go.Shape,"Rectangle",{fill:"silver",stroke:null,strokeWidth:0,minSize:portLabelSize}),
+            $(go.TextBlock,{text:"IN",margin:1,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"})),
+
+          $(go.Panel,"Vertical",new go.Binding("itemArray","inputPorts"),
+            {row:1,column:0,name:"INPUT",itemTemplate:
+              $(go.Panel,"Auto",new go.Binding("portId","portId"),
+                {fromSpot:go.Spot.Right,fromLinkable:false,fromLinkableSelfNode:false,
+                  toSpot:go.Spot.Left,toLinkable:true,toLinkableSelfNode:true,
+                  cursor:"pointer",alignment:go.Spot.Left,
+                  toolTip:$(go.Adornment,"Auto",$(go.Shape,{fill:"#FFFFCC"}),$(go.TextBlock,new go.Binding("text","dataType"),
+                    {margin:10,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}))},
+                $(go.Shape,"Rectangle",{fill:"green",stroke:null,strokeWidth:0,desiredSize:portSize,margin:new go.Margin(8,0,8,0)}))}),
+
+          $("Button",{row:2,column:0,desiredSize:portLabelSize},$(go.Picture,{source:"./img/267-plus.svg"})),
+
+          $(go.Panel,"Auto",
+            {row:0,column:2},
+            $(go.Shape,"Rectangle",{fill:"silver",stroke:null,strokeWidth:0,minSize:portLabelSize}),
+            $(go.TextBlock,{text:"OUT",margin:1,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"})),
+
+          $(go.Panel,"Vertical",new go.Binding("itemArray","outputPorts"),
+            {row:1,column:2,name:"OUTPUT",itemTemplate:
+              $(go.Panel,"Auto",new go.Binding("portId","portId"),
+                {fromSpot:go.Spot.Right,fromLinkable:true,fromLinkableSelfNode:true,
+                  toSpot:go.Spot.Left,toLinkable:false,toLinkableSelfNode:false,
+                  cursor:"pointer",alignment:go.Spot.Right,
+                  toolTip:$(go.Adornment,"Auto",$(go.Shape,{fill:"#FFFFCC"}),$(go.TextBlock,new go.Binding("text","dataType"),
+                    {margin:10,textAlign:"center",font:"bold 12px sans-serif",stroke:"black"}))},
+                $(go.Shape,"Rectangle",{fill:"green",stroke:null,strokeWidth:0,desiredSize:portSize,margin:new go.Margin(8,0,8,0)}))}),
+
+          $("Button",{row:2,column:2,desiredSize:portLabelSize},$(go.Picture,{source:"./img/267-plus.svg"}))
+
+          ));
+
+      myDiagram.linkTemplate=$(go.Link,
+        {routing:go.Link.AvoidsNodes,corner:5,curve:go.Link.JumpOver,reshapable:true,resegmentable:true,relinkableFrom:true,relinkableTo:true},
+        $(go.Shape,{stroke:"black",strokeWidth:2}),$(go.Shape,{toArrow:"Standard"}));
+
+      load();
+    }
+
+    function save() {
+      document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+      myDiagram.isModified = false;
+    }
+    function load() {
+      myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+    }
+    </script>
+  </head>
+  <body onload=init()>
+    <div id="myDiagram" style="border:solid 1px black; width:100%; height:500px"></div>
+    <p>
+      <button onclick="save()">Save</button>
+      <button onclick="load()">Load</button>
+    </p>
+    <textarea id="mySavedModel" style="width:100%;height:500px">
+{
+  "class":"go.GraphLinksModel",
+  "copiesArrays":true,
+  "copiesArrayObjects":true,
+  "linkFromPortIdProperty":"fromPort",
+  "linkToPortIdProperty":"toPort",
+  "nodeDataArray":[
+    {"key":"Velodyne","inputPorts":[],"outputPorts":[{"portId":"output0","dataType":"PointCloud"}]},
+    {"key":"VScan","inputPorts":[{"portId":"input0","dataType":"PointCloud"}],"outputPorts":[{"portId":"output0","dataType":"Scan"},{"portId":"output1","dataType":"Stixel"}]},
+    {"key":"Scan Viewer","inputPorts":[{"portId":"input0","dataType":"Scan"}],"outputPorts":[]},
+    {"key":"Stixel Viewer","inputPorts":[{"portId":"input0","dataType":"Stixel"}],"outputPorts":[]}
+  ],
+  "linkDataArray":[
+    {"from":"Velodyne","to":"VScan","fromPort":"output0","toPort":"input0"},
+    {"from":"VScan","to":"Scan Viewer","fromPort":"output0","toPort":"input0"}
+  ]
+}
+    </textarea>
+  </body>
+</html>
