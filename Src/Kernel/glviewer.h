@@ -36,7 +36,8 @@ struct DISPLAYLIST
     bool show;
     GLuint listid;
 	Eigen::Matrix4d transform;
-	Eigen::Matrix4d scale;
+    Eigen::Matrix4d pretransformscale;
+    Eigen::Matrix4d posttransformscale;
 };
 
 class GLViewer : public QGLWidget
@@ -60,6 +61,7 @@ private:
     CAMERAPARAMETERS cameraparameters;
     std::vector<DISPLAYLIST> displaylist;
     bool bperspective;
+    bool showaxes;
 private:
     void setProjection();
 public:
@@ -72,8 +74,10 @@ public:
     void setCameraPose(Eigen::Matrix4d transform);
     Eigen::Matrix4d getCameraPose();
     void setBackground(QColor color);
-	void setDisplayListScale(GLuint listid, double sx, double sy, double sz, bool islistid=1);
+    void setDisplayListPreScale(GLuint listid, double sx, double sy, double sz, bool islistid=1);
+    void setDisplayListPostScale(GLuint listid, double sx, double sy, double sz, bool islistid=1);
 	void setDisplayListRotation(GLuint listid, double rx, double ry, double rz, bool islistid=1);
+    void setDisplayListQuaternion(GLuint listid, double qw, double qx, double qy, double qz, bool islistid=1);
 	void setDisplayListTranslation(GLuint listid, double tx, double ty, double tz, bool islistid=1);
 	void setDisplayListTransform(GLuint listid, Eigen::Matrix4d transform, bool islistid=1);
 };

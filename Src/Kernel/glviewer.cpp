@@ -23,6 +23,7 @@ GLViewer::GLViewer(QWidget *parent) :
     cameraparameters.rspeed=1;
     cameraparameters.pointsize=1;
     bperspective=1;
+    showaxes=1;
     setMouseTracking(1);
 }
 
@@ -82,21 +83,24 @@ void GLViewer::paintGL()
         if(displaylist[i].show)
         {
 			glPushMatrix();
-			Eigen::Matrix4d matrix=displaylist[i].scale*displaylist[i].transform;
+            Eigen::Matrix4d matrix=displaylist[i].posttransformscale*displaylist[i].transform*displaylist[i].pretransformscale;
 			glMultMatrixd(matrix.data());
             glCallList(displaylist[i].listid);
 			glPopMatrix();
         }
     }
 	glPopMatrix();
-    glBegin(GL_LINES);
-    glColor4d(1,0,0,1);
-    glVertex3d(0,0,0);glVertex3d(1,0,0);
-    glColor4d(0,1,0,1);
-    glVertex3d(0,0,0);glVertex3d(0,1,0);
-    glColor4d(0,0,1,1);
-    glVertex3d(0,0,0);glVertex3d(0,0,1);
-    glEnd();
+    if(showaxes)
+    {
+        glBegin(GL_LINES);
+        glColor4d(1,0,0,1);
+        glVertex3d(0,0,0);glVertex3d(1,0,0);
+        glColor4d(0,1,0,1);
+        glVertex3d(0,0,0);glVertex3d(0,1,0);
+        glColor4d(0,0,1,1);
+        glVertex3d(0,0,0);glVertex3d(0,0,1);
+        glEnd();
+    }
     return;
 }
 
@@ -318,6 +322,13 @@ void GLViewer::keyPressEvent(QKeyEvent * event)
 			this->update();
 		}
 		break;
+    case Qt::Key_M:
+        {
+            showaxes=!showaxes;
+        }
+        break;
+    default:
+        break;
     }
     update();
     return;
@@ -369,7 +380,8 @@ void GLViewer::addDisplayList(GLuint listid)
         templist.listid=listid;
         templist.show=1;
 		templist.transform.setIdentity();
-		templist.scale.setIdentity();
+        templist.pretransformscale.setIdentity();
+        templist.posttransformscale.setIdentity();
         displaylist.push_back(templist);
     }
     return;
@@ -385,7 +397,7 @@ void GLViewer::addDisplayLists(GLuint listid, GLuint num)
         templist.listid=listid+i;
         templist.show=1;
         templist.transform.setIdentity();
-        templist.scale.setIdentity();
+        templist.posttransformscale.setIdentity();
         displaylist.push_back(templist);
     }
     return;
@@ -467,7 +479,7 @@ void GLViewer::setBackground(QColor color)
     return;
 }
 
-void GLViewer::setDisplayListScale(GLuint listid, double sx, double sy, double sz, bool islistid)
+void GLViewer::setDisplayListPreScale(GLuint listid, double sx, double sy, double sz, bool islistid)
 {
     if(islistid)
     {
@@ -477,18 +489,44 @@ void GLViewer::setDisplayListScale(GLuint listid, double sx, double sy, double s
         {
             if(displaylist[i].listid==listid)
             {
-				displaylist[i].scale(0,0)=sx;
-				displaylist[i].scale(1,1)=sy;
-				displaylist[i].scale(2,2)=sz;
+                displaylist[i].pretransformscale(0,0)=sx;
+                displaylist[i].pretransformscale(1,1)=sy;
+                displaylist[i].pretransformscale(2,2)=sz;
                 break;
             }
         }
     }
     else
     {
-        displaylist[listid].scale(0,0)=sx;
-		displaylist[listid].scale(1,1)=sy;
-		displaylist[listid].scale(2,2)=sz;
+        displaylist[listid].pretransformscale(0,0)=sx;
+        displaylist[listid].pretransformscale(1,1)=sy;
+        displaylist[listid].pretransformscale(2,2)=sz;
+    }
+    return;
+}
+
+void GLViewer::setDisplayListPostScale(GLuint listid, double sx, double sy, double sz, bool islistid)
+{
+    if(islistid)
+    {
+        int i;
+        int n=displaylist.size();
+        for(i=0;i<n;i++)
+        {
+            if(displaylist[i].listid==listid)
+            {
+                displaylist[i].posttransformscale(0,0)=sx;
+                displaylist[i].posttransformscale(1,1)=sy;
+                displaylist[i].posttransformscale(2,2)=sz;
+                break;
+            }
+        }
+    }
+    else
+    {
+        displaylist[listid].posttransformscale(0,0)=sx;
+        displaylist[listid].posttransformscale(1,1)=sy;
+        displaylist[listid].posttransformscale(2,2)=sz;
     }
     return;
 }
@@ -516,6 +554,33 @@ void GLViewer::setDisplayListRotation(GLuint listid, double rx, double ry, doubl
 		rotation=Eigen::AngleAxisd(rz,Eigen::Vector3d::UnitZ())*Eigen::AngleAxisd(ry,Eigen::Vector3d::UnitY())*Eigen::AngleAxisd(rx,Eigen::Vector3d::UnitX());
 		displaylist[listid].transform.block<3,3>(0,0)=rotation;
 	}
+    return;
+}
+
+void GLViewer::setDisplayListQuaternion(GLuint listid, double qw, double qx, double qy, double qz, bool islistid)
+{
+    if(islistid)
+    {
+        int i;
+        int n=displaylist.size();
+        for(i=0;i<n;i++)
+        {
+            if(displaylist[i].listid==listid)
+            {
+                Eigen::Quaterniond quad(qw,qx,qy,qz);
+                quad.normalize();
+                Eigen::Matrix3d rotation=quad.toRotationMatrix();
+                displaylist[i].transform.block<3,3>(0,0)=rotation;
+                break;
+            }
+        }
+    }
+    else
+    {
+        Eigen::Quaterniond quad(qw,qx,qy,qz);
+        Eigen::Matrix3d rotation=quad.toRotationMatrix();
+        displaylist[listid].transform.block<3,3>(0,0)=rotation;
+    }
     return;
 }
 
