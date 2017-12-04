@@ -320,7 +320,8 @@ enum ObtainBehavior
 
 #define PORT_DATA_LIST(portID) INPUT_DATA_ARG[portID]
 #define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? PORT_DATA_LIST(portID).size() : 0
-#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && PORT_DATA_LIST(portID).at(dataID)) ? \
+/*#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && PORT_DATA_LIST(portID).at(dataID)) ? \*/
+#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID)) ? \
       std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(PORT_DATA_LIST(portID).at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
