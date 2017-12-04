@@ -314,14 +314,13 @@ enum ObtainBehavior
 
 #define PORT_PARAMS_LIST(portID) INPUT_PARAMS_ARG[portID]
 #define PORT_PARAMS_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_PARAMS_ARG.size()) ? PORT_PARAMS_LIST(portID).size() : 0
-#define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<PORT_PARAMS_SIZE(portID) && PORT_PARAMS_LIST(portID).at(paramsID)) ? \
+#define PORT_PARAMS(portID, paramsID) (paramsID>=0 && paramsID<(PORT_PARAMS_SIZE(portID)) && PORT_PARAMS_LIST(portID).at(paramsID)) ? \
       std::static_pointer_cast< const PORT_PARAMS_TYPE(portID) >(PORT_PARAMS_LIST(portID).at(paramsID)) \
     : std::shared_ptr< const PORT_PARAMS_TYPE(portID) >()
 
 #define PORT_DATA_LIST(portID) INPUT_DATA_ARG[portID]
 #define PORT_DATA_SIZE(portID) (portID>=0 && portID<INPUT_PORT_NUM && portID<INPUT_DATA_ARG.size()) ? PORT_DATA_LIST(portID).size() : 0
-/*#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID) && PORT_DATA_LIST(portID).at(dataID)) ? \*/
-#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<PORT_DATA_SIZE(portID)) ? \
+#define PORT_DATA(portID, dataID) (dataID>=0 && dataID<(PORT_DATA_SIZE(portID)) && PORT_DATA_LIST(portID).at(dataID)) ? \
       std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(PORT_DATA_LIST(portID).at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
