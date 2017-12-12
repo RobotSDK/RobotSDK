@@ -324,7 +324,7 @@ enum ObtainBehavior
       std::static_pointer_cast< const PORT_DATA_TYPE(portID) >(PORT_DATA_LIST(portID).at(dataID)) \
     : std::shared_ptr< const PORT_DATA_TYPE(portID) >()
 
-#define IS_INTERNAL_TRIGGER INPUT_PARAMS_ARG.size()!=INPUT_PORT_NUM||INPUT_DATA_ARG.size()!=INPUT_PORT_NUM
+#define IS_INTERNAL_TRIGGER (INPUT_PARAMS_ARG.size()!=INPUT_PORT_NUM||INPUT_DATA_ARG.size()!=INPUT_PORT_NUM)
 #define CHECK_VALUE(value) if((value)==NULL){return 0;}
 
 //=================================================================================
